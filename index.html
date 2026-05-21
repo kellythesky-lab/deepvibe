@@ -1708,10 +1708,20 @@
      No background gradient needed — only shown in still moments. */
   .sticky-cta{
     position:fixed;bottom:0;left:0;right:0;z-index:40;
-    padding:14px 16px calc(14px + var(--safe-bottom));
-    background:transparent;
-    transform:translateY(110%);
-    transition:transform .35s var(--ease-out-soft), opacity .35s var(--ease-out-soft);
+    padding:18px 16px calc(18px + var(--safe-bottom));
+    /* Soft gradient fade from page background — smooths the boundary
+       between content and the floating CTA so it doesn't feel pasted on */
+    background:linear-gradient(
+      to bottom,
+      rgba(246,244,241,0) 0%,
+      rgba(246,244,241,.4) 30%,
+      rgba(246,244,241,.85) 65%,
+      rgba(246,244,241,.98) 100%
+    );
+    transform:translateY(40%);
+    transition:
+      transform .7s var(--ease-out-soft),
+      opacity .55s var(--ease-out-soft);
     opacity:0;
     pointer-events:none;
     will-change:transform,opacity;
@@ -1731,7 +1741,11 @@
     padding:14px;border-radius:14px;
     background:var(--kakao);color:var(--kakao-ink);
     font-size:14px;font-weight:600;letter-spacing:-.005em;
-    box-shadow:0 1px 0 rgba(0,0,0,.05),0 8px 20px -12px rgba(254,229,0,.7);
+    /* Slightly stronger shadow now that the gradient fade gives it lift */
+    box-shadow:
+      0 1px 0 rgba(0,0,0,.05),
+      0 6px 16px -8px rgba(254,229,0,.55),
+      0 14px 32px -12px rgba(20,10,30,.18);
     overflow:hidden;
     transition:transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
   }
@@ -2396,36 +2410,30 @@
     revealEls.forEach(el => el.classList.add('is-in'));
   }, 1500);
 
-  /* Sticky CTA — appears only when scrolling stops.
-     Nav scrolled state still tracks scroll position. */
+  /* Sticky CTA — appears once user has scrolled into the content,
+     then stays visible. No more flicker on every scroll. */
   const sticky = document.getElementById('stickyCta');
   const nav = document.getElementById('nav');
-  const SHOW_AFTER_Y = 240;        // don't appear above the fold
-  const SCROLL_IDLE_MS = 220;      // ms of no scroll = "stopped"
-  let scrollTimer = null;
+  const SHOW_AFTER_Y = 520;        // appear well past the fold
+  const HIDE_BEFORE_Y = 200;       // hide again only if scrolled back near top
 
-  const showSticky = () => {
-    if (window.scrollY > SHOW_AFTER_Y) {
+  const updateSticky = () => {
+    const y = window.scrollY;
+    if (y > SHOW_AFTER_Y) {
       sticky.classList.add('is-shown');
+    } else if (y < HIDE_BEFORE_Y) {
+      sticky.classList.remove('is-shown');
     }
-  };
-  const hideSticky = () => {
-    sticky.classList.remove('is-shown');
+    // Between 200 and 520: keep current state (hysteresis — prevents flicker)
+
+    // nav scrolled state
+    if (y > 8) nav.classList.add('is-scrolled');
+    else nav.classList.remove('is-scrolled');
   };
 
-  const onScroll = () => {
-    // hide immediately on any scroll
-    hideSticky();
-    // nav scrolled state
-    if (window.scrollY > 8) nav.classList.add('is-scrolled');
-    else nav.classList.remove('is-scrolled');
-    // schedule show after scroll stops
-    if (scrollTimer) clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(showSticky, SCROLL_IDLE_MS);
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
-  // initial check — if user lands and doesn't scroll, eventually show
-  scrollTimer = setTimeout(showSticky, SCROLL_IDLE_MS);
+  window.addEventListener('scroll', updateSticky, { passive: true });
+  // initial check (no auto-show on landing — only after user scrolls)
+  updateSticky();
 
   /* ============ HERO CARD AUTO-ROTATE ============ */
   const easeOut = (t) => 1 - Math.pow(1 - t, 3);

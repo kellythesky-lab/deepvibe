@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <radialGradient id="bgGlow1" cx="20%" cy="35%" r="40%">
+      <stop offset="0%" stop-color="#ffb4c6" stop-opacity=".55"/>
+      <stop offset="100%" stop-color="#ffb4c6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bgGlow2" cx="80%" cy="65%" r="40%">
+      <stop offset="0%" stop-color="#cdb4ff" stop-opacity=".55"/>
+      <stop offset="100%" stop-color="#cdb4ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="logoPink" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff6f91" stop-opacity=".95"/>
+      <stop offset="70%" stop-color="#ff9fbc" stop-opacity=".85"/>
+      <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".7"/>
+    </radialGradient>
+    <radialGradient id="logoViolet" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#b967ff" stop-opacity=".95"/>
+      <stop offset="70%" stop-color="#cdb4ff" stop-opacity=".85"/>
+      <stop offset="100%" stop-color="#cdb4ff" stop-opacity=".7"/>
+    </radialGradient>
+  </defs>
+
+  <!-- background -->
+  <rect width="1200" height="630" fill="#F6F4F1"/>
+  <rect width="1200" height="630" fill="url(#bgGlow1)"/>
+  <rect width="1200" height="630" fill="url(#bgGlow2)"/>
+
+  <!-- logo mark (large vesica piscis) -->
+  <g transform="translate(600, 200)">
+    <circle cx="-32" cy="0" r="56" fill="url(#logoPink)" style="mix-blend-mode:multiply"/>
+    <circle cx="32" cy="0" r="56" fill="url(#logoViolet)" style="mix-blend-mode:multiply"/>
+  </g>
+
+  <!-- wordmark "deepvibe" -->
+  <text x="600" y="370" 
+        font-family="Georgia, 'Noto Serif KR', serif" 
+        font-size="80" 
+        font-style="italic" 
+        font-weight="300"
+        fill="#15131A" 
+        text-anchor="middle"
+        letter-spacing="-2">deepvibe</text>
+
+  <!-- tagline -->
+  <text x="600" y="438" 
+        font-family="-apple-system, 'Noto Sans KR', sans-serif" 
+        font-size="32" 
+        font-weight="400"
+        fill="#2a262f" 
+        text-anchor="middle"
+        letter-spacing="-.5">두 사람 사이에 흐르는 결을 그립니다</text>
+
+  <!-- subline -->
+  <text x="600" y="490" 
+        font-family="-apple-system, 'Noto Sans KR', sans-serif" 
+        font-size="22" 
+        font-weight="300"
+        fill="#7a7680" 
+        text-anchor="middle"
+        letter-spacing=".5">카톡 대화로 읽는 우리 사이 · AI 관계 분석</text>
+
+  <!-- dot indicators (3 dots — page architecture hint) -->
+  <g transform="translate(600, 555)" fill="#a8a4ac">
+    <circle cx="-20" cy="0" r="3"/>
+    <circle cx="0" cy="0" r="3"/>
+    <circle cx="20" cy="0" r="3"/>
+  </g>
+</svg>

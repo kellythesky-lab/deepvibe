@@ -1710,25 +1710,29 @@
   }
 
   /* ============ STICKY CTA ============
-     Hides during scroll, appears when scrolling stops.
-     No background gradient needed — only shown in still moments. */
+     Initially completely removed from layout (display:none) so iOS Safari
+     cannot detect the yellow CTA color in the bottom fold. JS toggles
+     `is-mounted` first (sets display), then `is-shown` triggers the slide-in. */
   .sticky-cta{
+    display:none;
     position:fixed;bottom:0;left:0;right:0;z-index:40;
     padding:14px 16px calc(12px + var(--safe-bottom));
-    /* Soft gradient fade — tighter range, no yellow leak below the button */
     background:linear-gradient(
       to bottom,
       rgba(246,244,241,0) 0%,
       rgba(246,244,241,.7) 45%,
       rgba(246,244,241,.96) 100%
     );
-    transform:translateY(40%);
+    transform:translateY(110%);
+    opacity:0;
     transition:
       transform .7s var(--ease-out-soft),
       opacity .55s var(--ease-out-soft);
-    opacity:0;
     pointer-events:none;
     will-change:transform,opacity;
+  }
+  .sticky-cta.is-mounted{
+    display:block;
   }
   .sticky-cta.is-shown{
     transform:translateY(0);
@@ -1858,7 +1862,6 @@
 <noscript>
   <style>
     .reveal{transform:none !important}
-    .sticky-cta{transform:translateY(0) !important}
   </style>
 </noscript>
 </head>
@@ -2391,19 +2394,40 @@
     revealEls.forEach(el => el.classList.add('is-in'));
   }, 1500);
 
-  /* Sticky CTA — appears once user has scrolled into the content,
-     then stays visible. No more flicker on every scroll. */
+  /* Sticky CTA — display:none until user scrolls past the fold,
+     then mounts (display:block) and animates in. This prevents iOS Safari
+     from sampling the yellow color into its bottom toolbar before the
+     user has scrolled into the content. */
   const sticky = document.getElementById('stickyCta');
   const nav = document.getElementById('nav');
   const SHOW_AFTER_Y = 520;        // appear well past the fold
-  const HIDE_BEFORE_Y = 200;       // hide again only if scrolled back near top
+  const HIDE_BEFORE_Y = 200;       // unmount again only if scrolled back near top
+  let stickyMounted = false;
 
   const updateSticky = () => {
     const y = window.scrollY;
     if (y > SHOW_AFTER_Y) {
-      sticky.classList.add('is-shown');
-    } else if (y < HIDE_BEFORE_Y) {
+      // Mount first (so display:block), then on next frame add is-shown to trigger transition
+      if (!stickyMounted) {
+        sticky.classList.add('is-mounted');
+        stickyMounted = true;
+        // Wait one frame so the browser registers the display change before transitioning
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => sticky.classList.add('is-shown'));
+        });
+      } else {
+        sticky.classList.add('is-shown');
+      }
+    } else if (y < HIDE_BEFORE_Y && stickyMounted) {
       sticky.classList.remove('is-shown');
+      // Unmount after the slide-out transition completes
+      setTimeout(() => {
+        // Only unmount if still hidden (user hasn't scrolled back down meanwhile)
+        if (!sticky.classList.contains('is-shown')) {
+          sticky.classList.remove('is-mounted');
+          stickyMounted = false;
+        }
+      }, 700);
     }
     // Between 200 and 520: keep current state (hysteresis — prevents flicker)
 
@@ -2413,7 +2437,7 @@
   };
 
   window.addEventListener('scroll', updateSticky, { passive: true });
-  // initial check (no auto-show on landing — only after user scrolls)
+  // initial check (no auto-show on landing — Sticky stays display:none until scroll)
   updateSticky();
 
   /* ============ HERO CARD AUTO-ROTATE ============ */

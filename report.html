@@ -1,0 +1,1371 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#F6F4F1"/>
+<title>두 사람의 결 — deepvibe</title>
+
+<meta name="description" content="두 사람의 카톡에서 읽어낸 결, 한 편의 리포트로 정리되었어요."/>
+<meta name="robots" content="noindex, nofollow"/>
+
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<link rel="apple-touch-icon" href="favicon.svg"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============ Design Tokens (deepvibe Design System v119) ============ */
+  :root{
+    --bg:#F6F4F1;
+    --bg-soft:#EFEBE5;
+    --bg-warm:#F0E9DE;
+    --ink:#15131A;
+    --ink-2:#2a262f;
+    --muted:#7a7680;
+    --muted-2:#a8a4ac;
+    --line-04:rgba(20,10,30,.04);
+    --line-08:rgba(20,10,30,.08);
+    --line-12:rgba(20,10,30,.12);
+    --line-18:rgba(20,10,30,.18);
+
+    --kakao:#FEE500;
+    --kakao-ink:#3D1E1E;
+
+    /* Brand colors */
+    --pink:#ff6f91;
+    --pink-soft:#ffb4c6;
+    --pink-bg:rgba(255,159,188,.22);
+    --violet:#b967ff;
+
+    /* Card signature colors (6-tier) */
+    --s1-pink:#ff9fbc;          --s1-bg:rgba(255,159,188,.22);   --s1-deep:#a04060;
+    --s2-warm:#ffb894;          --s2-bg:rgba(255,184,148,.22);   --s2-deep:#a05822;
+    --s3-sky:#9bbcff;           --s3-bg:rgba(155,188,255,.26);   --s3-deep:#2850a8;
+    --s4-gold:#ffce6a;          --s4-bg:rgba(255,206,106,.26);   --s4-deep:#a87010;
+    --s5-violet:#caa3ff;        --s5-bg:rgba(202,163,255,.24);   --s5-deep:#6035a0;
+    --s6-mint:#92e5bc;          --s6-bg:rgba(146,229,188,.26);   --s6-deep:#1f7050;
+
+    --font-serif:'Fraunces','Noto Serif KR',serif;
+    --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Pretendard','Noto Sans KR',sans-serif;
+
+    --ease-out:cubic-bezier(.22,1,.36,1);
+    --ease-out-soft:cubic-bezier(.16,1,.3,1);
+    --ease-in-out:cubic-bezier(.65,0,.35,1);
+    --dur-fast:.18s;
+    --dur-base:.32s;
+    --dur-slow:.55s;
+
+    --r-sm:6px;
+    --r-md:14px;
+    --r-lg:20px;
+    --r-pill:999px;
+
+    --safe-bottom:env(safe-area-inset-bottom,0px);
+    --safe-top:env(safe-area-inset-top,0px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  :focus{outline:none}
+  :focus-visible{
+    outline:2px solid var(--ink);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+  html{
+    scroll-behavior:smooth;
+    overflow-x:hidden;
+    font-size:100%;
+    -webkit-text-size-adjust:100%;
+  }
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--font-sans);font-size:15.5px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    word-break:keep-all;line-break:strict;
+    overflow-x:hidden;
+    min-height:100vh;
+    min-height:100dvh;
+    position:relative;
+    padding-bottom:calc(80px + var(--safe-bottom));
+  }
+
+  /* ============ NAV ============ */
+  nav{
+    position:sticky;top:0;z-index:30;
+    background:rgba(246,244,241,.85);
+    backdrop-filter:blur(14px) saturate(180%);
+    -webkit-backdrop-filter:blur(14px) saturate(180%);
+    border-bottom:.5px solid transparent;
+    transition:border-color .25s var(--ease-out);
+  }
+  nav.is-scrolled{border-bottom-color:var(--line-08)}
+  nav .row{
+    max-width:520px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 20px;
+  }
+  nav .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+  nav .logo .mark{display:inline-block;width:22px;height:14px;position:relative}
+  nav .logo .mark svg{width:100%;height:100%;overflow:visible}
+  nav .logo .word{
+    font-family:var(--font-serif);font-weight:400;font-style:italic;
+    font-size:18px;letter-spacing:-.01em;color:var(--ink);
+  }
+  nav .user-chip{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:6px 12px 6px 6px;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:999px;
+    font-size:12.5px;font-weight:500;color:var(--ink-2);
+    box-shadow:0 1px 2px var(--line-04);
+    cursor:pointer;
+  }
+  nav .user-chip .avatar{
+    width:22px;height:22px;border-radius:50%;
+    background:linear-gradient(135deg, var(--pink), var(--violet));
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:10px;font-weight:600;
+  }
+
+  /* ============ MAIN ============ */
+  main{
+    max-width:520px;width:100%;
+    margin:0 auto;
+    padding:32px 20px 40px;
+  }
+
+  /* ============ HERO ============ */
+  .hero{
+    text-align:center;
+    margin-bottom:40px;
+  }
+  .hero > *{
+    opacity:0;
+    transform:translateY(10px);
+    animation:fadeUp .7s var(--ease-out-soft) forwards;
+  }
+  .hero > .hero-mark{animation-delay:.1s}
+  .hero > .hero-subtitle{animation-delay:.25s}
+  .hero > .hero-title{animation-delay:.4s}
+  .hero > .hero-affinity{animation-delay:.55s}
+  .hero > .hero-meta{animation-delay:.95s}
+  @keyframes fadeUp{to{opacity:1;transform:none}}
+
+  /* Count-up effect for hero affinity number (visual only — JS animates) */
+  .hero-affinity-number{
+    position:relative;
+    font-family:var(--font-serif);font-weight:500;
+    font-size:88px;line-height:1;
+    letter-spacing:-.045em;
+    color:var(--ink);
+    font-feature-settings:"tnum" 1, "lnum" 1;
+    margin-bottom:8px;
+  }
+
+  .hero-mark{
+    display:inline-block;
+    width:64px;height:38px;
+    margin:0 auto 24px;
+    position:relative;
+  }
+  .hero-mark svg{
+    width:100%;height:100%;overflow:visible;
+    animation:hero-mark-breath 4.4s var(--ease-in-out) infinite;
+  }
+  .hero-mark::after{
+    content:"";
+    position:absolute;
+    inset:-30%;
+    background:radial-gradient(circle, rgba(255,159,188,.4), transparent 65%);
+    z-index:-1;
+    filter:blur(20px);
+    animation:hero-halo-breath 4.4s var(--ease-in-out) infinite;
+  }
+  /* Breath via opacity + soft blur — works on all browsers, no transform-box issues.
+     The mark gently fades and softens, like a slow exhale. */
+  @keyframes hero-mark-breath{
+    0%, 100%{opacity:1;filter:blur(0)}
+    50%{opacity:.72;filter:blur(.6px)}
+  }
+  @keyframes hero-halo-breath{
+    0%, 100%{opacity:.7;transform:scale(1)}
+    50%{opacity:1;transform:scale(1.12)}
+  }
+
+  .hero-subtitle{
+    font-family:var(--font-serif);font-weight:400;
+    font-size:14px;color:var(--muted);
+    letter-spacing:-.005em;
+    margin-bottom:10px;
+  }
+  .hero-subtitle em{
+    font-style:normal;
+    font-weight:500;
+    color:var(--ink);
+  }
+
+  .hero-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:clamp(28px, 7.5vw, 34px);
+    line-height:1.2;letter-spacing:-.02em;
+    color:var(--ink);
+    margin-bottom:36px;
+  }
+  .hero-title em{
+    font-style:normal;
+    font-weight:500;
+    color:var(--ink);
+  }
+
+  /* Affinity hero block — large number + interpretation */
+  .hero-affinity{
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:24px;
+    padding:36px 24px 28px;
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 16px 32px -10px rgba(20,10,30,.14),
+      0 36px 60px -22px rgba(20,10,30,.22);
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-affinity::before{
+    content:"";
+    position:absolute;
+    width:280px;height:280px;
+    right:-100px;top:-100px;
+    border-radius:50%;
+    background:radial-gradient(circle, var(--s1-bg), transparent 65%);
+    filter:blur(20px);
+    pointer-events:none;
+  }
+  .hero-affinity-out{
+    position:relative;
+    font-family:var(--font-sans);
+    font-size:12.5px;color:var(--muted);
+    letter-spacing:-.005em;
+    margin-bottom:24px;
+  }
+  .hero-affinity-summary{
+    position:relative;
+    font-family:var(--font-serif);font-weight:300;
+    font-size:18px;line-height:1.5;
+    color:var(--ink);
+    letter-spacing:-.01em;
+    max-width:280px;
+    margin:0 auto;
+  }
+  .hero-affinity-summary em{
+    font-style:normal;
+    font-weight:500;
+    color:var(--ink);
+    padding:0 5px;
+    border-radius:4px;
+    background:var(--s1-bg);
+  }
+
+  .hero-meta{
+    margin-top:18px;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    font-family:var(--font-sans);
+    font-size:11.5px;color:var(--muted);
+  }
+  .hero-meta-dot{
+    width:3px;height:3px;border-radius:50%;
+    background:var(--muted-2);
+  }
+
+  /* ============ ANALYSIS CARDS ============ */
+  .cards{
+    display:flex;flex-direction:column;
+    gap:16px;
+    margin-bottom:40px;
+  }
+  .card{
+    position:relative;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:20px;
+    padding:24px 22px 26px;
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 8px 22px -12px rgba(20,10,30,.08),
+      0 22px 44px -24px rgba(20,10,30,.12);
+    overflow:hidden;
+    opacity:0;
+    transform:translateY(14px);
+    transition:opacity .7s var(--ease-out-soft), transform .8s var(--ease-out-soft);
+  }
+  .card.is-in{opacity:1;transform:none}
+
+  /* Card halo gradient — per-card signature color */
+  .card::before{
+    content:"";
+    position:absolute;
+    width:220px;height:220px;
+    right:-80px;top:-80px;
+    border-radius:50%;
+    filter:blur(22px);
+    pointer-events:none;
+    z-index:0;
+  }
+  .card-s1::before{background:radial-gradient(circle, var(--s1-bg), transparent 65%)}
+  .card-s2::before{background:radial-gradient(circle, var(--s6-bg), transparent 65%)} /* moment = mint (s6) */
+  .card-s3::before{background:radial-gradient(circle, var(--s3-bg), transparent 65%)}
+  .card-s4::before{background:radial-gradient(circle, var(--s2-bg), transparent 65%)} /* tempo = orange (s2) */
+  .card-s5::before{background:radial-gradient(circle, var(--s4-bg), transparent 65%)} /* style = gold (s4) */
+  .card-s6::before{background:radial-gradient(circle, var(--s5-bg), transparent 65%)} /* topic = violet (s5) */
+
+  .card-title{
+    position:relative;
+    font-family:var(--font-serif);font-weight:400;
+    font-size:22px;line-height:1.2;letter-spacing:-.01em;
+    color:var(--ink);
+    margin-bottom:18px;
+  }
+  .card-title em{
+    font-style:normal;
+    font-weight:500;
+    color:var(--ink);
+  }
+
+  /* Card body — placeholder for now */
+  .card-body{
+    position:relative;
+    z-index:1;
+  }
+
+  .card-summary{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:15px;line-height:1.6;
+    color:var(--ink-2);
+    letter-spacing:-.005em;
+    margin-bottom:24px;
+  }
+  .card-summary em{
+    font-style:normal;
+    font-weight:500;
+    color:var(--ink);
+    padding:0 5px;
+    border-radius:4px;
+  }
+  .card-s1 .card-summary em{background:var(--s1-bg)}
+  .card-s2 .card-summary em{background:var(--s6-bg)}
+  .card-s3 .card-summary em{background:var(--s3-bg)}
+  .card-s4 .card-summary em{background:var(--s2-bg)}
+  .card-s5 .card-summary em{background:var(--s4-bg)}
+  .card-s6 .card-summary em{background:var(--s5-bg)}
+
+  /* ========== 01 AFFINITY — chart + events ========== */
+  .affinity-chart{
+    position:relative;
+    margin-bottom:22px;
+    padding:18px 4px 8px;
+  }
+  .affinity-chart-label{
+    font-family:var(--font-sans);
+    font-size:10.5px;color:var(--muted-2);
+    letter-spacing:-.002em;
+    margin-bottom:8px;
+    display:flex;justify-content:space-between;
+  }
+  .affinity-chart-svg{
+    width:100%;
+    height:110px;
+    display:block;
+  }
+  .affinity-chart-line{
+    fill:none;
+    stroke:var(--s1-pink);
+    stroke-width:2.5;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    stroke-dasharray:600;
+    stroke-dashoffset:600;
+    transition:stroke-dashoffset 1.8s .3s var(--ease-out-soft);
+    vector-effect:non-scaling-stroke;
+  }
+  .card.is-in .affinity-chart-line{stroke-dashoffset:0}
+  .affinity-chart-area{
+    fill:url(#affinity-gradient);
+    opacity:0;
+    transition:opacity .8s 1.6s var(--ease-out);
+  }
+  .card.is-in .affinity-chart-area{opacity:1}
+  .affinity-chart-wrap{
+    position:relative;
+    width:100%;
+  }
+  .affinity-chart-dot{
+    position:absolute;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--s1-pink);
+    border:2px solid #fff;
+    box-sizing:content-box;
+    transform:translate(-50%, -50%) scale(0);
+    transition:transform .35s var(--ease-out-soft);
+    pointer-events:none;
+  }
+  .card.is-in .affinity-chart-dot{
+    transform:translate(-50%, -50%) scale(1);
+  }
+  .affinity-chart-dot.dot-1{transition-delay:1.2s}
+  .affinity-chart-dot.dot-2{transition-delay:1.5s}
+  .affinity-chart-dot.dot-3{transition-delay:1.8s}
+  .affinity-chart-dot.dot-4{transition-delay:2.1s}
+  .affinity-chart-dot.dot-5{transition-delay:2.4s}
+
+  .affinity-events{
+    display:flex;flex-direction:column;
+    gap:12px;
+  }
+  .affinity-event{
+    display:flex;align-items:flex-start;gap:12px;
+    padding:0;
+  }
+  .affinity-event-day{
+    flex-shrink:0;
+    font-family:var(--font-sans);
+    font-size:11.5px;font-weight:500;
+    color:var(--muted);
+    letter-spacing:-.002em;
+    width:54px;
+    padding-top:1px;
+  }
+  .affinity-event-text{
+    font-family:var(--font-sans);
+    font-size:13.5px;
+    color:var(--ink-2);
+    line-height:1.55;
+    letter-spacing:-.005em;
+  }
+  .affinity-event-text em{
+    font-style:normal;
+    font-weight:500;
+    color:var(--ink);
+    padding:0 4px;
+    border-radius:3px;
+    background:var(--s1-bg);
+  }
+
+  /* ========== 02 MOMENT — timeline ========== */
+  .moment-list{
+    display:flex;flex-direction:column;
+    gap:14px;
+  }
+  .moment-item{
+    display:flex;align-items:flex-start;gap:14px;
+    padding-bottom:14px;
+    border-bottom:.5px solid var(--line-08);
+  }
+  .moment-item:last-child{
+    border-bottom:none;
+    padding-bottom:0;
+  }
+  .moment-day{
+    flex-shrink:0;
+    display:flex;flex-direction:column;align-items:center;
+    width:48px;
+    padding-top:2px;
+  }
+  .moment-day-num{
+    font-family:var(--font-serif);font-weight:500;
+    font-size:22px;line-height:1;
+    color:var(--ink);
+    letter-spacing:-.02em;
+  }
+  .moment-day-unit{
+    font-family:var(--font-sans);
+    font-size:10px;color:var(--muted);
+    letter-spacing:-.002em;
+    margin-top:2px;
+  }
+  .moment-body{
+    flex:1;
+    padding-top:1px;
+  }
+  .moment-date{
+    font-family:var(--font-sans);
+    font-size:11px;color:var(--muted);
+    letter-spacing:-.002em;
+    margin-bottom:4px;
+  }
+  .moment-text{
+    font-family:var(--font-sans);
+    font-size:14px;color:var(--ink-2);
+    line-height:1.5;
+    letter-spacing:-.005em;
+  }
+  .moment-text em{
+    font-style:normal;
+    font-weight:500;
+    color:var(--ink);
+    padding:0 4px;
+    border-radius:3px;
+    background:var(--s6-bg);
+  }
+  .moment-quote{
+    display:inline-block;
+    margin-top:10px;
+    padding:8px 13px;
+    background:#F4F4F5;
+    border-radius:14px 14px 14px 4px;
+    font-family:var(--font-sans);
+    font-size:13px;color:var(--ink-2);
+    line-height:1.5;
+    letter-spacing:-.005em;
+    max-width:100%;
+  }
+
+  /* ========== 03 SIGNAL — emotion bars ========== */
+  .signal-bars{
+    display:flex;flex-direction:column;
+    gap:14px;
+  }
+  .signal-row{
+    display:flex;align-items:center;gap:12px;
+  }
+  .signal-label{
+    flex-shrink:0;
+    width:60px;
+    font-family:var(--font-sans);
+    font-size:13px;color:var(--ink-2);
+    letter-spacing:-.005em;
+    font-weight:500;
+  }
+  .signal-track{
+    flex:1;
+    height:8px;
+    background:var(--line-08);
+    border-radius:4px;
+    overflow:hidden;
+    position:relative;
+  }
+  .signal-fill{
+    height:100%;
+    background:var(--s3-sky);
+    border-radius:4px;
+    transform:scaleX(0);
+    transform-origin:left center;
+    transition:transform 1.2s var(--ease-out-soft);
+  }
+  .card.is-in .signal-fill{transform:scaleX(var(--fill, 0.5))}
+  .signal-fill-1{transition-delay:.3s}
+  .signal-fill-2{transition-delay:.5s}
+  .signal-fill-3{transition-delay:.7s}
+  .signal-fill-4{transition-delay:.9s}
+  .signal-value{
+    flex-shrink:0;
+    width:36px;
+    text-align:right;
+    font-family:var(--font-serif);font-weight:500;
+    font-size:15px;
+    color:var(--ink);
+    letter-spacing:-.01em;
+    font-feature-settings:"tnum" 1;
+  }
+
+  /* ========== 04 TEMPO — average + pattern ========== */
+  .tempo-hero{
+    display:flex;align-items:baseline;gap:8px;
+    margin-bottom:18px;
+    padding-bottom:18px;
+    border-bottom:.5px solid var(--line-08);
+  }
+  .tempo-hero-num{
+    font-family:var(--font-serif);font-weight:500;
+    font-size:44px;line-height:1;
+    color:var(--ink);
+    letter-spacing:-.03em;
+    font-feature-settings:"tnum" 1;
+  }
+  .tempo-hero-unit{
+    font-family:var(--font-sans);
+    font-size:14px;color:var(--muted);
+    letter-spacing:-.005em;
+    align-self:flex-end;
+    margin-bottom:4px;
+  }
+  .tempo-hero-label{
+    margin-left:auto;
+    font-family:var(--font-sans);
+    font-size:11px;color:var(--muted);
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    align-self:flex-end;
+    margin-bottom:4px;
+  }
+  .tempo-bars{
+    display:grid;
+    grid-template-columns:repeat(24, 1fr);
+    gap:2px;
+    align-items:flex-end;
+    height:48px;
+    margin-bottom:10px;
+  }
+  .tempo-bar{
+    background:var(--s2-warm);
+    border-radius:1.5px 1.5px 0 0;
+    opacity:.85;
+    transform:scaleY(0);
+    transform-origin:bottom;
+    transition:transform .8s var(--ease-out-soft);
+  }
+  .card.is-in .tempo-bar{transform:scaleY(1)}
+  .tempo-axis{
+    display:flex;justify-content:space-between;
+    font-family:var(--font-sans);
+    font-size:10px;color:var(--muted-2);
+    letter-spacing:-.002em;
+  }
+  .tempo-note{
+    margin-top:18px;
+    font-family:var(--font-sans);
+    font-size:13px;color:var(--ink-2);
+    line-height:1.55;
+    letter-spacing:-.005em;
+  }
+  .tempo-note em{
+    font-style:normal;
+    font-weight:500;
+    color:var(--ink);
+    padding:0 4px;
+    border-radius:3px;
+    background:var(--s2-bg);
+  }
+
+  /* ========== 05 STYLE — phrases + change ========== */
+  .style-section{
+    margin-bottom:18px;
+  }
+  .style-section:last-child{margin-bottom:0}
+  .style-section-label{
+    font-family:var(--font-sans);
+    font-size:11px;font-weight:500;
+    color:var(--muted);
+    letter-spacing:-.002em;
+    margin-bottom:10px;
+  }
+  .style-phrases{
+    display:flex;flex-wrap:wrap;gap:6px;
+  }
+  .style-phrase{
+    display:inline-flex;align-items:baseline;gap:6px;
+    padding:6px 12px;
+    background:var(--s4-bg);
+    border-radius:999px;
+    font-family:var(--font-sans);
+    font-size:12.5px;font-weight:500;
+    color:var(--ink);
+    letter-spacing:-.005em;
+  }
+  .style-phrase-count{
+    color:var(--muted);
+    font-weight:400;
+    font-size:11px;
+    letter-spacing:-.002em;
+  }
+  .style-change{
+    display:flex;align-items:center;gap:12px;
+    padding:14px 0 4px;
+    border-top:.5px solid var(--line-08);
+  }
+  .style-change-side{
+    flex:1 1 0;
+    min-width:0;
+    display:flex;flex-direction:column;
+    gap:3px;
+  }
+  .style-change-side:first-child{
+    align-items:flex-end;
+    text-align:right;
+  }
+  .style-change-side:last-child{
+    align-items:flex-start;
+    text-align:left;
+  }
+  .style-change-label{
+    font-family:var(--font-sans);
+    font-size:10.5px;color:var(--muted);
+    letter-spacing:.04em;
+    text-transform:uppercase;
+  }
+  .style-change-text{
+    font-family:var(--font-sans);
+    font-size:14px;font-weight:500;
+    color:var(--ink);
+    letter-spacing:-.005em;
+  }
+  .style-change-arrow{
+    color:var(--muted-2);
+    flex-shrink:0;
+  }
+
+  /* ========== 06 TOPIC — list ========== */
+  .topic-list{
+    display:flex;flex-direction:column;
+    gap:12px;
+  }
+  .topic-item{
+    display:flex;align-items:center;gap:14px;
+  }
+  .topic-rank{
+    flex-shrink:0;
+    width:20px;
+    font-family:var(--font-serif);font-weight:500;
+    font-size:14px;
+    color:var(--muted);
+    letter-spacing:-.01em;
+  }
+  .topic-bar-wrap{
+    flex:1;
+    display:flex;flex-direction:column;
+    gap:5px;
+  }
+  .topic-bar-head{
+    display:flex;justify-content:space-between;align-items:baseline;
+    gap:8px;
+  }
+  .topic-name{
+    font-family:var(--font-sans);
+    font-size:13.5px;font-weight:500;
+    color:var(--ink);
+    letter-spacing:-.005em;
+  }
+  .topic-pct{
+    font-family:var(--font-serif);font-weight:500;
+    font-size:13px;
+    color:var(--muted);
+    letter-spacing:-.01em;
+    font-feature-settings:"tnum" 1;
+  }
+  .topic-track{
+    height:4px;
+    background:var(--line-08);
+    border-radius:2px;
+    overflow:hidden;
+  }
+  .topic-fill{
+    height:100%;
+    background:var(--s5-violet);
+    border-radius:2px;
+    transform:scaleX(0);
+    transform-origin:left center;
+    transition:transform 1s var(--ease-out-soft);
+  }
+  .card.is-in .topic-fill{transform:scaleX(var(--fill, 0.5))}
+  .topic-fill-1{transition-delay:.2s}
+  .topic-fill-2{transition-delay:.35s}
+  .topic-fill-3{transition-delay:.5s}
+  .topic-fill-4{transition-delay:.65s}
+  .topic-fill-5{transition-delay:.8s}
+
+  /* ============ ACTIONS ============ */
+  .actions{
+    display:flex;flex-direction:column;
+    gap:14px;
+    margin-top:56px;
+  }
+  .action-card{
+    position:relative;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:20px;
+    padding:24px 22px;
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 8px 22px -12px rgba(20,10,30,.08);
+    overflow:hidden;
+    text-decoration:none;
+    color:inherit;
+    transition:transform .25s var(--ease-out), box-shadow .25s var(--ease-out);
+    display:block;
+    cursor:pointer;
+  }
+  .action-card:hover{
+    transform:translateY(-2px);
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 12px 28px -12px rgba(20,10,30,.1),
+      0 26px 50px -24px rgba(20,10,30,.12);
+  }
+
+  .action-card-primary{
+    background:#fff;
+  }
+  .action-card-primary::before{
+    content:"";
+    position:absolute;
+    width:200px;height:200px;
+    right:-60px;top:-60px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(255,159,188,.18), transparent 65%);
+    filter:blur(20px);
+    pointer-events:none;
+  }
+  .action-mark{
+    position:relative;
+    width:48px;height:28px;
+    margin-bottom:14px;
+  }
+  .action-mark svg{width:100%;height:100%;overflow:visible}
+  .action-title{
+    position:relative;
+    font-family:var(--font-serif);font-weight:400;
+    font-size:18px;line-height:1.3;letter-spacing:-.01em;
+    color:var(--ink);
+    margin-bottom:6px;
+  }
+  .action-title em{font-style:normal;font-weight:500;color:var(--ink)}
+  .action-desc{
+    position:relative;
+    font-family:var(--font-sans);
+    font-size:13.5px;color:var(--muted);
+    line-height:1.55;
+    margin-bottom:18px;
+  }
+  .action-button{
+    position:relative;
+    display:inline-flex;align-items:center;gap:5px;
+    font-family:var(--font-sans);
+    font-size:13.5px;font-weight:500;
+    color:var(--ink);
+    letter-spacing:-.005em;
+  }
+  .action-button svg{transition:transform .25s var(--ease-out-soft)}
+  .action-card:hover .action-button svg{transform:translateX(3px)}
+
+  /* Secondary action card — share.
+     Uses a soft gradient from pink (connecting to D-Day above) to warm beige,
+     creating gentle visual continuity without feeling drab. */
+  .action-card-share{
+    background:linear-gradient(135deg,
+      rgba(255,159,188,.08) 0%,
+      rgba(255,179,138,.06) 40%,
+      rgba(240,233,222,.55) 100%);
+    border-color:var(--line-08);
+  }
+
+  /* ============ FOOTER ============ */
+  footer{
+    margin-top:48px;
+    padding:24px 20px;
+    text-align:center;
+    font-family:var(--font-sans);
+    font-size:11px;color:var(--muted-2);
+    line-height:1.6;
+  }
+  footer a{color:var(--muted);text-decoration:none}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:360px){
+    main{padding:24px 16px 40px}
+    .hero{margin-bottom:32px}
+    .hero-affinity{padding:30px 20px 24px}
+    .hero-affinity-number{font-size:76px}
+    .card{padding:22px 18px}
+  }
+
+  /* ============ REDUCED MOTION ============ */
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;
+    }
+    .hero,.card{opacity:1 !important;transform:none !important}
+    .hero-mark svg{animation:none !important;opacity:1 !important;filter:none !important}
+    .hero-mark::after{animation:none !important;opacity:.85 !important;transform:none !important}
+  }
+</style>
+</head>
+<body>
+
+<!-- =================== NAV =================== -->
+<nav id="nav">
+  <div class="row">
+    <a class="logo" href="index.html" aria-label="deepvibe 홈으로">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 30 18" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="logo-pink" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff6f91" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#ff9fbc" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".7"/>
+            </radialGradient>
+            <radialGradient id="logo-violet" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#b967ff" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#cdb4ff" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#cdb4ff" stop-opacity=".7"/>
+            </radialGradient>
+          </defs>
+          <circle cx="11" cy="9" r="8" fill="url(#logo-pink)" style="mix-blend-mode:multiply"/>
+          <circle cx="19" cy="9" r="8" fill="url(#logo-violet)" style="mix-blend-mode:multiply"/>
+        </svg>
+      </span>
+      <span class="word">deepvibe</span>
+    </a>
+    <button class="user-chip" aria-label="사용자 메뉴">
+      <span class="avatar">민</span>
+      <span>민지</span>
+    </button>
+  </div>
+</nav>
+
+<!-- =================== MAIN =================== -->
+<main>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div class="hero-mark" aria-hidden="true">
+      <svg viewBox="0 0 64 38" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="hero-pink" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ff6f91" stop-opacity=".95"/>
+            <stop offset="70%" stop-color="#ff9fbc" stop-opacity=".82"/>
+            <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".68"/>
+          </radialGradient>
+          <radialGradient id="hero-violet" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#b967ff" stop-opacity=".95"/>
+            <stop offset="70%" stop-color="#cdb4ff" stop-opacity=".82"/>
+            <stop offset="100%" stop-color="#cdb4ff" stop-opacity=".68"/>
+          </radialGradient>
+        </defs>
+        <circle cx="23" cy="19" r="17" fill="url(#hero-pink)" style="mix-blend-mode:multiply"/>
+        <circle cx="41" cy="19" r="17" fill="url(#hero-violet)" style="mix-blend-mode:multiply"/>
+      </svg>
+    </div>
+
+    <div class="hero-subtitle"><em>지훈</em>님과의</div>
+    <h1 class="hero-title">한 편의 <em>결</em>이, 도착했어요.</h1>
+
+    <!-- Hero affinity card — the headline result -->
+    <div class="hero-affinity">
+      <div class="hero-affinity-number" id="heroNumber" data-target="82.3">0.0</div>
+      <div class="hero-affinity-out">호감도 / 100</div>
+      <p class="hero-affinity-summary">
+        두 사람은 지금, <em>친구에서 연인 사이</em>의 어떤 지점에 있어요.
+      </p>
+    </div>
+
+    <div class="hero-meta">
+      <span>94일</span>
+      <span class="hero-meta-dot"></span>
+      <span>1,247개 메시지</span>
+      <span class="hero-meta-dot"></span>
+      <span>2024.08.12 ~ 11.14</span>
+    </div>
+  </header>
+
+  <!-- ============ ANALYSIS CARDS — Impact order ============ -->
+  <section class="cards">
+
+    <!-- 01 · AFFINITY -->
+    <article class="card card-s1 reveal">
+      <h2 class="card-title">상대의 <em>호감도</em></h2>
+      <div class="card-body">
+        <p class="card-summary">8월에서 11월까지, <em>꾸준히 올라간 곡선</em>이에요</p>
+
+        <div class="affinity-chart">
+          <div class="affinity-chart-label">
+            <span>호감도 변화</span>
+            <span>94일</span>
+          </div>
+          <div class="affinity-chart-wrap">
+            <svg class="affinity-chart-svg" viewBox="0 0 320 110" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="affinity-gradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#ff9fbc" stop-opacity=".22"/>
+                  <stop offset="100%" stop-color="#ff9fbc" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- Area fill under the line -->
+              <path class="affinity-chart-area"
+                d="M 8 95 C 40 90, 65 83, 90 76 S 140 61, 165 54 S 215 46, 245 32 S 290 20, 312 15 L 312 110 L 8 110 Z"/>
+              <!-- The curve -->
+              <path class="affinity-chart-line"
+                d="M 8 95 C 40 90, 65 83, 90 76 S 140 61, 165 54 S 215 46, 245 32 S 290 20, 312 15"/>
+            </svg>
+            <!-- Dots as HTML overlays (stay round regardless of SVG aspect ratio) -->
+            <span class="affinity-chart-dot dot-1" style="left:2.5%;top:86.4%"></span>
+            <span class="affinity-chart-dot dot-2" style="left:28.1%;top:69.1%"></span>
+            <span class="affinity-chart-dot dot-3" style="left:51.6%;top:49.1%"></span>
+            <span class="affinity-chart-dot dot-4" style="left:76.6%;top:29.1%"></span>
+            <span class="affinity-chart-dot dot-5" style="left:97.5%;top:13.6%"></span>
+          </div>
+          <div class="affinity-chart-label" style="margin-top:8px;margin-bottom:0">
+            <span>8월 12일 · 첫 대화</span>
+            <span>오늘</span>
+          </div>
+        </div>
+
+        <div class="affinity-events">
+          <div class="affinity-event">
+            <div class="affinity-event-day">시작</div>
+            <div class="affinity-event-text">8월 12일에 <em>34점</em>에서 출발했어요.</div>
+          </div>
+          <div class="affinity-event">
+            <div class="affinity-event-day">오늘</div>
+            <div class="affinity-event-text">94일 만에 <em>82.3점</em>, 두 배가 넘게 올라왔어요.</div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- 02 · MOMENT -->
+    <article class="card card-s2 reveal">
+      <h2 class="card-title">결정적인 <em>순간</em></h2>
+      <div class="card-body">
+        <p class="card-summary">두 사람의 결이 <em>달라진 순간들</em>이에요</p>
+
+        <div class="moment-list">
+          <div class="moment-item">
+            <div class="moment-day">
+              <div class="moment-day-num">41</div>
+              <div class="moment-day-unit">일</div>
+            </div>
+            <div class="moment-body">
+              <div class="moment-date">9월 21일</div>
+              <div class="moment-text">먼저 "<em>잘자</em>"라고 인사한 첫 밤</div>
+              <div class="moment-quote">오늘 잘자요 :) 내일 봐요</div>
+            </div>
+          </div>
+          <div class="moment-item">
+            <div class="moment-day">
+              <div class="moment-day-num">62</div>
+              <div class="moment-day-unit">일</div>
+            </div>
+            <div class="moment-body">
+              <div class="moment-date">10월 12일</div>
+              <div class="moment-text">새벽 2시까지 이어진 <em>첫 통화</em></div>
+              <div class="moment-quote">우리 진짜 너무 오래 통화한 거 같아 ㅋㅋ</div>
+            </div>
+          </div>
+          <div class="moment-item">
+            <div class="moment-day">
+              <div class="moment-day-num">75</div>
+              <div class="moment-day-unit">일</div>
+            </div>
+            <div class="moment-body">
+              <div class="moment-date">10월 25일</div>
+              <div class="moment-text">답장에 <em>이모티콘이 늘어난</em> 날</div>
+              <div class="moment-quote">오늘 진짜 보고 싶다 🥺🥺</div>
+            </div>
+          </div>
+          <div class="moment-item">
+            <div class="moment-day">
+              <div class="moment-day-num">84</div>
+              <div class="moment-day-unit">일</div>
+            </div>
+            <div class="moment-body">
+              <div class="moment-date">11월 3일</div>
+              <div class="moment-text">처음으로 "<em>보고 싶다</em>"가 등장</div>
+              <div class="moment-quote">갑자기 보고 싶다... 뭐해요?</div>
+            </div>
+          </div>
+          <div class="moment-item">
+            <div class="moment-day">
+              <div class="moment-day-num">91</div>
+              <div class="moment-day-unit">일</div>
+            </div>
+            <div class="moment-body">
+              <div class="moment-date">11월 10일</div>
+              <div class="moment-text">아침 인사가 <em>매일</em>로 바뀐 시점</div>
+              <div class="moment-quote">좋은 아침! 오늘도 화이팅 ☀️</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- 03 · SIGNAL -->
+    <article class="card card-s3 reveal">
+      <h2 class="card-title">감정의 <em>시그널</em></h2>
+      <div class="card-body">
+        <p class="card-summary">대화 속에 가장 많이 흐른 건 <em>설렘과 친근함</em>이었어요</p>
+
+        <div class="signal-bars">
+          <div class="signal-row">
+            <div class="signal-label">친근함</div>
+            <div class="signal-track">
+              <div class="signal-fill signal-fill-1" style="--fill:0.92"></div>
+            </div>
+            <div class="signal-value">92</div>
+          </div>
+          <div class="signal-row">
+            <div class="signal-label">설렘</div>
+            <div class="signal-track">
+              <div class="signal-fill signal-fill-2" style="--fill:0.78"></div>
+            </div>
+            <div class="signal-value">78</div>
+          </div>
+          <div class="signal-row">
+            <div class="signal-label">고마움</div>
+            <div class="signal-track">
+              <div class="signal-fill signal-fill-3" style="--fill:0.54"></div>
+            </div>
+            <div class="signal-value">54</div>
+          </div>
+          <div class="signal-row">
+            <div class="signal-label">조심스러움</div>
+            <div class="signal-track">
+              <div class="signal-fill signal-fill-4" style="--fill:0.32"></div>
+            </div>
+            <div class="signal-value">32</div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- 04 · TEMPO -->
+    <article class="card card-s4 reveal">
+      <h2 class="card-title">답장의 <em>속도</em></h2>
+      <div class="card-body">
+        <p class="card-summary">평균 4분, <em>거의 실시간</em>이에요</p>
+
+        <div class="tempo-hero">
+          <span class="tempo-hero-num">4.2</span>
+          <span class="tempo-hero-unit">분</span>
+          <span class="tempo-hero-label">평균 답장</span>
+        </div>
+
+        <div class="tempo-bars" aria-label="시간대별 대화 빈도">
+          <div class="tempo-bar" style="height:18%"></div>
+          <div class="tempo-bar" style="height:12%"></div>
+          <div class="tempo-bar" style="height:8%"></div>
+          <div class="tempo-bar" style="height:6%"></div>
+          <div class="tempo-bar" style="height:5%"></div>
+          <div class="tempo-bar" style="height:8%"></div>
+          <div class="tempo-bar" style="height:18%"></div>
+          <div class="tempo-bar" style="height:32%"></div>
+          <div class="tempo-bar" style="height:42%"></div>
+          <div class="tempo-bar" style="height:55%"></div>
+          <div class="tempo-bar" style="height:58%"></div>
+          <div class="tempo-bar" style="height:48%"></div>
+          <div class="tempo-bar" style="height:50%"></div>
+          <div class="tempo-bar" style="height:55%"></div>
+          <div class="tempo-bar" style="height:62%"></div>
+          <div class="tempo-bar" style="height:68%"></div>
+          <div class="tempo-bar" style="height:72%"></div>
+          <div class="tempo-bar" style="height:78%"></div>
+          <div class="tempo-bar" style="height:85%"></div>
+          <div class="tempo-bar" style="height:92%"></div>
+          <div class="tempo-bar" style="height:98%"></div>
+          <div class="tempo-bar" style="height:88%"></div>
+          <div class="tempo-bar" style="height:62%"></div>
+          <div class="tempo-bar" style="height:38%"></div>
+        </div>
+        <div class="tempo-axis">
+          <span>0시</span>
+          <span>6시</span>
+          <span>12시</span>
+          <span>18시</span>
+          <span>24시</span>
+        </div>
+
+        <p class="tempo-note">가장 많이 이야기한 시간은 <em>밤 9~11시</em>. 잠들기 전, 가까워지는 시간이에요.</p>
+      </div>
+    </article>
+
+    <!-- 05 · STYLE -->
+    <article class="card card-s5 reveal">
+      <h2 class="card-title">말투의 <em>변화</em></h2>
+      <div class="card-body">
+        <p class="card-summary">말끝이 부드러워지고, <em>호칭이 가까워졌어요</em></p>
+
+        <div class="style-section">
+          <div class="style-section-label">자주 쓰는 말</div>
+          <div class="style-phrases">
+            <span class="style-phrase">그치 <span class="style-phrase-count">48회</span></span>
+            <span class="style-phrase">맞아 <span class="style-phrase-count">34회</span></span>
+            <span class="style-phrase">ㅎㅎ <span class="style-phrase-count">187회</span></span>
+            <span class="style-phrase">진짜? <span class="style-phrase-count">29회</span></span>
+            <span class="style-phrase">잘자 <span class="style-phrase-count">22회</span></span>
+          </div>
+        </div>
+
+        <div class="style-section">
+          <div class="style-section-label">달라진 호칭</div>
+          <div class="style-change">
+            <div class="style-change-side">
+              <div class="style-change-label">처음</div>
+              <div class="style-change-text">지훈씨</div>
+            </div>
+            <svg class="style-change-arrow" width="20" height="14" viewBox="0 0 20 14" fill="none" aria-hidden="true">
+              <path d="M2 7 H17 M13 3 L17 7 L13 11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="style-change-side">
+              <div class="style-change-label">지금</div>
+              <div class="style-change-text">지훈아</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- 06 · TOPIC -->
+    <article class="card card-s6 reveal">
+      <h2 class="card-title">자주 나눈 <em>이야기</em></h2>
+      <div class="card-body">
+        <p class="card-summary">서로의 하루를 <em>가장 자주 물어봤어요</em></p>
+
+        <div class="topic-list">
+          <div class="topic-item">
+            <div class="topic-rank">1</div>
+            <div class="topic-bar-wrap">
+              <div class="topic-bar-head">
+                <span class="topic-name">오늘 뭐 했어</span>
+                <span class="topic-pct">28%</span>
+              </div>
+              <div class="topic-track"><div class="topic-fill topic-fill-1" style="--fill:0.95"></div></div>
+            </div>
+          </div>
+          <div class="topic-item">
+            <div class="topic-rank">2</div>
+            <div class="topic-bar-wrap">
+              <div class="topic-bar-head">
+                <span class="topic-name">음식 · 카페</span>
+                <span class="topic-pct">21%</span>
+              </div>
+              <div class="topic-track"><div class="topic-fill topic-fill-2" style="--fill:0.72"></div></div>
+            </div>
+          </div>
+          <div class="topic-item">
+            <div class="topic-rank">3</div>
+            <div class="topic-bar-wrap">
+              <div class="topic-bar-head">
+                <span class="topic-name">주말 계획</span>
+                <span class="topic-pct">17%</span>
+              </div>
+              <div class="topic-track"><div class="topic-fill topic-fill-3" style="--fill:0.58"></div></div>
+            </div>
+          </div>
+          <div class="topic-item">
+            <div class="topic-rank">4</div>
+            <div class="topic-bar-wrap">
+              <div class="topic-bar-head">
+                <span class="topic-name">일 · 공부 고민</span>
+                <span class="topic-pct">13%</span>
+              </div>
+              <div class="topic-track"><div class="topic-fill topic-fill-4" style="--fill:0.44"></div></div>
+            </div>
+          </div>
+          <div class="topic-item">
+            <div class="topic-rank">5</div>
+            <div class="topic-bar-wrap">
+              <div class="topic-bar-head">
+                <span class="topic-name">영화 · 드라마</span>
+                <span class="topic-pct">9%</span>
+              </div>
+              <div class="topic-track"><div class="topic-fill topic-fill-5" style="--fill:0.30"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- ============ ACTIONS ============ -->
+  <section class="actions">
+
+    <!-- Primary action — D-Day -->
+    <a href="#" class="action-card action-card-primary">
+      <div class="action-mark" aria-hidden="true">
+        <svg viewBox="0 0 48 28" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="action-pink" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff6f91" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#ff9fbc" stop-opacity=".82"/>
+              <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".68"/>
+            </radialGradient>
+            <radialGradient id="action-violet" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#b967ff" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#cdb4ff" stop-opacity=".82"/>
+              <stop offset="100%" stop-color="#cdb4ff" stop-opacity=".68"/>
+            </radialGradient>
+          </defs>
+          <circle cx="17" cy="14" r="12" fill="url(#action-pink)" style="mix-blend-mode:multiply"/>
+          <circle cx="31" cy="14" r="12" fill="url(#action-violet)" style="mix-blend-mode:multiply"/>
+        </svg>
+      </div>
+      <h3 class="action-title">매일 켜는 화면 위에, <em>두 사람의 D-Day</em></h3>
+      <p class="action-desc">오늘부터 두 사람의 D-Day가 시작돼요.<br>50일·100일에 다시 와서, 그때의 결을 비교해드릴게요.</p>
+      <span class="action-button">
+        D-Day 시작하기
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M3 7 H11 M7 4 L11 7 L7 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </a>
+
+    <!-- Secondary action — share -->
+    <a href="#" class="action-card action-card-share">
+      <h3 class="action-title">두 사람의 결, <em>친구에게도 들려주고 싶다면</em></h3>
+      <p class="action-desc">친구가 시작하면, 나에게도 한 편의 리포트가 더 생겨요.</p>
+      <span class="action-button">
+        공유하기
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M3 7 H11 M7 4 L11 7 L7 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </a>
+
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div>두 사람의 결은 계속 흐르고 있어요.</div>
+    <div style="margin-top:14px;color:var(--muted-2);font-size:10px">© 2026 deepvibe</div>
+  </footer>
+
+</main>
+
+<script>
+(() => {
+  // Reveal cards on scroll
+  const cards = document.querySelectorAll('.card.reveal');
+  const cardObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-in');
+        cardObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.35, rootMargin: '0px 0px -80px 0px' });
+  cards.forEach(c => cardObserver.observe(c));
+
+  // Nav scroll state
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 4) nav.classList.add('is-scrolled');
+    else nav.classList.remove('is-scrolled');
+  }, { passive: true });
+
+  // Hero count-up: 0.0 → 82.3 (matches D-Day widget pattern from index.html)
+  const heroNumber = document.getElementById('heroNumber');
+  const target = parseFloat(heroNumber.dataset.target);
+  let heroStarted = false;
+  const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+  const heroCount = () => {
+    if (heroStarted) return;
+    heroStarted = true;
+    const dur = 1600;
+    const start = performance.now();
+    const tick = (now) => {
+      const p = Math.min(1, (now - start) / dur);
+      const v = (easeOut(p) * target).toFixed(1);
+      heroNumber.textContent = v;
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+  // Start count-up after hero fade-in completes (matches animation-delay)
+  setTimeout(heroCount, 700);
+})();
+</script>
+</body>
+</html>

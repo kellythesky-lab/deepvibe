@@ -832,6 +832,15 @@
     font-variant-numeric:tabular-nums lining-nums;
     font-feature-settings:"tnum" 1,"lnum" 1;
   }
+  /* big-text: 한글 정성 표현용 (s1, s3, s4 평가성 카드)
+     - Fraunces 영문 숫자 30px → 한글 22px로 시각적 균형
+     - 의미 있는 한 줄 카피 (점수 평가 X) */
+  .hero-slide .a-stat .big.big-text{
+    font-size:22px;
+    font-weight:400;
+    letter-spacing:-.005em;
+    font-feature-settings:normal;
+  }
   /* small soft glow orb behind the number — smaller than the digits,
      bleeds out gently like ink in paper. Multiply blend so the color
      soaks into the white card background instead of floating above it. */
@@ -1010,9 +1019,7 @@
      4. p-summary (.6s)
      5. p-chart (.8s - line draws 1.8s)
      6. p-events (1.1s, 1.3s, 1.5s sequentially) */
-  .p-card .p-tag,
   .p-card .p-title,
-  .p-card .p-hero-num,
   .p-card .p-summary,
   .p-card .p-chart,
   .p-card .p-events li{
@@ -1020,22 +1027,15 @@
     transform:translateY(8px);
     transition:opacity .6s var(--ease-out-soft), transform .6s var(--ease-out-soft);
   }
-  .reveal.is-in .p-card .p-tag{opacity:1;transform:none;transition-delay:.1s}
-  .reveal.is-in .p-card .p-title{opacity:1;transform:none;transition-delay:.2s}
-  .reveal.is-in .p-card .p-hero-num{opacity:1;transform:none;transition-delay:.35s}
-  .reveal.is-in .p-card .p-summary{opacity:1;transform:none;transition-delay:.6s}
-  .reveal.is-in .p-card .p-chart{opacity:1;transform:none;transition-delay:.8s}
-  .reveal.is-in .p-card .p-events li:nth-child(1){opacity:1;transform:none;transition-delay:1.1s}
-  .reveal.is-in .p-card .p-events li:nth-child(2){opacity:1;transform:none;transition-delay:1.3s}
-  .reveal.is-in .p-card .p-events li:nth-child(3){opacity:1;transform:none;transition-delay:1.5s}
+  .reveal.is-in .p-card .p-title{opacity:1;transform:none;transition-delay:.1s}
+  .reveal.is-in .p-card .p-summary{opacity:1;transform:none;transition-delay:.25s}
+  .reveal.is-in .p-card .p-chart{opacity:1;transform:none;transition-delay:.45s}
+  .reveal.is-in .p-card .p-events li:nth-child(1){opacity:1;transform:none;transition-delay:.75s}
+  .reveal.is-in .p-card .p-events li:nth-child(2){opacity:1;transform:none;transition-delay:.95s}
+  .reveal.is-in .p-card .p-events li:nth-child(3){opacity:1;transform:none;transition-delay:1.15s}
 
-  .p-tag{
-    font-family:var(--font-sans);
-    font-size:9.5px;font-weight:600;
-    color:var(--muted-2);
-    letter-spacing:.14em;
-    text-transform:uppercase;
-  }
+  /* v124: p-tag removed ("01 · AFFINITY" English label dropped — Korean-first principle). */
+
   .p-title{
     margin-top:6px;
     font-family:var(--font-serif);font-weight:300;font-style:italic;
@@ -1044,51 +1044,22 @@
   }
   .p-main .p-title{font-size:24px}
 
-  /* ===== MAIN: hero number + summary + chart + events ===== */
-  .p-hero-num{
-    position:relative;
-    margin:24px auto 10px;
-    text-align:center;
-    padding:18px 0;
-  }
-  .p-hero-glow{
-    position:absolute;
-    left:50%;top:50%;
-    transform:translate(-50%,-50%);
-    width:240px;height:240px;
-    border-radius:50%;
-    background:radial-gradient(circle at 50% 50%,
-      rgba(255,159,188,.42) 0%,
-      rgba(255,180,198,.22) 30%,
-      rgba(255,200,215,.08) 55%,
-      rgba(255,200,215,0) 75%
-    );
-    filter:blur(6px);
-    pointer-events:none;
-    z-index:0;
-  }
-  .p-hero-value{
-    position:relative;z-index:1;
-    font-family:var(--font-serif);font-weight:300;
-    font-size:72px;line-height:1;letter-spacing:-.04em;
-    color:var(--ink);
-    font-feature-settings:"tnum" 1,"lnum" 1;
-  }
-  .p-hero-denom{
-    position:relative;z-index:1;
-    margin-top:6px;
-    font-family:var(--font-serif);font-weight:300;font-style:italic;
-    font-size:16px;color:var(--muted);
-    letter-spacing:-.01em;
-  }
+  /* v124: p-hero-num removed (score "82.3 /100" replaced by narrative + chart,
+     matching /report's AFFINITY card pattern). */
 
   .p-summary{
     margin-top:18px;
     text-align:center;
     font-family:var(--font-serif);font-weight:300;font-style:italic;
-    font-size:13.5px;color:var(--muted);
-    line-height:1.55;
+    font-size:15px;color:var(--ink);
+    line-height:1.5;
     letter-spacing:-.005em;
+  }
+  .p-summary em{
+    font-style:normal;font-weight:400;
+    color:var(--ink);
+    background:rgba(255,159,188,.22);
+    padding:0 5px;border-radius:4px;
   }
 
   .p-chart{
@@ -2128,9 +2099,7 @@
     .reveal.is-in .p-card{transition-delay:0s !important}
     /* skip all internal staggers — show everything instantly */
     .journey-card,
-    .p-card .p-tag,
     .p-card .p-title,
-    .p-card .p-hero-num,
     .p-card .p-summary,
     .p-card .p-chart,
     .p-card .p-events li{
@@ -2206,13 +2175,13 @@
     <div class="hero-card" id="heroCard">
       <div class="hero-slides" id="heroSlides">
 
-        <div class="hero-slide s1 is-current" data-stat="82.3" data-stat-fmt="decimal">
+        <div class="hero-slide s1 is-current">
           <div class="a-title">답장이 빨라진 주</div>
           <div class="a-art"></div>
           <div class="a-quote">"자고 있었어? ㅋㅋ<br><em>깨운 건 아니지</em>"</div>
           <div class="a-stat">
-            <span>매칭도</span>
-            <span class="big" data-target="82.3">0</span>
+            <span>지금 결</span>
+            <span class="big big-text">친구 ↔ 연인</span>
           </div>
         </div>
 
@@ -2226,23 +2195,23 @@
           </div>
         </div>
 
-        <div class="hero-slide s3" data-stat="71" data-stat-fmt="percent">
+        <div class="hero-slide s3">
           <div class="a-title">웃음 이모티콘의 결</div>
           <div class="a-art"></div>
           <div class="a-quote">"오늘 진짜<br><em>보고 싶다</em> 🥺"</div>
           <div class="a-stat">
-            <span>긍정 비율</span>
-            <span class="big" data-target="71">0<span style="font-size:10px;color:var(--muted);font-style:normal;margin-left:2px">%</span></span>
+            <span>감정 결</span>
+            <span class="big big-text">웃음 흐르는</span>
           </div>
         </div>
 
-        <div class="hero-slide s4" data-stat="68" data-stat-fmt="percent">
+        <div class="hero-slide s4">
           <div class="a-title">닮아가는 말투</div>
           <div class="a-art"></div>
           <div class="a-quote">"그치 그치,<br><em>나도 그 생각 했어</em>"</div>
           <div class="a-stat">
-            <span>일치도</span>
-            <span class="big" data-target="68">0<span style="font-size:10px;color:var(--muted);font-style:normal;margin-left:2px">%</span></span>
+            <span>말투 결</span>
+            <span class="big big-text">닮아가는</span>
           </div>
         </div>
 
@@ -2345,18 +2314,11 @@
 
     <!-- HERO PREVIEW CARD: Affinity / 호감도 - the sole analysis preview -->
     <article class="p-card" aria-labelledby="p-main-title">
-      <div class="p-tag"><span>01 · AFFINITY</span></div>
       <h3 class="p-title" id="p-main-title">상대의 호감도</h3>
 
-      <div class="p-hero-num">
-        <div class="p-hero-glow" aria-hidden="true"></div>
-        <div class="p-hero-value">0.0</div>
-        <div class="p-hero-denom"><em>/100</em></div>
-      </div>
-
       <p class="p-summary">
-        적극적인 답장과 사적인 공유가 많고,<br>
-        대화를 먼저 여는 빈도도 꾸준합니다.
+        두 사람은 지금,<br>
+        <em>친구에서 연인으로 향하는 길</em> 위에 있어요.
       </p>
 
       <!-- mini line chart of affinity over time -->
@@ -2750,6 +2712,8 @@
   const animateStatOnSlide = (slideEl) => {
     const statEl = slideEl.querySelector('.a-stat .big');
     if (!statEl) return;
+    // big-text: 정성 표현 카드 (s1, s3, s4) — count-up 스킵
+    if (statEl.classList.contains('big-text')) return;
     const target = parseFloat(statEl.dataset.target);
     const fmt = slideEl.dataset.statFmt || 'decimal';
     // text node is first child; preserve any trailing unit <span>
@@ -2890,44 +2854,8 @@
     }
   }
 
-  /* Analysis preview hero number (82.3) count-up: starts when analysis section reveals */
-  const heroValue = document.querySelector('.p-hero-value');
-  if (heroValue) {
-    const heroTarget = 82.3;
-    const analysisSection = document.querySelector('.analysis');
-    let heroStarted = false;
-    const heroCount = () => {
-      if (heroStarted) return;
-      heroStarted = true;
-      if (reduce) {
-        heroValue.textContent = heroTarget.toFixed(1);
-        return;
-      }
-      const dur = 1600;
-      const start = performance.now();
-      const tick = (now) => {
-        const p = Math.min(1, (now - start) / dur);
-        const v = (easeOut(p) * heroTarget).toFixed(1);
-        heroValue.textContent = v;
-        if (p < 1) requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-    };
-    if ('IntersectionObserver' in window && analysisSection) {
-      const ao = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            // Wait for the card's internal stagger to start (.35s delay on hero-num)
-            setTimeout(heroCount, 500);
-            ao.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.3 });
-      ao.observe(analysisSection);
-    } else {
-      heroCount();
-    }
-  }
+  /* v124: Analysis preview hero number (82.3) removed for brand consistency.
+     /report AFFINITY card uses narrative + chart (no score), /index preview now matches. */
 
   /* Tap ripple on kakao buttons */
   const tapTargets = document.querySelectorAll('.btn-kakao');

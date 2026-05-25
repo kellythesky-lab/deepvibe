@@ -345,13 +345,11 @@ function OGUpload() {
 function MiniCard({
   accentColor,
   label,
-  value,
-  suffix,
+  caption,
 }: {
   accentColor: string;
   label: string;
-  value: string;
-  suffix: string;
+  caption: string;
 }) {
   return (
     <div
@@ -360,9 +358,10 @@ function MiniCard({
         flexDirection: 'column',
         background: '#fff',
         borderRadius: '22px',
-        padding: '24px 22px',
+        padding: '26px 24px',
         width: '280px',
         height: '160px',
+        justifyContent: 'space-between',
         boxShadow:
           '0 1px 2px rgba(20,10,30,0.04), 0 12px 28px -16px rgba(20,10,30,0.1), 0 24px 48px -20px rgba(20,10,30,0.15)',
       }}
@@ -372,7 +371,6 @@ function MiniCard({
           display: 'flex',
           alignItems: 'center',
           gap: '8px',
-          marginBottom: '14px',
         }}
       >
         <div
@@ -394,29 +392,18 @@ function MiniCard({
           {label}
         </div>
       </div>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-        <div
-          style={{
-            fontFamily: 'Fraunces',
-            fontWeight: 500,
-            fontSize: '64px',
-            color: COLORS.ink,
-            letterSpacing: '-0.03em',
-            lineHeight: 1,
-          }}
-        >
-          {value}
-        </div>
-        <div
-          style={{
-            fontFamily: 'NotoSansKR',
-            fontSize: '20px',
-            color: COLORS.muted,
-            letterSpacing: '-0.002em',
-          }}
-        >
-          {suffix}
-        </div>
+      <div
+        style={{
+          display: 'flex',
+          fontFamily: 'NotoSerifKR',
+          fontWeight: 400,
+          fontSize: '28px',
+          color: COLORS.ink,
+          letterSpacing: '-0.015em',
+          lineHeight: 1.25,
+        }}
+      >
+        {caption}
       </div>
     </div>
   );
@@ -473,9 +460,9 @@ function OGReport() {
           zIndex: 2,
         }}
       >
-        <MiniCard accentColor={COLORS.pink} label="상대의 호감도" value="82.3" suffix="%" />
-        <MiniCard accentColor={COLORS.orange} label="평균 답장" value="4" suffix="분" />
-        <MiniCard accentColor={COLORS.coral} label="다가오는 시간" value="47" suffix="회" />
+        <MiniCard accentColor={COLORS.pink} label="지금 결" caption="친구 ↔ 연인" />
+        <MiniCard accentColor={COLORS.orange} label="감정 결" caption="웃음 흐르는" />
+        <MiniCard accentColor={COLORS.coral} label="다가오는 결" caption="미래가 보이는" />
       </div>
 
       <div

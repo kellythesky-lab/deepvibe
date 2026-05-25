@@ -96,6 +96,13 @@
       dropdown.className = 'auth-dropdown';
       dropdown.setAttribute('role', 'menu');
 
+      // "내가 그린 결" — link to history page
+      const historyLink = document.createElement('a');
+      historyLink.setAttribute('role', 'menuitem');
+      historyLink.setAttribute('href', '/history');
+      historyLink.textContent = '내가 그린 결';
+      dropdown.appendChild(historyLink);
+
       const logoutBtn = document.createElement('button');
       logoutBtn.type = 'button';
       logoutBtn.setAttribute('role', 'menuitem');
@@ -185,12 +192,202 @@
   };
 
   // ============================================================
+  // TERMS AGREEMENT MODAL — first-time user consent
+  //
+  // Shows once after sign-in. User must agree to 만 14세 + 이용약관 +
+  // 개인정보처리방침 to proceed. Marketing consent is optional.
+  // localStorage key: 'dv_terms_agreed_v1' (bump version when terms change)
+  // ============================================================
+  const TERMS_KEY = 'dv_terms_agreed_v1';
+
+  const hasAgreedToTerms = () => {
+    try {
+      return localStorage.getItem(TERMS_KEY) === 'true';
+    } catch (e) {
+      return false;
+    }
+  };
+
+  const setTermsAgreed = (marketing = false) => {
+    try {
+      localStorage.setItem(TERMS_KEY, 'true');
+      if (marketing) {
+        localStorage.setItem('dv_marketing_consent_v1', 'true');
+      }
+    } catch (e) {}
+  };
+
+  const showConsentModal = () => {
+    // Don't show twice
+    if (document.querySelector('.consent-modal-overlay')) return;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'consent-modal-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-labelledby', 'consentTitle');
+
+    overlay.innerHTML = `
+      <div class="consent-modal">
+        <div class="consent-modal-handle" aria-hidden="true"></div>
+        <h2 class="consent-modal-title" id="consentTitle">시작하기 전에, <em>잠깐만요</em></h2>
+        <p class="consent-modal-desc">두 사람의 결을 안전하게 그리기 위해, 아래 항목에 동의해 주세요.</p>
+
+        <ul class="consent-list">
+          <li class="consent-item">
+            <label class="consent-row">
+              <input type="checkbox" id="agreeAge" class="consent-check" data-required="1">
+              <span class="consent-check-box" aria-hidden="true">
+                <svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6 L5 8.5 L9.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <span class="consent-text">
+                <span class="consent-tag">필수</span>
+                <span class="consent-label">만 14세 이상이에요</span>
+              </span>
+            </label>
+          </li>
+          <li class="consent-item">
+            <label class="consent-row">
+              <input type="checkbox" id="agreeTerms" class="consent-check" data-required="1">
+              <span class="consent-check-box" aria-hidden="true">
+                <svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6 L5 8.5 L9.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <span class="consent-text">
+                <span class="consent-tag">필수</span>
+                <span class="consent-label">이용약관에 동의해요</span>
+                <a href="/terms" target="_blank" class="consent-link" aria-label="이용약관 자세히 보기">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4 2 H10 V8 M10 2 L4 8 M3 5 V10 H8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+              </span>
+            </label>
+          </li>
+          <li class="consent-item">
+            <label class="consent-row">
+              <input type="checkbox" id="agreePrivacy" class="consent-check" data-required="1">
+              <span class="consent-check-box" aria-hidden="true">
+                <svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6 L5 8.5 L9.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <span class="consent-text">
+                <span class="consent-tag">필수</span>
+                <span class="consent-label">개인정보 수집·이용에 동의해요</span>
+                <a href="/privacy" target="_blank" class="consent-link" aria-label="개인정보처리방침 자세히 보기">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4 2 H10 V8 M10 2 L4 8 M3 5 V10 H8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+              </span>
+            </label>
+          </li>
+          <li class="consent-item">
+            <label class="consent-row">
+              <input type="checkbox" id="agreeMarketing" class="consent-check">
+              <span class="consent-check-box" aria-hidden="true">
+                <svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6 L5 8.5 L9.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <span class="consent-text">
+                <span class="consent-tag consent-tag-optional">선택</span>
+                <span class="consent-label">마케팅 정보 받기 (신규 기능 알림)</span>
+              </span>
+            </label>
+          </li>
+        </ul>
+
+        <div class="consent-all-row">
+          <label class="consent-row consent-row-all">
+            <input type="checkbox" id="agreeAll" class="consent-check">
+            <span class="consent-check-box" aria-hidden="true">
+              <svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6 L5 8.5 L9.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="consent-text">
+              <span class="consent-label consent-label-all">모두 동의</span>
+            </span>
+          </label>
+        </div>
+
+        <button type="button" class="btn-consent-submit" id="btnConsentSubmit" disabled>
+          시작하기
+        </button>
+        <button type="button" class="btn-consent-cancel" id="btnConsentCancel">
+          나중에 할게요
+        </button>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    // Animate in
+    requestAnimationFrame(() => {
+      overlay.classList.add('is-open');
+    });
+    document.body.style.overflow = 'hidden';
+
+    // Wire up checkboxes
+    const requiredChecks = overlay.querySelectorAll('.consent-check[data-required="1"]');
+    const allChecks = overlay.querySelectorAll('.consent-check:not(#agreeAll)');
+    const agreeAll = overlay.querySelector('#agreeAll');
+    const agreeMarketing = overlay.querySelector('#agreeMarketing');
+    const submitBtn = overlay.querySelector('#btnConsentSubmit');
+    const cancelBtn = overlay.querySelector('#btnConsentCancel');
+
+    const updateSubmitState = () => {
+      const allRequiredChecked = Array.from(requiredChecks).every(c => c.checked);
+      submitBtn.disabled = !allRequiredChecked;
+
+      // Update "agree all" checkbox to reflect current state
+      const allChecked = Array.from(allChecks).every(c => c.checked);
+      agreeAll.checked = allChecked;
+    };
+
+    allChecks.forEach(c => c.addEventListener('change', updateSubmitState));
+
+    agreeAll.addEventListener('change', () => {
+      allChecks.forEach(c => { c.checked = agreeAll.checked; });
+      updateSubmitState();
+    });
+
+    submitBtn.addEventListener('click', () => {
+      setTermsAgreed(agreeMarketing.checked);
+      closeConsentModal();
+    });
+
+    cancelBtn.addEventListener('click', () => {
+      // User declined — sign them out
+      closeConsentModal();
+      window.dvAuth.logout();
+    });
+
+    // No outside-click close — must explicitly choose
+  };
+
+  const closeConsentModal = () => {
+    const overlay = document.querySelector('.consent-modal-overlay');
+    if (!overlay) return;
+    overlay.classList.remove('is-open');
+    document.body.style.overflow = '';
+    setTimeout(() => overlay.remove(), 350);
+  };
+
+  // Trigger consent modal when needed
+  const checkConsent = () => {
+    if (window.dvAuth.isSignedIn() && !hasAgreedToTerms()) {
+      showConsentModal();
+    }
+  };
+
+  // Expose globally
+  window.dvConsent = {
+    hasAgreed: hasAgreedToTerms,
+    show: showConsentModal,
+    setAgreed: setTermsAgreed,
+    clear: () => { try { localStorage.removeItem(TERMS_KEY); } catch (e) {} },
+  };
+
+  // ============================================================
   // BOOT
   // ============================================================
   const boot = () => {
     enforcePageGuard();
     renderNav();
     wireKakaoButtons();
+    checkConsent();
   };
 
   if (document.readyState === 'loading') {

@@ -13,8 +13,8 @@
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://deepvibe-phi.vercel.app/upload"/>
 <meta property="og:title" content="대화를 들려주세요 — deepvibe"/>
-<meta property="og:description" content="한 편의 리포트로, 두 사람의 결을 정리해드려요. 100% 내 기기에서만 분석돼요."/>
-<meta property="og:image" content="https://deepvibe-phi.vercel.app/og-upload.png"/>
+<meta property="og:description" content="한 편의 리포트로, 두 사람의 결을 정리해드려요. 분석이 끝나면 원본은 바로 지워져요."/>
+<meta property="og:image" content="https://deepvibe-phi.vercel.app/api/og?type=upload"/>
 <meta property="og:image:type" content="image/png"/>
 <meta property="og:image:width" content="1200"/>
 <meta property="og:image:height" content="630"/>
@@ -26,7 +26,7 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="대화를 들려주세요 — deepvibe"/>
 <meta name="twitter:description" content="한 편의 리포트로, 두 사람의 결을 정리해드려요."/>
-<meta name="twitter:image" content="https://deepvibe-phi.vercel.app/og-upload.png"/>
+<meta name="twitter:image" content="https://deepvibe-phi.vercel.app/api/og?type=upload"/>
 
 <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
 <link rel="apple-touch-icon" href="favicon.svg"/>
@@ -208,7 +208,8 @@
     transform:translateY(0);
     pointer-events:auto;
   }
-  .auth-dropdown button{
+  .auth-dropdown button,
+  .auth-dropdown a{
     display:block;width:100%;
     padding:9px 12px;
     background:transparent;border:none;
@@ -218,8 +219,202 @@
     border-radius:8px;
     cursor:pointer;
     transition:background .15s var(--ease-out);
+    text-decoration:none;
+    box-sizing:border-box;
   }
-  .auth-dropdown button:hover{background:var(--bg-soft)}
+  .auth-dropdown button:hover,
+  .auth-dropdown a:hover{background:var(--bg-soft)}
+  /* ============ CONSENT MODAL (first-time user agreement) ============ */
+  .consent-modal-overlay{
+    position:fixed;inset:0;z-index:200;
+    background:rgba(20,10,30,.45);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    opacity:0;
+    transition:opacity .35s var(--ease-out);
+    display:flex;align-items:flex-end;justify-content:center;
+  }
+  .consent-modal-overlay.is-open{opacity:1}
+
+  .consent-modal{
+    width:100%;
+    max-width:520px;
+    background:#fff;
+    border-top-left-radius:24px;
+    border-top-right-radius:24px;
+    padding:14px 24px calc(28px + var(--safe-bottom, 0px));
+    max-height:90vh;
+    overflow-y:auto;
+    transform:translateY(100%);
+    transition:transform .4s var(--ease-out-soft);
+  }
+  .consent-modal-overlay.is-open .consent-modal{transform:translateY(0)}
+
+  .consent-modal-handle{
+    width:36px;height:4px;
+    margin:0 auto 20px;
+    background:var(--muted-2);
+    border-radius:2px;
+    opacity:.5;
+  }
+  .consent-modal-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:22px;color:var(--ink);
+    line-height:1.35;
+    letter-spacing:-.015em;
+    margin-bottom:8px;
+  }
+  .consent-modal-title em{
+    font-style:italic;
+    color:var(--ink);
+  }
+  .consent-modal-desc{
+    font-family:var(--font-sans);
+    font-size:13.5px;color:var(--muted);
+    line-height:1.7;
+    letter-spacing:-.005em;
+    margin-bottom:24px;
+  }
+
+  .consent-list{
+    list-style:none;
+    display:flex;flex-direction:column;
+    gap:0;
+    margin-bottom:14px;
+  }
+  .consent-item{
+    border-bottom:.5px solid var(--line-08);
+  }
+  .consent-item:last-child{border-bottom:none}
+
+  .consent-row{
+    display:flex;align-items:center;gap:12px;
+    padding:14px 4px;
+    cursor:pointer;
+  }
+  .consent-check{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+    width:0;height:0;
+  }
+  .consent-check-box{
+    width:20px;height:20px;
+    flex-shrink:0;
+    border:1.5px solid var(--line-18);
+    border-radius:6px;
+    background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;
+    transition:background .2s var(--ease-out), border-color .2s var(--ease-out);
+  }
+  .consent-check-box svg{
+    width:12px;height:12px;
+    opacity:0;
+    transition:opacity .2s var(--ease-out);
+  }
+  .consent-check:checked + .consent-check-box{
+    background:var(--ink);
+    border-color:var(--ink);
+  }
+  .consent-check:checked + .consent-check-box svg{opacity:1}
+  .consent-check:focus-visible + .consent-check-box{
+    outline:2px solid var(--ink);
+    outline-offset:2px;
+  }
+
+  .consent-text{
+    flex:1;
+    display:flex;align-items:center;gap:8px;
+    flex-wrap:wrap;
+  }
+  .consent-tag{
+    display:inline-block;
+    padding:2px 7px;
+    background:rgba(255,159,188,.22);
+    color:#a04060;
+    border-radius:999px;
+    font-family:var(--font-sans);
+    font-size:10.5px;font-weight:600;
+    letter-spacing:-.002em;
+    flex-shrink:0;
+  }
+  .consent-tag-optional{
+    background:var(--bg-soft);
+    color:var(--muted);
+  }
+  .consent-label{
+    font-family:var(--font-sans);
+    font-size:14px;color:var(--ink-2);
+    letter-spacing:-.005em;
+    line-height:1.4;
+    flex:1;
+    min-width:0;
+  }
+  .consent-link{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:24px;height:24px;
+    color:var(--muted);
+    border-radius:6px;
+    transition:background .15s var(--ease-out), color .15s var(--ease-out);
+    text-decoration:none;
+    flex-shrink:0;
+  }
+  .consent-link:hover{
+    background:var(--bg-soft);
+    color:var(--ink);
+  }
+
+  .consent-all-row{
+    padding:4px 0 16px;
+    margin-bottom:20px;
+    border-bottom:.5px solid var(--line-08);
+  }
+  .consent-row-all{
+    padding:10px 4px;
+  }
+  .consent-label-all{
+    font-weight:500;
+    color:var(--ink);
+  }
+
+  .btn-consent-submit{
+    display:flex;align-items:center;justify-content:center;
+    width:100%;
+    padding:16px;
+    border-radius:14px;
+    background:var(--kakao);color:var(--kakao-ink);
+    font-family:var(--font-sans);
+    font-size:15px;font-weight:600;letter-spacing:-.005em;
+    border:none;
+    box-shadow:0 1px 0 rgba(0,0,0,.05), 0 10px 24px -12px rgba(20,10,30,.22);
+    transition:transform var(--dur-fast) var(--ease-out), opacity var(--dur-base) var(--ease-out), background var(--dur-base) var(--ease-out);
+    cursor:pointer;
+    margin-bottom:8px;
+  }
+  .btn-consent-submit:disabled{
+    background:var(--bg-soft);
+    color:var(--muted-2);
+    box-shadow:none;
+    cursor:not-allowed;
+  }
+  .btn-consent-submit:not(:disabled):active{transform:scale(.985)}
+
+  .btn-consent-cancel{
+    display:flex;align-items:center;justify-content:center;
+    width:100%;
+    padding:12px;
+    background:transparent;
+    color:var(--muted);
+    font-family:var(--font-sans);
+    font-size:13px;font-weight:500;letter-spacing:-.005em;
+    border:none;
+    cursor:pointer;
+    transition:color .2s var(--ease-out);
+  }
+  .btn-consent-cancel:hover{color:var(--ink-2)}
+
+
 
   /* ============ MAIN ============ */
   main{
@@ -591,21 +786,56 @@
     color:var(--ink);
   }
 
-  /* ============ ERROR MESSAGE ============ */
+  /* ============ ERROR MESSAGE (Inline Form Validation) ============ */
   .error-message{
     display:none;
-    align-items:flex-start;gap:8px;
-    padding:12px 14px;
+    flex-direction:column;
+    gap:10px;
+    padding:14px 16px;
     background:rgba(208,74,74,.06);
     border:.5px solid rgba(208,74,74,.18);
     border-radius:12px;
     margin-top:12px;
+    font-family:var(--font-sans);
     font-size:13px;color:var(--danger);
     line-height:1.5;
     letter-spacing:-.002em;
   }
   .error-message.is-visible{display:flex}
-  .error-message svg{flex-shrink:0;margin-top:2px}
+
+  .error-message-row{
+    display:flex;align-items:flex-start;gap:8px;
+  }
+  .error-message-row svg{flex-shrink:0;margin-top:2px}
+
+  /* Optional action row — appears under the message for recoverable errors */
+  .error-message-actions{
+    display:none;
+    gap:10px;
+    flex-wrap:wrap;
+    padding-left:24px;
+  }
+  .error-message-actions.is-visible{display:flex}
+  .error-message-action{
+    display:inline-flex;align-items:center;gap:5px;
+    padding:7px 12px;
+    background:#fff;
+    border:.5px solid rgba(208,74,74,.28);
+    border-radius:999px;
+    font-family:var(--font-sans);
+    font-size:12px;font-weight:500;
+    color:var(--danger);
+    letter-spacing:-.005em;
+    cursor:pointer;
+    transition:background .2s var(--ease-out), border-color .2s var(--ease-out);
+  }
+  .error-message-action:hover{
+    background:rgba(208,74,74,.06);
+    border-color:rgba(208,74,74,.42);
+  }
+  .error-message-action svg{
+    flex-shrink:0;
+  }
 
   /* ============ HELP LINK ============ */
   .help-link{
@@ -1081,6 +1311,112 @@
     transform:translateX(3px);
   }
 
+  /* ============ ANALYZING ERROR (Critical mid-analysis failure) ============ */
+  .analyzing-error{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:100%;
+    max-width:340px;
+    opacity:0;
+    transform:translateY(8px);
+    transition:opacity .5s .15s var(--ease-out-soft), transform .55s .15s var(--ease-out-soft);
+    pointer-events:none;
+  }
+  .analyzing-error.is-visible{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+  }
+  .error-mark{
+    width:48px;height:48px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:50%;
+    background:rgba(208,74,74,.08);
+    margin-bottom:22px;
+    color:var(--danger);
+  }
+  .error-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:22px;color:var(--ink);
+    text-align:center;
+    line-height:1.4;
+    letter-spacing:-.015em;
+    margin-bottom:10px;
+  }
+  .error-desc{
+    font-family:var(--font-sans);
+    font-size:13.5px;color:var(--muted);
+    text-align:center;
+    line-height:1.6;
+    letter-spacing:-.005em;
+    margin-bottom:28px;
+    max-width:280px;
+  }
+  .error-actions{
+    display:flex;flex-direction:column;
+    gap:10px;
+    width:100%;
+  }
+  .btn-error-retry{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;
+    padding:15px;
+    border-radius:14px;
+    background:var(--ink);color:#fff;
+    font-family:var(--font-sans);
+    font-size:14.5px;font-weight:500;letter-spacing:-.005em;
+    border:none;
+    box-shadow:0 1px 0 rgba(0,0,0,.05), 0 10px 24px -12px rgba(20,10,30,.22);
+    transition:transform var(--dur-fast) var(--ease-out);
+    cursor:pointer;
+  }
+  .btn-error-retry:active{transform:scale(.985)}
+  .btn-error-secondary{
+    display:flex;align-items:center;justify-content:center;
+    width:100%;
+    padding:13px;
+    border-radius:14px;
+    background:transparent;
+    color:var(--muted);
+    font-family:var(--font-sans);
+    font-size:13.5px;font-weight:500;letter-spacing:-.005em;
+    border:none;
+    cursor:pointer;
+    transition:color .2s var(--ease-out);
+    text-decoration:none;
+  }
+  .btn-error-secondary:hover{color:var(--ink)}
+
+  /* ============ NETWORK BANNER (Sticky top — global offline state) ============ */
+  .network-banner{
+    position:fixed;
+    top:calc(var(--safe-top, 0px));
+    left:0;right:0;
+    z-index:90;
+    transform:translateY(-110%);
+    transition:transform .35s var(--ease-out-soft);
+    pointer-events:none;
+  }
+  .network-banner.is-visible{
+    transform:translateY(0);
+    pointer-events:auto;
+  }
+  .network-banner-inner{
+    max-width:520px;
+    margin:0 auto;
+    padding:10px 16px calc(10px + var(--safe-top, 0px));
+    background:rgba(208,74,74,.95);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    color:#fff;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    font-family:var(--font-sans);
+    font-size:12.5px;font-weight:500;
+    letter-spacing:-.005em;
+  }
+  .network-banner-inner svg{flex-shrink:0}
+
   /* ============ RESPONSIVE ============ */
   @media (max-width:360px){
     main{padding:32px 16px 60px}
@@ -1106,7 +1442,9 @@
     .analyzing-stage{transform:none !important}
     .analyzing-dot{transform:none !important}
     .analyzing-complete{transform:none !important}
+    .analyzing-error{transform:none !important}
     .analyzing-orbit.is-complete{transition:none !important}
+    .network-banner{transition:none !important}
   }
 </style>
 
@@ -1195,7 +1533,7 @@
           id="partnerName"
           name="partnerName"
           class="partner-input"
-          placeholder="예: 지훈"
+          placeholder="대화 상대의 이름"
           maxlength="20"
           aria-required="true"
         >
@@ -1208,7 +1546,7 @@
         <span class="form-card-num">2</span>
         <span class="form-card-label">대화를 올려주세요</span>
       </div>
-      <p class="form-card-hint">카톡에서 내보낸 .txt 파일이면 충분해요.<br>대화는 <em>내 기기에서만 분석</em>되고, 어디에도 저장되지 않아요.</p>
+      <p class="form-card-hint">카톡에서 내보낸 .txt 파일이면 충분해요.<br>분석이 끝나면 <em>원본은 바로 지워져요</em>.</p>
 
       <label class="dropzone" id="dropzone" for="fileInput">
         <div class="dropzone-icon-wrap">
@@ -1244,13 +1582,18 @@
         </button>
       </div>
 
-      <!-- Error message -->
+      <!-- Error message (inline form validation) -->
       <div class="error-message" id="errorMessage" role="alert">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/>
-          <path d="M8 5 V8.5 M8 10.5 V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-        <span id="errorText">파일을 읽을 수 없어요.</span>
+        <div class="error-message-row">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M8 5 V8.5 M8 10.5 V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span id="errorText">파일을 읽을 수 없어요</span>
+        </div>
+        <div class="error-message-actions" id="errorActions">
+          <!-- Action buttons injected dynamically based on error type -->
+        </div>
       </div>
 
       <!-- Help link -->
@@ -1273,7 +1616,7 @@
           <path d="M7 1.5 L11.5 3.2 V7 C 11.5 9.8, 9.5 11.7, 7 12.5 C 4.5 11.7, 2.5 9.8, 2.5 7 V3.2 Z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
           <path d="M5 7 L6.5 8.5 L9 6" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        분석이 끝나면 <span class="em-safe">원본은 사라져요</span>.
+        분석이 끝나면 <span class="em-safe">원본은 바로 지워져요</span>
       </div>
     </div>
 
@@ -1436,6 +1779,35 @@
       </svg>
     </a>
   </div>
+
+  <!-- Error state — fades in when analysis fails mid-flight -->
+  <div class="analyzing-error" id="analyzingError" aria-hidden="true" role="alert">
+    <div class="error-mark" aria-hidden="true">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M12 7 V13 M12 16 V16.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="error-title" id="errorOverlayTitle">분석을 마무리하지 못했어요</div>
+    <p class="error-desc" id="errorOverlayDesc">잠시 후 다시 시도해 주세요. 같은 일이 반복되면, 카톡 파일을 새로 내보내볼까요?</p>
+    <div class="error-actions">
+      <button type="button" class="btn-error-retry" id="btnErrorRetry">
+        다시 시도하기
+      </button>
+      <a href="/" class="btn-error-secondary">처음으로 돌아가기</a>
+    </div>
+  </div>
+</div>
+
+<!-- =================== NETWORK BANNER (Global offline indicator) =================== -->
+<div class="network-banner" id="networkBanner" role="status" aria-live="polite">
+  <div class="network-banner-inner">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <path d="M2 5 C 4 3, 10 3, 12 5 M4 7.5 C 5.2 6.5, 8.8 6.5, 10 7.5 M5.8 10 C 6.4 9.5, 7.6 9.5, 8.2 10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M1.5 1.5 L12.5 12.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    </svg>
+    <span>인터넷 연결이 끊겼어요</span>
+  </div>
 </div>
 
 <script>
@@ -1451,6 +1823,7 @@
   const fileRemove = $('fileRemove');
   const errorMessage = $('errorMessage');
   const errorText = $('errorText');
+  const errorActions = $('errorActions');
   const helpLink = $('helpLink');
   const modal = $('modal');
   const modalOverlay = $('modalOverlay');
@@ -1462,6 +1835,11 @@
   const btnAnalyze = $('btnAnalyze');
   const uploadForm = $('uploadForm');
   const analyzingOverlay = $('analyzingOverlay');
+  const analyzingError = $('analyzingError');
+  const errorOverlayTitle = $('errorOverlayTitle');
+  const errorOverlayDesc = $('errorOverlayDesc');
+  const btnErrorRetry = $('btnErrorRetry');
+  const networkBanner = $('networkBanner');
 
   let validFile = null;
 
@@ -1503,7 +1881,10 @@
     return text.split('\n').filter(l => /.{1,30} : /.test(l)).length;
   };
 
-  const showError = (msg) => {
+  // Show inline error.
+  // opts.actions = array of { label, onClick, icon } — optional recovery buttons
+  // (e.g., "내보내기 가이드", "다시 시도")
+  const showError = (msg, opts = {}) => {
     errorText.textContent = msg;
     errorMessage.classList.add('is-visible');
     dropzone.classList.add('has-error');
@@ -1511,10 +1892,29 @@
     fileState.classList.remove('is-visible');
     validFile = null;
     updateSubmitState();
+
+    // Inject action buttons if provided
+    errorActions.innerHTML = '';
+    const actions = opts.actions || [];
+    if (actions.length > 0) {
+      actions.forEach(action => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'error-message-action';
+        btn.textContent = action.label;
+        btn.addEventListener('click', action.onClick);
+        errorActions.appendChild(btn);
+      });
+      errorActions.classList.add('is-visible');
+    } else {
+      errorActions.classList.remove('is-visible');
+    }
   };
 
   const clearError = () => {
     errorMessage.classList.remove('is-visible');
+    errorActions.classList.remove('is-visible');
+    errorActions.innerHTML = '';
     dropzone.classList.remove('has-error');
   };
 
@@ -1531,33 +1931,49 @@
   const handleFile = (file) => {
     clearError();
     if (!file.name.toLowerCase().endsWith('.txt')) {
-      showError('.txt 파일이 아닌 것 같아요. 카톡에서 "텍스트만" 옵션으로 다시 내보내주세요.');
+      showError('.txt 파일이 아닌 것 같아요. 카톡에서 "텍스트만" 옵션으로 다시 내보내주세요', {
+        actions: [
+          { label: '내보내기 가이드 보기', onClick: openModal },
+        ],
+      });
       return;
     }
     if (file.size > 10 * 1024 * 1024) {
-      showError('파일이 너무 커요. 더 짧은 기간으로 다시 내보내볼까요?');
+      showError('파일이 너무 커요. 더 짧은 기간으로 다시 내보내볼까요?', {
+        actions: [
+          { label: '내보내기 가이드 보기', onClick: openModal },
+        ],
+      });
       return;
     }
     if (file.size < 100) {
-      showError('대화가 너무 짧아요. 50줄 이상 필요해요.');
+      showError('대화가 너무 짧아요. 50줄 이상 필요해요');
       return;
     }
     const reader = new FileReader();
     reader.onload = (e) => {
       const text = e.target.result;
       if (!looksLikeKakaoExport(text)) {
-        showError('카톡 대화 파일이 아닌 것 같아요. 다시 확인해주세요.');
+        showError('카톡 대화 파일이 아닌 것 같아요. 다시 확인해 주세요', {
+          actions: [
+            { label: '내보내기 가이드 보기', onClick: openModal },
+          ],
+        });
         return;
       }
       const lineCount = countConversationLines(text);
       if (lineCount < 50) {
-        showError(`대화가 짧아요 (${lineCount}줄). 50줄 이상 필요해요.`);
+        showError(`대화가 짧아요 (${lineCount}줄). 50줄 이상 필요해요`);
         return;
       }
       showFile(file, lineCount);
     };
     reader.onerror = () => {
-      showError('파일을 읽지 못했어요. 다시 시도해주세요.');
+      showError('파일을 읽지 못했어요. 다시 시도해 주세요', {
+        actions: [
+          { label: '다시 시도', onClick: () => fileInput.click() },
+        ],
+      });
     };
     reader.readAsText(file, 'UTF-8');
   };
@@ -1711,6 +2127,52 @@
     }
   };
 
+  /* Trigger error state — stops analysis, fades out orbit, shows error message.
+     errorType: 'server' (5xx) | 'timeout' | 'network' | 'unknown' */
+  const showAnalyzingError = (errorType = 'unknown') => {
+    stopStageSequence();
+    // Halt orbit (visual cue: stops spinning)
+    orbit.classList.add('is-complete');
+    stageText.classList.add('is-complete');
+    dotsWrap.classList.add('is-complete');
+    subText.classList.add('is-complete');
+
+    // Tailor copy by error type
+    const copy = {
+      server: {
+        title: '분석을 마무리하지 못했어요',
+        desc: '잠시 후 다시 시도해 주세요. 같은 일이 반복되면, 카톡 파일을 새로 내보내볼까요?',
+      },
+      timeout: {
+        title: '분석이 길어지고 있어요',
+        desc: '서버가 잠시 바쁜 것 같아요. 잠시 후 다시 시도해 주세요.',
+      },
+      network: {
+        title: '연결이 끊겼어요',
+        desc: '인터넷이 다시 연결되면 자동으로 시도할게요. 잠시만 기다려 주세요.',
+      },
+      unknown: {
+        title: '예상하지 못한 문제가 생겼어요',
+        desc: '잠시 후 다시 시도해 주세요. 문제가 계속되면 처음으로 돌아가 다시 올려볼까요?',
+      },
+    };
+    const { title, desc } = copy[errorType] || copy.unknown;
+    errorOverlayTitle.textContent = title;
+    errorOverlayDesc.textContent = desc;
+
+    // Reveal error state
+    setTimeout(() => {
+      analyzingError.classList.add('is-visible');
+      analyzingError.setAttribute('aria-hidden', 'false');
+    }, 400);
+  };
+
+  // Retry button — reset everything and go back to form
+  btnErrorRetry.addEventListener('click', () => {
+    resetOverlay();
+    // Form state is preserved (file, name) so user can re-submit immediately
+  });
+
   uploadForm.addEventListener('submit', (e) => {
     e.preventDefault();
     if (btnAnalyze.disabled) return;
@@ -1747,6 +2209,8 @@
     subText.classList.remove('is-complete');
     completeWrap.classList.remove('is-visible');
     completeWrap.setAttribute('aria-hidden', 'true');
+    analyzingError.classList.remove('is-visible');
+    analyzingError.setAttribute('aria-hidden', 'true');
     stages.forEach((el, i) => {
       el.classList.remove('is-active', 'is-leaving');
       if (i === 0) el.classList.add('is-active');
@@ -1756,6 +2220,21 @@
       if (i === 0) el.classList.add('is-active');
     });
   };
+
+  // ============================================================
+  // NETWORK CONNECTIVITY — show banner when offline
+  // ============================================================
+  const updateNetworkBanner = () => {
+    if (!navigator.onLine) {
+      networkBanner.classList.add('is-visible');
+    } else {
+      networkBanner.classList.remove('is-visible');
+    }
+  };
+  window.addEventListener('online', updateNetworkBanner);
+  window.addEventListener('offline', updateNetworkBanner);
+  // Initial check on load
+  updateNetworkBanner();
 
   if (testMode === 'loading' || testMode === 'complete' || testMode === 'full') {
     setTimeout(() => {
@@ -1784,6 +2263,29 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') resetOverlay();
     });
+  }
+
+  /* DEV: ?test=error-server | error-timeout | error-network | error-unknown
+          ?test=offline (force network banner)
+     Preview error states without an actual failure. */
+  if (testMode && testMode.startsWith('error-')) {
+    const errorType = testMode.replace('error-', '');
+    setTimeout(() => {
+      analyzingOverlay.classList.add('is-active');
+      analyzingOverlay.setAttribute('aria-hidden', 'false');
+      startStageSequence();
+      // Trigger error after 2 seconds of "loading"
+      setTimeout(() => showAnalyzingError(errorType), 2000);
+    }, 200);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') resetOverlay();
+    });
+  }
+
+  if (testMode === 'offline') {
+    // Force network banner regardless of actual online state
+    networkBanner.classList.add('is-visible');
   }
 
   updateSubmitState();

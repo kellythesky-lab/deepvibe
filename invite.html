@@ -1,0 +1,741 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#F6F4F1"/>
+<title>친구 초대 — deepvibe</title>
+
+<meta name="description" content="친구를 초대하고 분석권 한 장을 더 받으세요. deepvibe에서 함께 결을 그려요."/>
+<meta name="robots" content="noindex, nofollow"/>
+
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link rel="apple-touch-icon" href="/favicon.svg"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F4F1;
+    --bg-soft:#EFEBE5;
+    --bg-warm:#F0E9DE;
+    --ink:#15131A;
+    --ink-2:#2a262f;
+    --muted:#7a7680;
+    --muted-2:#a8a4ac;
+    --line-04:rgba(20,10,30,.04);
+    --line-08:rgba(20,10,30,.08);
+    --line-12:rgba(20,10,30,.12);
+    --line-18:rgba(20,10,30,.18);
+
+    --pink:#ff6f91;
+    --pink-soft:#ffb4c6;
+    --violet:#b967ff;
+    --kakao:#FEE500;
+    --kakao-ink:#3D1E1E;
+    --success:#4ab07a;
+    --danger:#d04a4a;
+
+    --font-serif:'Fraunces','Noto Serif KR',serif;
+    --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Pretendard','Noto Sans KR',sans-serif;
+
+    --ease-out:cubic-bezier(.22,1,.36,1);
+    --ease-out-soft:cubic-bezier(.16,1,.3,1);
+    --ease-in-out:cubic-bezier(.65,0,.35,1);
+
+    --r-sm:6px;
+    --r-md:14px;
+    --r-lg:20px;
+    --r-pill:999px;
+
+    --safe-bottom:env(safe-area-inset-bottom,0px);
+    --safe-top:env(safe-area-inset-top,0px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  :focus{outline:none}
+  :focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:4px}
+
+  html{
+    scroll-behavior:smooth;
+    overflow-x:hidden;
+    -webkit-text-size-adjust:100%;
+  }
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--font-sans);font-size:14px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    word-break:keep-all;line-break:strict;
+    overflow-x:hidden;
+    min-height:100vh;min-height:100dvh;
+    position:relative;
+    padding-bottom:calc(60px + var(--safe-bottom));
+  }
+
+  /* ============ NAV ============ */
+  nav{
+    position:sticky;top:0;z-index:30;
+    background:rgba(246,244,241,.85);
+    backdrop-filter:blur(14px) saturate(180%);
+    -webkit-backdrop-filter:blur(14px) saturate(180%);
+    border-bottom:.5px solid transparent;
+    transition:border-color .25s var(--ease-out);
+  }
+  nav.is-scrolled{border-bottom-color:var(--line-08)}
+  nav .row{
+    max-width:520px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 20px;
+  }
+  nav .logo{display:flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer}
+  nav .logo .mark{display:inline-block;width:22px;height:14px}
+  nav .logo .mark svg{width:100%;height:100%;overflow:visible}
+  nav .logo .word{
+    font-family:var(--font-serif);font-weight:400;font-style:italic;
+    font-size:18px;letter-spacing:-.01em;color:var(--ink);
+  }
+  nav .back{
+    display:inline-flex;align-items:center;gap:4px;
+    padding:6px 10px 6px 8px;
+    background:transparent;border:none;
+    color:var(--muted);
+    font-size:12.5px;font-weight:500;letter-spacing:-.005em;
+    text-decoration:none;
+    border-radius:8px;
+    transition:background .2s var(--ease-out), color .2s var(--ease-out);
+    cursor:pointer;
+  }
+  nav .back:hover{background:var(--bg-soft);color:var(--ink)}
+
+  /* ============ MAIN ============ */
+  main{
+    position:relative;
+    max-width:520px;
+    margin:0 auto;
+    padding:32px 20px 60px;
+  }
+
+  /* ============ PAGE HEADER ============ */
+  .page-header{
+    text-align:center;
+    margin-bottom:32px;
+    opacity:0;
+    transform:translateY(8px);
+    animation:fadeUp .7s .1s var(--ease-out-soft) forwards;
+  }
+  @keyframes fadeUp{to{opacity:1;transform:none}}
+
+  .page-mark{
+    display:inline-flex;align-items:center;justify-content:center;
+    margin-bottom:16px;
+  }
+  .page-mark svg{width:44px;height:30px;overflow:visible}
+
+  .page-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:clamp(26px, 6vw, 30px);
+    line-height:1.2;letter-spacing:-.02em;
+    color:var(--ink);
+    margin-bottom:10px;
+  }
+  .page-title em{
+    font-style:normal;font-weight:500;
+    color:var(--ink);
+    background:rgba(255,159,188,.22);
+    padding:0 5px;border-radius:4px;
+  }
+  .page-sub{
+    font-family:var(--font-sans);
+    font-size:13.5px;color:var(--muted);
+    letter-spacing:-.002em;
+    line-height:1.55;
+  }
+
+  /* ============ LINK CARD (초대 링크) ============ */
+  .link-card{
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:18px;
+    padding:22px 20px 20px;
+    margin-bottom:24px;
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 8px 22px -12px rgba(20,10,30,.08);
+    opacity:0;
+    transform:translateY(8px);
+    animation:fadeUp .7s .2s var(--ease-out-soft) forwards;
+  }
+  .link-card-label{
+    font-family:var(--font-sans);
+    font-size:11px;color:var(--muted);
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .link-display{
+    display:flex;align-items:center;gap:10px;
+    padding:12px 14px;
+    background:var(--bg-soft);
+    border-radius:12px;
+    margin-bottom:14px;
+  }
+  .link-text{
+    flex:1;min-width:0;
+    font-family:var(--font-sans);
+    font-size:13.5px;color:var(--ink-2);
+    letter-spacing:-.002em;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-feature-settings:"tnum" 1;
+  }
+  .link-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+  .link-btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    gap:6px;
+    padding:13px 14px;
+    border-radius:12px;
+    border:none;
+    cursor:pointer;
+    font-family:var(--font-sans);
+    font-size:13.5px;font-weight:500;
+    letter-spacing:-.005em;
+    transition:transform .15s var(--ease-out), background .2s var(--ease-out);
+    -webkit-tap-highlight-color:transparent;
+  }
+  .link-btn:active{transform:scale(.98)}
+  .link-btn.copy{
+    background:var(--bg-soft);
+    color:var(--ink);
+  }
+  .link-btn.copy:hover{background:var(--line-08)}
+  .link-btn.kakao{
+    background:var(--kakao);
+    color:var(--kakao-ink);
+    box-shadow:
+      0 1px 0 rgba(0,0,0,.05),
+      0 6px 16px -8px rgba(20,10,30,.18);
+  }
+  .link-btn svg{flex-shrink:0}
+
+  .link-meta{
+    margin-top:14px;
+    display:flex;align-items:center;gap:6px;
+    font-size:12px;color:var(--muted);
+    letter-spacing:-.002em;
+  }
+  .link-meta-dot{
+    width:3px;height:3px;
+    border-radius:50%;
+    background:var(--muted-2);
+  }
+
+  /* ============ STATS (현황 카운터) ============ */
+  .stats{
+    margin-bottom:28px;
+    opacity:0;
+    transform:translateY(8px);
+    animation:fadeUp .7s .3s var(--ease-out-soft) forwards;
+  }
+  .stats-label{
+    font-family:var(--font-sans);
+    font-size:11px;color:var(--muted);
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    margin-bottom:12px;
+  }
+  .stats-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:8px;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:16px;
+    padding:18px 8px;
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 8px 20px -14px rgba(20,10,30,.06);
+  }
+  .stats-item{
+    text-align:center;
+    position:relative;
+  }
+  .stats-item:not(:last-child)::after{
+    content:"";
+    position:absolute;
+    right:-4px;top:8px;bottom:8px;
+    width:.5px;
+    background:var(--line-08);
+  }
+  .stats-value{
+    font-family:var(--font-serif);font-weight:500;
+    font-size:32px;color:var(--ink);
+    line-height:1;
+    letter-spacing:-.03em;
+    margin-bottom:6px;
+    font-feature-settings:"tnum" 1, "lnum" 1;
+  }
+  .stats-name{
+    font-family:var(--font-sans);
+    font-size:12px;color:var(--muted);
+    letter-spacing:-.002em;
+  }
+
+  /* ============ INVITE LIST (초대 카드 목록) ============ */
+  .invite-section{
+    opacity:0;
+    transform:translateY(8px);
+    animation:fadeUp .7s .4s var(--ease-out-soft) forwards;
+  }
+  .invite-section-label{
+    font-family:var(--font-sans);
+    font-size:11px;color:var(--muted);
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    margin-bottom:12px;
+  }
+  .invite-list{
+    display:flex;flex-direction:column;
+    gap:8px;
+  }
+  .invite-card{
+    display:flex;flex-direction:column;
+    gap:6px;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:14px;
+    padding:14px 16px;
+    box-shadow:0 1px 2px var(--line-04);
+    transition:box-shadow .2s var(--ease-out);
+  }
+  .invite-card:hover{
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 8px 20px -14px rgba(20,10,30,.08);
+  }
+  .invite-card-row{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:10px;
+  }
+  .invite-card-name{
+    font-family:var(--font-sans);
+    font-size:14.5px;font-weight:500;color:var(--ink);
+    letter-spacing:-.005em;
+    display:flex;align-items:center;gap:8px;
+  }
+  .invite-card-name.anon{color:var(--muted);font-weight:400}
+  .invite-card-anon-dot{
+    display:inline-block;
+    width:8px;height:8px;
+    border-radius:50%;
+    background:var(--muted-2);
+  }
+  .invite-card-meta{
+    font-family:var(--font-sans);
+    font-size:12.5px;color:var(--muted);
+    letter-spacing:-.002em;
+  }
+  .invite-status{
+    display:inline-flex;align-items:center;gap:5px;
+    padding:4px 10px;
+    border-radius:var(--r-pill);
+    font-size:11.5px;font-weight:500;
+    letter-spacing:-.002em;
+    white-space:nowrap;
+  }
+  .invite-status.joined{
+    background:rgba(74,176,122,.12);
+    color:#2d7a52;
+  }
+  .invite-status.pending{
+    background:var(--bg-soft);
+    color:var(--ink-2);
+  }
+  .invite-status.expired{
+    background:rgba(208,74,74,.08);
+    color:#a04040;
+  }
+  .invite-status svg{flex-shrink:0}
+
+  .invite-resend{
+    display:inline-flex;align-items:center;gap:4px;
+    background:transparent;
+    border:none;
+    color:var(--ink);
+    font-family:var(--font-sans);
+    font-size:12px;font-weight:500;
+    letter-spacing:-.005em;
+    cursor:pointer;
+    padding:4px 0 0;
+    text-decoration:underline;
+    text-decoration-thickness:.5px;
+    text-underline-offset:3px;
+    text-decoration-color:var(--line-18);
+    transition:text-decoration-color .2s var(--ease-out);
+  }
+  .invite-resend:hover{text-decoration-color:var(--ink)}
+
+  /* ============ EMPTY STATE ============ */
+  .empty-state{
+    display:none;
+    flex-direction:column;align-items:center;
+    text-align:center;
+    padding:36px 20px;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:18px;
+  }
+  .empty-state-mark{
+    margin-bottom:14px;
+    width:36px;height:24px;
+    opacity:.5;
+  }
+  .empty-state-mark svg{width:100%;height:100%;overflow:visible}
+  .empty-state-title{
+    font-family:var(--font-serif);font-weight:400;
+    font-size:17px;color:var(--ink);
+    margin-bottom:6px;
+    letter-spacing:-.005em;
+  }
+  .empty-state-desc{
+    font-size:13px;color:var(--muted);
+    letter-spacing:-.002em;
+    line-height:1.5;
+  }
+
+  body.is-empty .invite-list{display:none}
+  body.is-empty .empty-state{display:flex}
+
+  /* ============ LOADING ============ */
+  .loading-state{
+    display:none;
+    flex-direction:column;gap:8px;
+  }
+  .skeleton-card{
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:14px;
+    padding:14px 16px;
+    display:flex;flex-direction:column;gap:8px;
+  }
+  .skeleton-block{
+    background:linear-gradient(90deg, var(--bg-soft) 0%, #f5f1ea 50%, var(--bg-soft) 100%);
+    background-size:200% 100%;
+    animation:shimmer 1.6s var(--ease-in-out) infinite;
+    border-radius:6px;
+    height:14px;
+  }
+  .skeleton-block.s-name{width:40%;height:16px}
+  .skeleton-block.s-meta{width:65%}
+  @keyframes shimmer{
+    0%{background-position:100% 0}
+    100%{background-position:-100% 0}
+  }
+
+  body.is-loading .invite-list,
+  body.is-loading .empty-state{display:none}
+  body.is-loading .loading-state{display:flex}
+
+  /* ============ TOAST ============ */
+  .toast{
+    position:fixed;
+    bottom:calc(24px + var(--safe-bottom));
+    left:50%;
+    transform:translate(-50%, 100%);
+    background:rgba(21,19,26,.94);
+    color:#fff;
+    padding:12px 20px;
+    border-radius:var(--r-pill);
+    font-size:13.5px;font-weight:500;
+    letter-spacing:-.005em;
+    box-shadow:
+      0 1px 2px rgba(0,0,0,.1),
+      0 12px 28px -10px rgba(0,0,0,.3);
+    opacity:0;
+    transition:opacity .3s var(--ease-out), transform .3s var(--ease-out);
+    pointer-events:none;
+    z-index:100;
+    display:flex;align-items:center;gap:8px;
+  }
+  .toast.is-shown{
+    opacity:1;
+    transform:translate(-50%, 0);
+  }
+  .toast svg{flex-shrink:0}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:360px){
+    main{padding:24px 16px 48px}
+    .link-card{padding:18px 16px}
+    .stats-grid{padding:16px 6px}
+    .stats-value{font-size:28px}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .page-header,
+    .link-card,
+    .stats,
+    .invite-section{
+      opacity:1 !important;
+      transform:none !important;
+      animation:none !important;
+    }
+    .skeleton-block{animation:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- =================== NAV =================== -->
+<nav id="nav">
+  <div class="row">
+    <a class="logo" href="/" aria-label="deepvibe 홈으로">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 30 18" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="logo-pink" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff6f91" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#ff9fbc" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".7"/>
+            </radialGradient>
+            <radialGradient id="logo-violet" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#b967ff" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#caa3ff" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#dec4ff" stop-opacity=".7"/>
+            </radialGradient>
+          </defs>
+          <circle cx="11" cy="9" r="7.5" fill="url(#logo-pink)" style="mix-blend-mode:multiply"/>
+          <circle cx="19" cy="9" r="7.5" fill="url(#logo-violet)" style="mix-blend-mode:multiply"/>
+        </svg>
+      </span>
+      <span class="word">deepvibe</span>
+    </a>
+    <a class="back" href="javascript:history.back()" aria-label="이전 페이지로">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M9 3 L5 7 L9 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      뒤로
+    </a>
+  </div>
+</nav>
+
+<!-- =================== MAIN =================== -->
+<main>
+
+  <!-- Page header -->
+  <header class="page-header">
+    <div class="page-mark" aria-hidden="true">
+      <svg viewBox="0 0 30 18" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="11" cy="9" r="7.5" fill="url(#logo-pink)" style="mix-blend-mode:multiply"/>
+        <circle cx="19" cy="9" r="7.5" fill="url(#logo-violet)" style="mix-blend-mode:multiply"/>
+      </svg>
+    </div>
+    <h1 class="page-title">친구를 <em>초대해요</em></h1>
+    <p class="page-sub">친구가 시작하면, 분석권 한 장이 더 와요</p>
+  </header>
+
+  <!-- Link card -->
+  <section class="link-card">
+    <div class="link-card-label">내 초대 링크</div>
+    <div class="link-display">
+      <div class="link-text" id="invite-link">deepvibe.app/i/AB7K2X</div>
+    </div>
+    <div class="link-actions">
+      <button class="link-btn copy" id="btn-copy" type="button">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <rect x="3.5" y="4.5" width="7" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M5.5 4.5 V3 a1 1 0 0 1 1 -1 H11 a1 1 0 0 1 1 1 V8 a1 1 0 0 1 -1 1 H10.5" stroke="currentColor" stroke-width="1.2"/>
+        </svg>
+        링크 복사
+      </button>
+      <button class="link-btn kakao" id="btn-kakao" type="button">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+          <path d="M7 1.5C3.69 1.5 1 3.6 1 6.2c0 1.65 1.1 3.1 2.76 3.95l-.7 2.55c-.05.17.13.31.27.21l3.05-2.05c.21.02.41.04.62.04 3.31 0 6-2.1 6-4.7S10.31 1.5 7 1.5z"/>
+        </svg>
+        카카오톡 공유
+      </button>
+    </div>
+    <div class="link-meta">
+      <span>링크는 7일 후 만료돼요</span>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats">
+    <div class="stats-label">현황</div>
+    <div class="stats-grid">
+      <div class="stats-item">
+        <div class="stats-value" id="stat-sent">3</div>
+        <div class="stats-name">보낸 초대</div>
+      </div>
+      <div class="stats-item">
+        <div class="stats-value" id="stat-joined">1</div>
+        <div class="stats-name">가입한 친구</div>
+      </div>
+      <div class="stats-item">
+        <div class="stats-value" id="stat-rewards">1</div>
+        <div class="stats-name">받은 분석권</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Invite list -->
+  <section class="invite-section">
+    <div class="invite-section-label">내가 보낸 초대</div>
+
+    <!-- Loading skeleton -->
+    <div class="loading-state">
+      <div class="skeleton-card">
+        <div class="skeleton-block s-name"></div>
+        <div class="skeleton-block s-meta"></div>
+      </div>
+      <div class="skeleton-card">
+        <div class="skeleton-block s-name"></div>
+        <div class="skeleton-block s-meta"></div>
+      </div>
+      <div class="skeleton-card">
+        <div class="skeleton-block s-name"></div>
+        <div class="skeleton-block s-meta"></div>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-state">
+      <div class="empty-state-mark" aria-hidden="true">
+        <svg viewBox="0 0 30 18" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="11" cy="9" r="7.5" fill="url(#logo-pink)" style="mix-blend-mode:multiply"/>
+          <circle cx="19" cy="9" r="7.5" fill="url(#logo-violet)" style="mix-blend-mode:multiply"/>
+        </svg>
+      </div>
+      <div class="empty-state-title">아직 보낸 초대가 없어요</div>
+      <div class="empty-state-desc">친구에게 링크를 보내면,<br>여기에 기록돼요</div>
+    </div>
+
+    <!-- Default list -->
+    <div class="invite-list">
+      <article class="invite-card">
+        <div class="invite-card-row">
+          <div class="invite-card-name">김지훈</div>
+          <span class="invite-status joined">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+              <path d="M2 5 L4 7 L8 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            가입 완료
+          </span>
+        </div>
+        <div class="invite-card-meta">5월 18일 초대 · 분석권 1장 받음</div>
+      </article>
+
+      <article class="invite-card">
+        <div class="invite-card-row">
+          <div class="invite-card-name anon">
+            <span class="invite-card-anon-dot"></span>
+            아직 가입 전
+          </div>
+          <span class="invite-status pending">대기 중</span>
+        </div>
+        <div class="invite-card-meta">5월 22일 초대 · 만료까지 4일</div>
+      </article>
+
+      <article class="invite-card">
+        <div class="invite-card-row">
+          <div class="invite-card-name anon">
+            <span class="invite-card-anon-dot"></span>
+            아직 가입 전
+          </div>
+          <span class="invite-status expired">만료됨</span>
+        </div>
+        <div class="invite-card-meta">5월 10일 초대 · 7일 후 만료</div>
+        <button class="invite-resend" type="button">
+          다시 보내기
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M3 5 H7 M5.5 3.5 L7 5 L5.5 6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <path d="M3 7 L6 10 L11 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <span id="toast-text">링크를 복사했어요</span>
+</div>
+
+<script>
+(() => {
+  // ============ NAV scroll effect ============
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 4) nav.classList.add('is-scrolled');
+    else nav.classList.remove('is-scrolled');
+  }, { passive: true });
+
+  // ============ State (URL ?state=empty|loading|default) ============
+  const params = new URLSearchParams(location.search);
+  const state = params.get('state');
+  if (state === 'empty') {
+    document.body.classList.add('is-empty');
+    document.getElementById('stat-sent').textContent = '0';
+    document.getElementById('stat-joined').textContent = '0';
+    document.getElementById('stat-rewards').textContent = '0';
+  } else if (state === 'loading') {
+    document.body.classList.add('is-loading');
+  }
+
+  // ============ Copy link ============
+  const btnCopy = document.getElementById('btn-copy');
+  const inviteLink = document.getElementById('invite-link');
+  const toast = document.getElementById('toast');
+  const toastText = document.getElementById('toast-text');
+
+  const showToast = (msg) => {
+    toastText.textContent = msg;
+    toast.classList.add('is-shown');
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(() => {
+      toast.classList.remove('is-shown');
+    }, 2200);
+  };
+
+  btnCopy.addEventListener('click', async () => {
+    const text = 'https://' + inviteLink.textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast('링크를 복사했어요');
+    } catch (e) {
+      // fallback
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); showToast('링크를 복사했어요'); }
+      catch (_) { showToast('복사할 수 없어요'); }
+      document.body.removeChild(ta);
+    }
+  });
+
+  // ============ Kakao share (placeholder) ============
+  const btnKakao = document.getElementById('btn-kakao');
+  btnKakao.addEventListener('click', () => {
+    // 실제 구현 시: window.Kakao.Share.sendDefault({...})
+    showToast('카카오톡 공유 (준비 중)');
+  });
+
+  // ============ Resend ============
+  document.querySelectorAll('.invite-resend').forEach(btn => {
+    btn.addEventListener('click', () => {
+      showToast('초대를 다시 보냈어요');
+    });
+  });
+})();
+</script>
+</body>
+</html>

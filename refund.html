@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#F6F4F1"/>
+<title>환불정책 — deepvibe</title>
+
+<meta name="description" content="deepvibe 결제 및 환불 정책 안내입니다."/>
+<meta name="robots" content="noindex, nofollow"/>
+
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link rel="apple-touch-icon" href="/favicon.svg"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F4F1;
+    --bg-soft:#EFEBE5;
+    --ink:#15131A;
+    --ink-2:#2a262f;
+    --muted:#7a7680;
+    --muted-2:#a8a4ac;
+    --line-04:rgba(20,10,30,.04);
+    --line-08:rgba(20,10,30,.08);
+    --line-12:rgba(20,10,30,.12);
+    --line-18:rgba(20,10,30,.18);
+    --pink:#ff6f91;
+    --pink-soft:#ffb4c6;
+
+    --font-serif:'Fraunces','Noto Serif KR',serif;
+    --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Pretendard','Noto Sans KR',sans-serif;
+
+    --ease-out:cubic-bezier(.22,1,.36,1);
+    --ease-out-soft:cubic-bezier(.16,1,.3,1);
+
+    --r-md:14px;
+    --r-lg:20px;
+    --safe-bottom:env(safe-area-inset-bottom,0px);
+    --safe-top:env(safe-area-inset-top,0px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  :focus{outline:none}
+  :focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:4px}
+
+  html{
+    scroll-behavior:smooth;
+    overflow-x:hidden;
+    font-size:100%;
+    -webkit-text-size-adjust:100%;
+  }
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--font-sans);font-size:14px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    word-break:keep-all;line-break:strict;
+    overflow-x:hidden;
+    min-height:100vh;min-height:100dvh;
+    position:relative;
+    padding-bottom:calc(60px + var(--safe-bottom));
+  }
+
+  /* ============ NAV ============ */
+  nav{
+    position:sticky;top:0;z-index:30;
+    background:rgba(246,244,241,.85);
+    backdrop-filter:blur(14px) saturate(180%);
+    -webkit-backdrop-filter:blur(14px) saturate(180%);
+    border-bottom:.5px solid transparent;
+    transition:border-color .25s var(--ease-out);
+  }
+  nav.is-scrolled{border-bottom-color:var(--line-08)}
+  nav .row{
+    max-width:680px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 20px;
+  }
+  nav .logo{display:flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer}
+  nav .logo .mark{display:inline-block;width:22px;height:14px}
+  nav .logo .mark svg{width:100%;height:100%;overflow:visible}
+  nav .logo .word{
+    font-family:var(--font-serif);font-weight:400;font-style:italic;
+    font-size:18px;letter-spacing:-.01em;color:var(--ink);
+  }
+  nav .back{
+    display:inline-flex;align-items:center;gap:4px;
+    padding:6px 10px 6px 8px;
+    background:transparent;
+    border:none;
+    color:var(--muted);
+    font-size:12.5px;font-weight:500;letter-spacing:-.005em;
+    text-decoration:none;
+    border-radius:8px;
+    transition:background .2s var(--ease-out), color .2s var(--ease-out);
+    cursor:pointer;
+  }
+  nav .back:hover{background:var(--bg-soft);color:var(--ink)}
+  nav .back svg{flex-shrink:0}
+
+  /* ============ MAIN ============ */
+  main{
+    position:relative;
+    max-width:680px;
+    margin:0 auto;
+    padding:40px 20px 60px;
+  }
+
+  /* ============ DOC HEADER ============ */
+  .doc-header{
+    margin-bottom:40px;
+    padding-bottom:24px;
+    border-bottom:.5px solid var(--line-08);
+  }
+  .doc-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:clamp(26px, 6vw, 32px);
+    line-height:1.2;letter-spacing:-.02em;
+    color:var(--ink);
+    margin-bottom:12px;
+  }
+  .doc-meta{
+    display:flex;align-items:center;gap:10px;
+    flex-wrap:wrap;
+    font-family:var(--font-sans);
+    font-size:12px;color:var(--muted);
+    letter-spacing:-.002em;
+  }
+  .doc-meta-dot{
+    width:3px;height:3px;border-radius:50%;
+    background:var(--muted-2);
+    flex-shrink:0;
+  }
+  .doc-meta em{
+    font-style:normal;
+    font-weight:500;
+    color:var(--ink-2);
+  }
+
+  /* ============ DRAFT NOTICE ============ */
+  .draft-notice{
+    margin-top:20px;
+    padding:14px 16px;
+    background:rgba(255,159,188,.08);
+    border:.5px solid rgba(255,159,188,.24);
+    border-radius:12px;
+    display:flex;align-items:flex-start;gap:10px;
+    font-size:12.5px;color:var(--ink-2);
+    line-height:1.6;
+    letter-spacing:-.002em;
+  }
+  .draft-notice svg{flex-shrink:0;margin-top:2px;color:#a04060}
+  .draft-notice strong{font-weight:500;color:var(--ink)}
+
+  /* ============ TOC (Table of Contents) ============ */
+  .doc-toc{
+    margin-bottom:48px;
+    padding:20px 22px;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:16px;
+    box-shadow:0 1px 2px var(--line-04);
+  }
+  .doc-toc-label{
+    font-family:var(--font-sans);
+    font-size:11px;color:var(--muted);
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .doc-toc-list{
+    list-style:none;
+    display:flex;flex-direction:column;
+    gap:8px;
+  }
+  .doc-toc-list a{
+    display:flex;align-items:center;gap:10px;
+    padding:6px 0;
+    color:var(--ink-2);
+    text-decoration:none;
+    font-size:13.5px;
+    letter-spacing:-.005em;
+    transition:color .15s var(--ease-out);
+  }
+  .doc-toc-list a:hover{color:var(--ink)}
+  .doc-toc-num{
+    flex-shrink:0;
+    font-family:var(--font-serif);font-weight:400;
+    font-size:12.5px;
+    color:var(--muted);
+    min-width:24px;
+  }
+  .doc-toc-list a:hover .doc-toc-num{color:var(--ink)}
+
+  /* ============ DOC CONTENT ============ */
+  .doc-content{
+    color:var(--ink);
+    line-height:1.75;
+  }
+  .doc-content h2{
+    font-family:var(--font-serif);font-weight:400;
+    font-size:18px;color:var(--ink);
+    margin-top:48px;
+    margin-bottom:14px;
+    letter-spacing:-.01em;
+    line-height:1.3;
+    scroll-margin-top:80px;
+  }
+  .doc-content h2:first-child{margin-top:0}
+  .doc-content h2 .num{
+    color:var(--muted);
+    font-weight:300;
+    margin-right:6px;
+  }
+  .doc-content h3{
+    font-family:var(--font-sans);font-weight:500;
+    font-size:14.5px;color:var(--ink);
+    margin-top:24px;
+    margin-bottom:10px;
+    letter-spacing:-.005em;
+    line-height:1.4;
+  }
+  .doc-content p{
+    margin-bottom:14px;
+    color:var(--ink-2);
+    font-size:14px;
+    letter-spacing:-.002em;
+  }
+  .doc-content p:last-child{margin-bottom:0}
+  .doc-content ul,
+  .doc-content ol{
+    margin-bottom:14px;
+    padding-left:20px;
+    color:var(--ink-2);
+    font-size:14px;
+  }
+  .doc-content ul li,
+  .doc-content ol li{
+    margin-bottom:6px;
+    line-height:1.7;
+    letter-spacing:-.002em;
+  }
+  .doc-content ul li:last-child,
+  .doc-content ol li:last-child{margin-bottom:0}
+  .doc-content strong{
+    font-weight:500;
+    color:var(--ink);
+  }
+  .doc-content a{
+    color:var(--ink);
+    text-decoration:underline;
+    text-decoration-thickness:.5px;
+    text-underline-offset:3px;
+    text-decoration-color:var(--line-18);
+    transition:text-decoration-color .2s var(--ease-out);
+  }
+  .doc-content a:hover{text-decoration-color:var(--ink)}
+
+  /* ============ DOC FOOTER ============ */
+  .doc-footer{
+    margin-top:60px;
+    padding-top:28px;
+    border-top:.5px solid var(--line-08);
+    display:flex;flex-direction:column;gap:16px;
+  }
+  .doc-footer-row{
+    display:flex;align-items:center;gap:16px;
+    flex-wrap:wrap;
+  }
+  .doc-footer-label{
+    font-family:var(--font-sans);
+    font-size:11px;color:var(--muted);
+    letter-spacing:.06em;
+    text-transform:uppercase;
+  }
+  .doc-footer-links{
+    display:flex;align-items:center;gap:14px;
+    flex-wrap:wrap;
+  }
+  .doc-footer-link{
+    font-family:var(--font-sans);
+    font-size:13px;color:var(--muted);
+    letter-spacing:-.005em;
+    text-decoration:none;
+    transition:color .2s var(--ease-out);
+  }
+  .doc-footer-link:hover{color:var(--ink)}
+  .doc-footer-link.is-current{color:var(--ink);font-weight:500}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:360px){
+    main{padding:32px 16px 48px}
+    .doc-toc{padding:16px 18px}
+    .doc-content h2{margin-top:36px;font-size:17px}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<!-- =================== NAV =================== -->
+<nav id="nav">
+  <div class="row">
+    <a class="logo" href="/" aria-label="deepvibe 홈으로">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 30 18" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="logo-pink" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff6f91" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#ff9fbc" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".7"/>
+            </radialGradient>
+            <radialGradient id="logo-violet" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#b967ff" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#caa3ff" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#dec4ff" stop-opacity=".7"/>
+            </radialGradient>
+          </defs>
+          <circle cx="11" cy="9" r="7.5" fill="url(#logo-pink)" style="mix-blend-mode:multiply"/>
+          <circle cx="19" cy="9" r="7.5" fill="url(#logo-violet)" style="mix-blend-mode:multiply"/>
+        </svg>
+      </span>
+      <span class="word">deepvibe</span>
+    </a>
+    <a class="back" href="javascript:history.back()" aria-label="이전 페이지로">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M9 3 L5 7 L9 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      뒤로
+    </a>
+  </div>
+</nav>
+
+<!-- =================== MAIN =================== -->
+<main>
+
+  <!-- Doc header -->
+  <header class="doc-header">
+    <h1 class="doc-title">환불정책</h1>
+    <div class="doc-meta">
+      <span>시행일</span>
+      <span class="doc-meta-dot"></span>
+      <span><em>2026년 6월 1일</em></span>
+    </div>
+
+    <div class="draft-notice">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/>
+        <path d="M7 4 V7.5 M7 9 V9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+      <div>
+        본 환불정책은 <strong>현재 초안 단계</strong>이며, 정식 서비스 시작 전 법무 검토를 거쳐 최종 확정됩니다. 시행 전 주요 내용 변경 시 별도 안내드립니다.
+      </div>
+    </div>
+  </header>
+
+<!-- Table of contents -->
+  <nav class="doc-toc" aria-label="목차">
+    <div class="doc-toc-label">목차</div>
+    <ol class="doc-toc-list">
+      <li><a href="#article-1"><span class="doc-toc-num">제1조</span><span>적용 범위</span></a></li>
+      <li><a href="#article-2"><span class="doc-toc-num">제2조</span><span>결제 수단</span></a></li>
+      <li><a href="#article-3"><span class="doc-toc-num">제3조</span><span>환불 가능 조건</span></a></li>
+      <li><a href="#article-4"><span class="doc-toc-num">제4조</span><span>환불 신청 방법</span></a></li>
+      <li><a href="#article-5"><span class="doc-toc-num">제5조</span><span>환불 처리 기간</span></a></li>
+      <li><a href="#article-6"><span class="doc-toc-num">제6조</span><span>환불 불가 사유</span></a></li>
+      <li><a href="#article-7"><span class="doc-toc-num">제7조</span><span>분쟁 해결</span></a></li>
+    </ol>
+  </nav>
+
+<!-- Doc content -->
+  <article class="doc-content">
+
+    <h2 id="article-1"><span class="num">제1조</span> 적용 범위</h2>
+    <p>본 환불정책은 deepvibe(이하 "회사")가 제공하는 유료 서비스에 대한 결제 및 환불에 적용됩니다. 본 정책은 회사의 이용약관과 함께 적용되며, 약관에서 정하지 않은 사항은 관련 법령(전자상거래법, 콘텐츠산업진흥법 등)에 따릅니다.</p>
+
+    <h2 id="article-2"><span class="num">제2조</span> 결제 수단</h2>
+    <p>회사는 다음 결제 수단을 지원합니다(서비스 상황에 따라 변경될 수 있습니다).</p>
+    <ul>
+      <li>신용카드</li>
+      <li>체크카드</li>
+      <li>카카오페이</li>
+      <li>토스페이</li>
+      <li>네이버페이</li>
+      <li>휴대폰 결제</li>
+    </ul>
+    <p>※ 구체적인 가격 및 결제 모델은 정식 출시 시점에 확정되어 공지됩니다.</p>
+
+    <h2 id="article-3"><span class="num">제3조</span> 환불 가능 조건</h2>
+    <p>다음 경우 환불이 가능합니다.</p>
+    <h3>1. 분석 미실행 환불</h3>
+    <p>결제 완료 후 분석을 시작하지 않은 경우, 결제일로부터 <strong>7일 이내</strong> 전액 환불이 가능합니다.</p>
+    <h3>2. 서비스 결함으로 인한 환불</h3>
+    <ul>
+      <li>분석 처리 중 시스템 오류로 결과를 제공받지 못한 경우</li>
+      <li>제공된 분석 결과가 명백히 불완전하거나 결함이 있는 경우</li>
+    </ul>
+    <h3>3. 회사 귀책 사유</h3>
+    <p>회사의 귀책으로 서비스를 정상 이용할 수 없는 경우 전액 환불됩니다.</p>
+
+    <h2 id="article-4"><span class="num">제4조</span> 환불 신청 방법</h2>
+    <p>① 환불을 원하는 이용자는 다음 방법으로 신청할 수 있습니다.</p>
+    <ul>
+      <li>서비스 내 [내가 그린 결] → 해당 분석 → [환불 신청] 메뉴</li>
+      <li>고객센터 이메일: (사업자 등록 후 확정)</li>
+    </ul>
+    <p>② 환불 신청 시 다음 정보가 필요합니다.</p>
+    <ul>
+      <li>결제 일시</li>
+      <li>결제 수단</li>
+      <li>환불 사유</li>
+    </ul>
+
+    <h2 id="article-5"><span class="num">제5조</span> 환불 처리 기간</h2>
+    <p>① 환불 승인 후 결제 수단에 따라 다음 기간 내 환불 처리됩니다.</p>
+    <ul>
+      <li><strong>신용카드·체크카드</strong>: 카드사 정책에 따라 영업일 기준 3~7일</li>
+      <li><strong>간편 결제(카카오페이·토스 등)</strong>: 영업일 기준 1~3일</li>
+      <li><strong>휴대폰 결제</strong>: 결제일 기준 당월 환불은 즉시, 다음 달은 영업일 기준 7일</li>
+    </ul>
+    <p>② 환불 처리 진행 상황은 결제 시 등록된 연락처로 안내됩니다.</p>
+
+    <h2 id="article-6"><span class="num">제6조</span> 환불 불가 사유</h2>
+    <p>다음 경우 환불이 제한될 수 있습니다.</p>
+    <ul>
+      <li>분석이 정상적으로 완료되어 결과를 제공받은 경우(단순 변심)</li>
+      <li>분석 결과의 주관적 만족도 차이</li>
+      <li>이용자의 부정 사용이 확인된 경우</li>
+      <li>결제일로부터 7일이 경과한 단순 변심에 의한 환불 요청</li>
+    </ul>
+    <p>※ 본 항목은 「전자상거래 등에서의 소비자보호에 관한 법률」 제17조에 따른 청약 철회 제한 사유에 부합합니다.</p>
+
+    <h2 id="article-7"><span class="num">제7조</span> 분쟁 해결</h2>
+    <p>① 환불과 관련한 분쟁이 발생한 경우, 회사와 이용자는 신의성실의 원칙에 따라 협의하여 해결합니다.</p>
+    <p>② 협의가 이루어지지 않을 경우, 한국소비자원 또는 전자거래분쟁조정위원회의 조정을 신청할 수 있습니다.</p>
+    <p>③ 모든 분쟁의 관할 법원은 민사소송법에 따른 관할 법원으로 합니다.</p>
+
+  </article>
+
+  <!-- Doc footer -->
+  <footer class="doc-footer">
+    <div class="doc-footer-row">
+      <span class="doc-footer-label">관련 문서</span>
+      <div class="doc-footer-links">
+        <a href="/terms" class="doc-footer-link">이용약관</a>
+        <a href="/privacy" class="doc-footer-link">개인정보처리방침</a>
+        <a href="/refund" class="doc-footer-link is-current">환불정책</a>
+      </div>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+(() => {
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 4) nav.classList.add('is-scrolled');
+    else nav.classList.remove('is-scrolled');
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>

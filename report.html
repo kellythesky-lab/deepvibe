@@ -14,7 +14,7 @@
 <meta property="og:url" content="https://deepvibe-phi.vercel.app/report"/>
 <meta property="og:title" content="한 편의 결이, 도착했어요 — deepvibe"/>
 <meta property="og:description" content="두 사람 사이에 흐르는 결을 읽어드렸어요. 호감도, 결정적 순간, 감정 시그널까지."/>
-<meta property="og:image" content="https://deepvibe-phi.vercel.app/og-report.png"/>
+<meta property="og:image" content="https://deepvibe-phi.vercel.app/api/og?type=report"/>
 <meta property="og:image:type" content="image/png"/>
 <meta property="og:image:width" content="1200"/>
 <meta property="og:image:height" content="630"/>
@@ -26,7 +26,7 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="한 편의 결이, 도착했어요 — deepvibe"/>
 <meta name="twitter:description" content="두 사람 사이에 흐르는 결을 읽어드렸어요."/>
-<meta name="twitter:image" content="https://deepvibe-phi.vercel.app/og-report.png"/>
+<meta name="twitter:image" content="https://deepvibe-phi.vercel.app/api/og?type=report"/>
 
 <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
 <link rel="apple-touch-icon" href="favicon.svg"/>
@@ -63,6 +63,7 @@
     --s4-gold:#ffce6a;          --s4-bg:rgba(255,206,106,.26);   --s4-deep:#a87010;
     --s5-violet:#caa3ff;        --s5-bg:rgba(202,163,255,.24);   --s5-deep:#6035a0;
     --s6-mint:#92e5bc;          --s6-bg:rgba(146,229,188,.26);   --s6-deep:#1f7050;
+    --s7-coral:#ff8a7d;         --s7-bg:rgba(255,138,125,.22);   --s7-deep:#a04030;
 
     --font-serif:'Fraunces','Noto Serif KR',serif;
     --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Pretendard','Noto Sans KR',sans-serif;
@@ -186,7 +187,8 @@
     transform:translateY(0);
     pointer-events:auto;
   }
-  .auth-dropdown button{
+  .auth-dropdown button,
+  .auth-dropdown a{
     display:block;width:100%;
     padding:9px 12px;
     background:transparent;border:none;
@@ -196,8 +198,202 @@
     border-radius:8px;
     cursor:pointer;
     transition:background .15s var(--ease-out);
+    text-decoration:none;
+    box-sizing:border-box;
   }
-  .auth-dropdown button:hover{background:var(--bg-soft)}
+  .auth-dropdown button:hover,
+  .auth-dropdown a:hover{background:var(--bg-soft)}
+  /* ============ CONSENT MODAL (first-time user agreement) ============ */
+  .consent-modal-overlay{
+    position:fixed;inset:0;z-index:200;
+    background:rgba(20,10,30,.45);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    opacity:0;
+    transition:opacity .35s var(--ease-out);
+    display:flex;align-items:flex-end;justify-content:center;
+  }
+  .consent-modal-overlay.is-open{opacity:1}
+
+  .consent-modal{
+    width:100%;
+    max-width:520px;
+    background:#fff;
+    border-top-left-radius:24px;
+    border-top-right-radius:24px;
+    padding:14px 24px calc(28px + var(--safe-bottom, 0px));
+    max-height:90vh;
+    overflow-y:auto;
+    transform:translateY(100%);
+    transition:transform .4s var(--ease-out-soft);
+  }
+  .consent-modal-overlay.is-open .consent-modal{transform:translateY(0)}
+
+  .consent-modal-handle{
+    width:36px;height:4px;
+    margin:0 auto 20px;
+    background:var(--muted-2);
+    border-radius:2px;
+    opacity:.5;
+  }
+  .consent-modal-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:22px;color:var(--ink);
+    line-height:1.35;
+    letter-spacing:-.015em;
+    margin-bottom:8px;
+  }
+  .consent-modal-title em{
+    font-style:italic;
+    color:var(--ink);
+  }
+  .consent-modal-desc{
+    font-family:var(--font-sans);
+    font-size:13.5px;color:var(--muted);
+    line-height:1.7;
+    letter-spacing:-.005em;
+    margin-bottom:24px;
+  }
+
+  .consent-list{
+    list-style:none;
+    display:flex;flex-direction:column;
+    gap:0;
+    margin-bottom:14px;
+  }
+  .consent-item{
+    border-bottom:.5px solid var(--line-08);
+  }
+  .consent-item:last-child{border-bottom:none}
+
+  .consent-row{
+    display:flex;align-items:center;gap:12px;
+    padding:14px 4px;
+    cursor:pointer;
+  }
+  .consent-check{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+    width:0;height:0;
+  }
+  .consent-check-box{
+    width:20px;height:20px;
+    flex-shrink:0;
+    border:1.5px solid var(--line-18);
+    border-radius:6px;
+    background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;
+    transition:background .2s var(--ease-out), border-color .2s var(--ease-out);
+  }
+  .consent-check-box svg{
+    width:12px;height:12px;
+    opacity:0;
+    transition:opacity .2s var(--ease-out);
+  }
+  .consent-check:checked + .consent-check-box{
+    background:var(--ink);
+    border-color:var(--ink);
+  }
+  .consent-check:checked + .consent-check-box svg{opacity:1}
+  .consent-check:focus-visible + .consent-check-box{
+    outline:2px solid var(--ink);
+    outline-offset:2px;
+  }
+
+  .consent-text{
+    flex:1;
+    display:flex;align-items:center;gap:8px;
+    flex-wrap:wrap;
+  }
+  .consent-tag{
+    display:inline-block;
+    padding:2px 7px;
+    background:rgba(255,159,188,.22);
+    color:#a04060;
+    border-radius:999px;
+    font-family:var(--font-sans);
+    font-size:10.5px;font-weight:600;
+    letter-spacing:-.002em;
+    flex-shrink:0;
+  }
+  .consent-tag-optional{
+    background:var(--bg-soft);
+    color:var(--muted);
+  }
+  .consent-label{
+    font-family:var(--font-sans);
+    font-size:14px;color:var(--ink-2);
+    letter-spacing:-.005em;
+    line-height:1.4;
+    flex:1;
+    min-width:0;
+  }
+  .consent-link{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:24px;height:24px;
+    color:var(--muted);
+    border-radius:6px;
+    transition:background .15s var(--ease-out), color .15s var(--ease-out);
+    text-decoration:none;
+    flex-shrink:0;
+  }
+  .consent-link:hover{
+    background:var(--bg-soft);
+    color:var(--ink);
+  }
+
+  .consent-all-row{
+    padding:4px 0 16px;
+    margin-bottom:20px;
+    border-bottom:.5px solid var(--line-08);
+  }
+  .consent-row-all{
+    padding:10px 4px;
+  }
+  .consent-label-all{
+    font-weight:500;
+    color:var(--ink);
+  }
+
+  .btn-consent-submit{
+    display:flex;align-items:center;justify-content:center;
+    width:100%;
+    padding:16px;
+    border-radius:14px;
+    background:var(--kakao);color:var(--kakao-ink);
+    font-family:var(--font-sans);
+    font-size:15px;font-weight:600;letter-spacing:-.005em;
+    border:none;
+    box-shadow:0 1px 0 rgba(0,0,0,.05), 0 10px 24px -12px rgba(20,10,30,.22);
+    transition:transform var(--dur-fast) var(--ease-out), opacity var(--dur-base) var(--ease-out), background var(--dur-base) var(--ease-out);
+    cursor:pointer;
+    margin-bottom:8px;
+  }
+  .btn-consent-submit:disabled{
+    background:var(--bg-soft);
+    color:var(--muted-2);
+    box-shadow:none;
+    cursor:not-allowed;
+  }
+  .btn-consent-submit:not(:disabled):active{transform:scale(.985)}
+
+  .btn-consent-cancel{
+    display:flex;align-items:center;justify-content:center;
+    width:100%;
+    padding:12px;
+    background:transparent;
+    color:var(--muted);
+    font-family:var(--font-sans);
+    font-size:13px;font-weight:500;letter-spacing:-.005em;
+    border:none;
+    cursor:pointer;
+    transition:color .2s var(--ease-out);
+  }
+  .btn-consent-cancel:hover{color:var(--ink-2)}
+
+
 
   /* ============ MAIN ============ */
   main{
@@ -223,16 +419,7 @@
   .hero > .hero-meta{animation-delay:.95s}
   @keyframes fadeUp{to{opacity:1;transform:none}}
 
-  /* Count-up effect for hero affinity number (visual only — JS animates) */
-  .hero-affinity-number{
-    position:relative;
-    font-family:var(--font-serif);font-weight:500;
-    font-size:88px;line-height:1;
-    letter-spacing:-.045em;
-    color:var(--ink);
-    font-feature-settings:"tnum" 1, "lnum" 1;
-    margin-bottom:8px;
-  }
+  /* Count-up effect removed in v121 — score is no longer the headline. */
 
   .hero-mark{
     display:inline-block;
@@ -289,12 +476,12 @@
     color:var(--ink);
   }
 
-  /* Affinity hero block — large number + interpretation */
+  /* Affinity hero block — narrative-first (no score) */
   .hero-affinity{
     background:#fff;
     border:.5px solid var(--line-08);
     border-radius:24px;
-    padding:36px 24px 28px;
+    padding:36px 28px 36px;
     box-shadow:
       0 1px 2px var(--line-04),
       0 16px 32px -10px rgba(20,10,30,.14),
@@ -312,21 +499,15 @@
     filter:blur(20px);
     pointer-events:none;
   }
-  .hero-affinity-out{
-    position:relative;
-    font-family:var(--font-sans);
-    font-size:12.5px;color:var(--muted);
-    letter-spacing:-.005em;
-    margin-bottom:24px;
-  }
   .hero-affinity-summary{
     position:relative;
     font-family:var(--font-serif);font-weight:300;
-    font-size:18px;line-height:1.5;
+    font-size:22px;line-height:1.5;
     color:var(--ink);
-    letter-spacing:-.01em;
-    max-width:280px;
+    letter-spacing:-.015em;
+    max-width:320px;
     margin:0 auto;
+    text-align:center;
   }
   .hero-affinity-summary em{
     font-style:normal;
@@ -388,6 +569,7 @@
   .card-s4::before{background:radial-gradient(circle, var(--s2-bg), transparent 65%)} /* tempo = orange (s2) */
   .card-s5::before{background:radial-gradient(circle, var(--s4-bg), transparent 65%)} /* style = gold (s4) */
   .card-s6::before{background:radial-gradient(circle, var(--s5-bg), transparent 65%)} /* topic = violet (s5) */
+  .card-s7::before{background:radial-gradient(circle, var(--s7-bg), transparent 65%)} /* future = coral (s7) */
 
   .card-title{
     position:relative;
@@ -484,11 +666,11 @@
   .card.is-in .affinity-chart-dot{
     transform:translate(-50%, -50%) scale(1);
   }
-  .affinity-chart-dot.dot-1{transition-delay:1.2s}
-  .affinity-chart-dot.dot-2{transition-delay:1.5s}
-  .affinity-chart-dot.dot-3{transition-delay:1.8s}
-  .affinity-chart-dot.dot-4{transition-delay:2.1s}
-  .affinity-chart-dot.dot-5{transition-delay:2.4s}
+  .affinity-chart-dot.dot-1{transition-delay:.35s}
+  .affinity-chart-dot.dot-2{transition-delay:.8s}
+  .affinity-chart-dot.dot-3{transition-delay:1.23s}
+  .affinity-chart-dot.dot-4{transition-delay:1.68s}
+  .affinity-chart-dot.dot-5{transition-delay:2.05s}
 
   .affinity-events{
     display:flex;flex-direction:column;
@@ -664,6 +846,7 @@
     font-size:11.5px;color:var(--muted);
     letter-spacing:-.002em;
     text-align:right;
+    padding-right:11px;
   }
   .signal-compare-grid-head.right{text-align:right}
   .signal-compare-name{
@@ -1111,6 +1294,417 @@
   .topic-fill-4{transition-delay:.65s}
   .topic-fill-5{transition-delay:.8s}
 
+  /* TOPIC — evolution (Level 5: 주제의 진화) */
+  .topic-evolution{
+    margin-top:22px;
+    padding-top:18px;
+    border-top:.5px solid var(--line-08);
+  }
+  .topic-evolution-label{
+    font-family:var(--font-sans);
+    font-size:11px;color:var(--muted);
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .topic-evo-stage{
+    display:grid;
+    grid-template-columns:38px 1fr;
+    gap:12px;
+    align-items:start;
+    padding:8px 0;
+  }
+  .topic-evo-stage + .topic-evo-stage{
+    border-top:.5px dashed var(--line-08);
+  }
+  .topic-evo-time{
+    display:flex;flex-direction:column;
+    align-items:center;
+    padding-top:4px;
+  }
+  .topic-evo-dot{
+    width:9px;height:9px;
+    border-radius:50%;
+    background:var(--s5-violet);
+    margin-bottom:4px;
+    opacity:var(--dot-opacity, 1);
+  }
+  .topic-evo-month{
+    font-family:var(--font-sans);
+    font-size:11px;color:var(--muted);
+    letter-spacing:-.002em;
+    font-weight:500;
+  }
+  .topic-evo-body{
+    padding-top:2px;
+  }
+  .topic-evo-title{
+    font-family:var(--font-sans);
+    font-size:13.5px;color:var(--ink-2);
+    font-weight:500;
+    letter-spacing:-.005em;
+    line-height:1.4;
+    margin-bottom:6px;
+  }
+  .topic-evo-chips{
+    display:flex;flex-wrap:wrap;gap:5px;
+  }
+  .topic-evo-chip{
+    display:inline-flex;align-items:center;
+    padding:3px 9px;
+    background:rgba(202,163,255,.18);
+    color:var(--s5-deep);
+    border-radius:999px;
+    font-family:var(--font-sans);
+    font-size:11.5px;font-weight:500;
+    letter-spacing:-.002em;
+    line-height:1.4;
+  }
+  .topic-evo-note{
+    margin-top:14px;
+    padding-top:12px;
+    border-top:.5px solid var(--line-08);
+    text-align:center;
+    font-family:var(--font-sans);
+    font-size:12.5px;color:var(--ink-2);
+    line-height:1.5;
+    letter-spacing:-.005em;
+  }
+  .topic-evo-note em{
+    font-style:normal;
+    font-weight:500;
+    color:var(--ink);
+    padding:0 4px;
+    border-radius:3px;
+    background:var(--s5-bg);
+  }
+
+  /* TOPIC — quote (Level 6: 가장 자주 주고받은 한마디) */
+  .topic-quote-wrap{
+    margin-top:20px;
+    padding-top:18px;
+    border-top:.5px solid var(--line-08);
+  }
+  .topic-quote-label{
+    font-family:var(--font-sans);
+    font-size:11px;color:var(--muted);
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .topic-quote-row{
+    display:flex;align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .topic-quote{
+    display:inline-block;
+    padding:8px 13px;
+    background:#F4F4F5;
+    border-radius:14px 14px 14px 4px;
+    font-family:var(--font-sans);
+    font-size:13px;color:var(--ink-2);
+    line-height:1.5;
+    letter-spacing:-.005em;
+    max-width:100%;
+  }
+  .topic-quote-count{
+    font-family:var(--font-sans);
+    font-size:11.5px;color:var(--muted);
+    letter-spacing:-.002em;
+  }
+  .topic-quote-count em{
+    font-style:normal;
+    font-weight:600;
+    color:var(--ink-2);
+  }
+
+  /* TOPIC — staged entrance (evolution stages reveal sequentially) */
+  .topic-evo-stage{
+    opacity:0;
+    transform:translateY(6px);
+    transition:opacity .55s var(--ease-out-soft), transform .55s var(--ease-out-soft);
+  }
+  .card.is-in .topic-evo-stage{opacity:1;transform:none}
+  .card.is-in .topic-evo-stage:nth-of-type(1){transition-delay:1.0s}
+  .card.is-in .topic-evo-stage:nth-of-type(2){transition-delay:1.2s}
+  .card.is-in .topic-evo-stage:nth-of-type(3){transition-delay:1.4s}
+  .card.is-in .topic-evo-stage:nth-of-type(4){transition-delay:1.6s}
+
+  /* ========== 07 FUTURE — signals of what comes next ========== */
+  /* Level 3: 시간별 미래 표현 등장 막대 */
+  .future-bars{
+    display:flex;flex-direction:column;
+    gap:11px;
+    margin-top:4px;
+  }
+  .future-bar-row{
+    display:grid;
+    grid-template-columns:34px 1fr 44px;
+    gap:10px;
+    align-items:center;
+  }
+  .future-bar-month{
+    font-family:var(--font-sans);
+    font-size:11.5px;color:var(--muted);
+    font-weight:500;
+    letter-spacing:-.002em;
+  }
+  .future-bar-track{
+    position:relative;
+    height:12px;
+    background:rgba(255,138,125,.08);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .future-bar-fill{
+    position:absolute;left:0;top:0;bottom:0;
+    width:0%;
+    background:var(--s7-coral);
+    border-radius:6px;
+    transition:width 1s var(--ease-out-soft);
+  }
+  .card.is-in .future-bar-fill{width:calc(100% * var(--fill, 0.5))}
+  .future-bar-fill-1{transition-delay:.4s}
+  .future-bar-fill-2{transition-delay:.55s}
+  .future-bar-fill-3{transition-delay:.7s}
+  .future-bar-fill-4{transition-delay:.85s}
+  .future-bar-count{
+    font-family:var(--font-serif);font-weight:500;
+    font-size:15px;color:var(--ink);
+    letter-spacing:-.01em;
+    text-align:right;
+    font-feature-settings:"tnum" 1, "lnum" 1;
+  }
+  .future-bar-count.is-latest{
+    color:var(--s7-deep);
+  }
+  .future-summary{
+    margin-top:14px;
+    padding-top:12px;
+    border-top:.5px solid var(--line-08);
+    text-align:center;
+    font-family:var(--font-sans);
+    font-size:12.5px;color:var(--ink-2);
+    line-height:1.5;
+    letter-spacing:-.005em;
+  }
+  .future-summary em{
+    font-style:normal;
+    font-weight:500;
+    color:var(--ink);
+    padding:0 4px;
+    border-radius:3px;
+    background:var(--s7-bg);
+  }
+
+  /* Level 5: 처음 등장한 순간 */
+  .future-firsts{
+    margin-top:20px;
+    padding-top:18px;
+    border-top:.5px solid var(--line-08);
+  }
+  .future-firsts-label{
+    font-family:var(--font-sans);
+    font-size:11px;color:var(--muted);
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .future-first-item{
+    display:grid;
+    grid-template-columns:38px 1fr;
+    gap:12px;
+    align-items:start;
+    padding:8px 0;
+  }
+  .future-first-item + .future-first-item{
+    border-top:.5px dashed var(--line-08);
+  }
+  .future-first-time{
+    display:flex;flex-direction:column;
+    align-items:center;
+    padding-top:4px;
+  }
+  .future-first-dot{
+    width:9px;height:9px;
+    border-radius:50%;
+    background:var(--s7-coral);
+    margin-bottom:4px;
+    opacity:var(--dot-opacity, 1);
+  }
+  .future-first-date{
+    font-family:var(--font-sans);
+    font-size:10.5px;color:var(--muted);
+    font-weight:500;
+    letter-spacing:-.002em;
+    text-align:center;
+    white-space:nowrap;
+  }
+  .future-first-body{
+    padding-top:1px;
+  }
+  .future-first-quote{
+    display:inline-block;
+    padding:8px 13px;
+    background:#F4F4F5;
+    border-radius:14px 14px 14px 4px;
+    font-family:var(--font-sans);
+    font-size:13px;color:var(--ink-2);
+    line-height:1.45;
+    letter-spacing:-.005em;
+    max-width:100%;
+  }
+  .future-first-quote.is-key{
+    background:var(--s7-bg);
+    color:var(--s7-deep);
+    font-weight:500;
+  }
+
+  /* Level 6: 가장 자주 주고받은 한마디 */
+  .future-quote-wrap{
+    margin-top:20px;
+    padding-top:18px;
+    border-top:.5px solid var(--line-08);
+  }
+  .future-quote-label{
+    font-family:var(--font-sans);
+    font-size:11px;color:var(--muted);
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .future-quote-row{
+    display:flex;align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .future-quote{
+    display:inline-block;
+    padding:8px 13px;
+    background:#F4F4F5;
+    border-radius:14px 14px 14px 4px;
+    font-family:var(--font-sans);
+    font-size:13px;color:var(--ink-2);
+    line-height:1.5;
+    letter-spacing:-.005em;
+    max-width:100%;
+  }
+  .future-quote-count{
+    font-family:var(--font-sans);
+    font-size:11.5px;color:var(--muted);
+    letter-spacing:-.002em;
+  }
+  .future-quote-count em{
+    font-style:normal;
+    font-weight:600;
+    color:var(--ink-2);
+  }
+
+  /* FUTURE — staged entrance (first items reveal sequentially) */
+  .future-first-item{
+    opacity:0;
+    transform:translateY(6px);
+    transition:opacity .55s var(--ease-out-soft), transform .55s var(--ease-out-soft);
+  }
+  .card.is-in .future-first-item{opacity:1;transform:none}
+  .card.is-in .future-first-item:nth-of-type(1){transition-delay:1.1s}
+  .card.is-in .future-first-item:nth-of-type(2){transition-delay:1.3s}
+  .card.is-in .future-first-item:nth-of-type(3){transition-delay:1.5s}
+
+  /* ============ REPORT ERROR (full-page state for missing/failed results) ============ */
+  .report-error{
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    padding:60px 24px 80px;
+    text-align:center;
+    min-height:60vh;
+    justify-content:center;
+  }
+  .report-error.is-visible{display:flex}
+
+  .report-error-mark{
+    width:56px;height:56px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:50%;
+    background:rgba(208,74,74,.08);
+    margin-bottom:28px;
+    color:var(--danger);
+  }
+  .report-error-mark svg{width:28px;height:28px}
+
+  .report-error-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:24px;color:var(--ink);
+    line-height:1.4;
+    letter-spacing:-.02em;
+    margin-bottom:12px;
+    max-width:340px;
+  }
+  .report-error-desc{
+    font-family:var(--font-sans);
+    font-size:14px;color:var(--muted);
+    line-height:1.7;
+    letter-spacing:-.005em;
+    margin-bottom:36px;
+    max-width:340px;
+  }
+  .report-error-meta{
+    font-family:var(--font-sans);
+    font-size:11.5px;color:var(--muted-2);
+    letter-spacing:-.002em;
+    margin-bottom:8px;
+  }
+
+  .report-error-actions{
+    display:flex;flex-direction:column;
+    gap:10px;
+    width:100%;
+    max-width:300px;
+  }
+  .btn-report-primary{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;
+    padding:15px;
+    border-radius:14px;
+    background:var(--ink);color:#fff;
+    font-family:var(--font-sans);
+    font-size:14.5px;font-weight:500;letter-spacing:-.005em;
+    border:none;
+    box-shadow:0 1px 0 rgba(0,0,0,.05), 0 10px 24px -12px rgba(20,10,30,.22);
+    transition:transform var(--dur-fast) var(--ease-out);
+    cursor:pointer;
+    text-decoration:none;
+  }
+  .btn-report-primary:active{transform:scale(.985)}
+  .btn-report-secondary{
+    display:flex;align-items:center;justify-content:center;
+    width:100%;
+    padding:13px;
+    border-radius:14px;
+    background:transparent;
+    color:var(--muted);
+    font-family:var(--font-sans);
+    font-size:13.5px;font-weight:500;letter-spacing:-.005em;
+    border:none;
+    cursor:pointer;
+    transition:color .2s var(--ease-out);
+    text-decoration:none;
+  }
+  .btn-report-secondary:hover{color:var(--ink)}
+
+  /* When error is visible, hide the rest of the report */
+  body.has-report-error .hero,
+  body.has-report-error .cards,
+  body.has-report-error .actions,
+  body.has-report-error .invite,
+  body.has-report-error .faq,
+  body.has-report-error footer,
+  body.has-report-error .sticky-cta{
+    display:none !important;
+  }
+
   /* ============ ACTIONS ============ */
   .actions{
     display:flex;flex-direction:column;
@@ -1458,8 +2052,8 @@
   @media (max-width:360px){
     main{padding:24px 16px 40px}
     .hero{margin-bottom:32px}
-    .hero-affinity{padding:30px 20px 24px}
-    .hero-affinity-number{font-size:76px}
+    .hero-affinity{padding:30px 22px 30px}
+    .hero-affinity-summary{font-size:20px}
     .card{padding:22px 18px}
   }
 
@@ -1513,6 +2107,23 @@
 <!-- =================== MAIN =================== -->
 <main>
 
+  <!-- ============ REPORT ERROR (full-page state) ============ -->
+  <div class="report-error" id="reportError" role="alert" aria-live="polite">
+    <div class="report-error-mark" aria-hidden="true">
+      <svg viewBox="0 0 28 28" fill="none">
+        <circle cx="14" cy="14" r="11.5" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M14 8 V15 M14 18 V18.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1 class="report-error-title" id="reportErrorTitle">이 분석을 불러올 수 없어요</h1>
+    <p class="report-error-desc" id="reportErrorDesc">분석 내용이 사라졌거나, 잠시 서버에 닿지 못한 것 같아요. 잠시 후 다시 시도해 주세요.</p>
+    <div class="report-error-meta" id="reportErrorMeta" style="display:none;"></div>
+    <div class="report-error-actions">
+      <a href="/upload" class="btn-report-primary" id="btnReportPrimary">새 분석 시작하기</a>
+      <a href="/" class="btn-report-secondary">처음으로 돌아가기</a>
+    </div>
+  </div>
+
   <!-- ============ HERO ============ -->
   <header class="hero">
     <div class="hero-mark" aria-hidden="true">
@@ -1537,10 +2148,8 @@
     <div class="hero-subtitle"><em>지훈</em>님과의</div>
     <h1 class="hero-title">한 편의 <em>결</em>이, 도착했어요.</h1>
 
-    <!-- Hero affinity card — the headline result -->
+    <!-- Hero affinity card — the headline narrative (no numeric score) -->
     <div class="hero-affinity">
-      <div class="hero-affinity-number" id="heroNumber" data-target="82.3">0.0</div>
-      <div class="hero-affinity-out">호감도 / 100</div>
       <p class="hero-affinity-summary">
         두 사람은 지금,<br>
         <em>친구에서 연인으로 향하는 길</em> 위에 있어요.
@@ -1798,12 +2407,12 @@
           <div class="tempo-compare-item">
             <div class="tempo-compare-name">민지의 답장</div>
             <div class="tempo-compare-value lead">2.1<span class="unit">분</span></div>
-            <div class="tempo-compare-tail">평균</div>
+            <div class="tempo-compare-tail">빠른 편이에요</div>
           </div>
           <div class="tempo-compare-item">
             <div class="tempo-compare-name">지훈의 답장</div>
             <div class="tempo-compare-value">6.3<span class="unit">분</span></div>
-            <div class="tempo-compare-tail"><em>3배</em> 더 오래 기다려요</div>
+            <div class="tempo-compare-tail"><em>3배</em> 더 천천히</div>
           </div>
         </div>
 
@@ -1940,6 +2549,170 @@
               </div>
               <div class="topic-track"><div class="topic-fill topic-fill-5" style="--fill:0.30"></div></div>
             </div>
+          </div>
+        </div>
+
+        <!-- Level 5: 주제의 진화 -->
+        <div class="topic-evolution">
+          <div class="topic-evolution-label">시간이 흐르며</div>
+
+          <div class="topic-evo-stage" style="--dot-opacity:.3">
+            <div class="topic-evo-time">
+              <div class="topic-evo-dot"></div>
+              <div class="topic-evo-month">8월</div>
+            </div>
+            <div class="topic-evo-body">
+              <div class="topic-evo-title">하루를 묻는</div>
+              <div class="topic-evo-chips">
+                <span class="topic-evo-chip">오늘 뭐 했어</span>
+                <span class="topic-evo-chip">카페</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic-evo-stage" style="--dot-opacity:.55">
+            <div class="topic-evo-time">
+              <div class="topic-evo-dot"></div>
+              <div class="topic-evo-month">9월</div>
+            </div>
+            <div class="topic-evo-body">
+              <div class="topic-evo-title">주말을 약속하는</div>
+              <div class="topic-evo-chips">
+                <span class="topic-evo-chip">주말 계획</span>
+                <span class="topic-evo-chip">다음 주</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic-evo-stage" style="--dot-opacity:.8">
+            <div class="topic-evo-time">
+              <div class="topic-evo-dot"></div>
+              <div class="topic-evo-month">10월</div>
+            </div>
+            <div class="topic-evo-body">
+              <div class="topic-evo-title">속마음을 나누는</div>
+              <div class="topic-evo-chips">
+                <span class="topic-evo-chip">고민</span>
+                <span class="topic-evo-chip">가족</span>
+                <span class="topic-evo-chip">진짜</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic-evo-stage" style="--dot-opacity:1">
+            <div class="topic-evo-time">
+              <div class="topic-evo-dot"></div>
+              <div class="topic-evo-month">11월</div>
+            </div>
+            <div class="topic-evo-body">
+              <div class="topic-evo-title">미래를 그리는</div>
+              <div class="topic-evo-chips">
+                <span class="topic-evo-chip">앞으로</span>
+                <span class="topic-evo-chip">같이</span>
+                <span class="topic-evo-chip">우리</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="topic-evo-note">
+            석 달 사이, <em>주제도 깊어졌어요</em>
+          </div>
+        </div>
+
+        <!-- Level 6: 가장 자주 주고받은 한마디 -->
+        <div class="topic-quote-wrap">
+          <div class="topic-quote-label">가장 자주 주고받은 한마디</div>
+          <div class="topic-quote-row">
+            <div class="topic-quote">오늘은 뭐 했어요?</div>
+            <div class="topic-quote-count"><em>152번</em> 등장</div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- 07 · FUTURE — signals of what comes next -->
+    <article class="card card-s7 reveal">
+      <h2 class="card-title">다가오는 <em>시간</em></h2>
+      <div class="card-body">
+        <p class="card-summary">두 사람의 대화에 <em>미래가 들어왔어요</em></p>
+
+        <!-- Level 3: 시간별 미래 표현 등장 막대 -->
+        <div class="future-bars">
+          <div class="future-bar-row">
+            <div class="future-bar-month">8월</div>
+            <div class="future-bar-track">
+              <div class="future-bar-fill future-bar-fill-1" style="--fill:0.25"></div>
+            </div>
+            <div class="future-bar-count">12회</div>
+          </div>
+          <div class="future-bar-row">
+            <div class="future-bar-month">9월</div>
+            <div class="future-bar-track">
+              <div class="future-bar-fill future-bar-fill-2" style="--fill:0.49"></div>
+            </div>
+            <div class="future-bar-count">23회</div>
+          </div>
+          <div class="future-bar-row">
+            <div class="future-bar-month">10월</div>
+            <div class="future-bar-track">
+              <div class="future-bar-fill future-bar-fill-3" style="--fill:0.81"></div>
+            </div>
+            <div class="future-bar-count">38회</div>
+          </div>
+          <div class="future-bar-row">
+            <div class="future-bar-month">11월</div>
+            <div class="future-bar-track">
+              <div class="future-bar-fill future-bar-fill-4" style="--fill:1"></div>
+            </div>
+            <div class="future-bar-count is-latest">47회</div>
+          </div>
+        </div>
+
+        <div class="future-summary">
+          석 달 사이, <em>4배 늘었어요</em>
+        </div>
+
+        <!-- Level 5: 처음 등장한 순간 -->
+        <div class="future-firsts">
+          <div class="future-firsts-label">처음 등장한 순간</div>
+
+          <div class="future-first-item" style="--dot-opacity:.4">
+            <div class="future-first-time">
+              <div class="future-first-dot"></div>
+              <div class="future-first-date">9월 18일</div>
+            </div>
+            <div class="future-first-body">
+              <div class="future-first-quote">다음 주에 시간 돼요?</div>
+            </div>
+          </div>
+
+          <div class="future-first-item" style="--dot-opacity:.7">
+            <div class="future-first-time">
+              <div class="future-first-dot"></div>
+              <div class="future-first-date">10월 7일</div>
+            </div>
+            <div class="future-first-body">
+              <div class="future-first-quote">우리 언제 또 만나요</div>
+            </div>
+          </div>
+
+          <div class="future-first-item" style="--dot-opacity:1">
+            <div class="future-first-time">
+              <div class="future-first-dot"></div>
+              <div class="future-first-date">11월 3일</div>
+            </div>
+            <div class="future-first-body">
+              <div class="future-first-quote is-key">내년에 같이 가보고 싶은 데가 있어</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Level 6: 가장 자주 주고받은 한마디 -->
+        <div class="future-quote-wrap">
+          <div class="future-quote-label">가장 자주 주고받은 한마디</div>
+          <div class="future-quote-row">
+            <div class="future-quote">다음 주에 만나요</div>
+            <div class="future-quote-count"><em>32번</em> 등장</div>
           </div>
         </div>
       </div>
@@ -2118,6 +2891,72 @@
 
 <script>
 (() => {
+  // ============================================================
+  // REPORT ERROR — full-page state when result can't be loaded
+  // ============================================================
+  // errorType: 'not_found' | 'expired' | 'unauthorized' | 'server' | 'unknown'
+  const showReportError = (errorType = 'unknown', meta = null) => {
+    const copy = {
+      not_found: {
+        title: '이 분석을 불러올 수 없어요',
+        desc: '주소가 잘못되었거나, 이미 사라진 분석일 수 있어요. 새로 분석을 시작해 볼까요?',
+        primary: { label: '새 분석 시작하기', href: '/upload' },
+      },
+      expired: {
+        title: '분석이 만료되었어요',
+        desc: '두 사람의 대화는 3일 후 안전하게 사라져요. 새로 카톡 파일을 올려 다시 분석해 주세요.',
+        primary: { label: '새 분석 시작하기', href: '/upload' },
+      },
+      unauthorized: {
+        title: '이 분석을 볼 수 없어요',
+        desc: '본인의 분석만 열어볼 수 있어요. 로그인 상태를 확인해 주세요.',
+        primary: { label: '로그인하기', href: '/' },
+      },
+      server: {
+        title: '잠시 서버에 닿지 못했어요',
+        desc: '잠시 후 다시 시도해 주세요. 같은 일이 반복되면 페이지를 새로고침해 볼까요?',
+        primary: { label: '다시 시도하기', href: window.location.href },
+      },
+      unknown: {
+        title: '예상하지 못한 문제가 생겼어요',
+        desc: '잠시 후 다시 시도해 주세요. 문제가 계속되면 새로 분석을 시작해 볼까요?',
+        primary: { label: '새 분석 시작하기', href: '/upload' },
+      },
+    };
+
+    const { title, desc, primary } = copy[errorType] || copy.unknown;
+    const errorEl = document.getElementById('reportError');
+    document.getElementById('reportErrorTitle').textContent = title;
+    document.getElementById('reportErrorDesc').textContent = desc;
+
+    const primaryBtn = document.getElementById('btnReportPrimary');
+    primaryBtn.textContent = primary.label;
+    primaryBtn.setAttribute('href', primary.href);
+
+    // Show optional meta info (e.g., analysis ID, timestamp) for debugging
+    if (meta) {
+      const metaEl = document.getElementById('reportErrorMeta');
+      metaEl.textContent = meta;
+      metaEl.style.display = 'block';
+    }
+
+    errorEl.classList.add('is-visible');
+    document.body.classList.add('has-report-error');
+  };
+
+  // Expose globally so it can be called from external scripts (e.g., auth-ui.js)
+  window.showReportError = showReportError;
+
+  // ============================================================
+  // DEV TEST: ?error=not_found | expired | unauthorized | server | unknown
+  // ============================================================
+  const urlParams = new URLSearchParams(window.location.search);
+  const errorParam = urlParams.get('error');
+  if (errorParam) {
+    showReportError(errorParam, urlParams.get('id') ? `Analysis ID: ${urlParams.get('id')}` : null);
+    return; // Skip the rest of report initialization
+  }
+
   // Reveal cards on scroll
   const cards = document.querySelectorAll('.card.reveal');
   const cardObserver = new IntersectionObserver((entries) => {
@@ -2137,26 +2976,7 @@
     else nav.classList.remove('is-scrolled');
   }, { passive: true });
 
-  // Hero count-up: 0.0 → 82.3 (matches D-Day widget pattern from index.html)
-  const heroNumber = document.getElementById('heroNumber');
-  const target = parseFloat(heroNumber.dataset.target);
-  let heroStarted = false;
-  const easeOut = (t) => 1 - Math.pow(1 - t, 3);
-  const heroCount = () => {
-    if (heroStarted) return;
-    heroStarted = true;
-    const dur = 1600;
-    const start = performance.now();
-    const tick = (now) => {
-      const p = Math.min(1, (now - start) / dur);
-      const v = (easeOut(p) * target).toFixed(1);
-      heroNumber.textContent = v;
-      if (p < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  };
-  // Start count-up after hero fade-in completes (matches animation-delay)
-  setTimeout(heroCount, 700);
+  // Hero count-up removed in v121 — the narrative is the headline, not a score.
 
   // ============================================================
   // TOAST — shared component for transient feedback messages

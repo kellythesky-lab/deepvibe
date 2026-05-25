@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#F6F4F1"/>
+<title>내가 그린 결 — deepvibe</title>
+
+<meta name="description" content="내가 분석한 두 사람 사이의 결을 모아 볼 수 있어요."/>
+<meta name="robots" content="noindex, nofollow"/>
+
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link rel="apple-touch-icon" href="/favicon.svg"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F4F1;
+    --bg-soft:#EFEBE5;
+    --bg-warm:#F0E9DE;
+    --ink:#15131A;
+    --ink-2:#2a262f;
+    --muted:#7a7680;
+    --muted-2:#a8a4ac;
+    --line-04:rgba(20,10,30,.04);
+    --line-08:rgba(20,10,30,.08);
+    --line-12:rgba(20,10,30,.12);
+    --line-18:rgba(20,10,30,.18);
+    --kakao:#FEE500;
+    --kakao-ink:#3D1E1E;
+    --pink:#ff6f91;
+    --pink-soft:#ffb4c6;
+    --violet:#b967ff;
+    --danger:#d04a4a;
+
+    --font-serif:'Fraunces','Noto Serif KR',serif;
+    --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Pretendard','Noto Sans KR',sans-serif;
+
+    --ease-out:cubic-bezier(.22,1,.36,1);
+    --ease-out-soft:cubic-bezier(.16,1,.3,1);
+    --ease-in-out:cubic-bezier(.65,0,.35,1);
+    --dur-fast:.18s;
+    --dur-base:.32s;
+    --dur-slow:.55s;
+
+    --r-sm:6px;
+    --r-md:14px;
+    --r-lg:20px;
+    --r-pill:999px;
+
+    --safe-bottom:env(safe-area-inset-bottom,0px);
+    --safe-top:env(safe-area-inset-top,0px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  :focus{outline:none}
+  :focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:4px}
+  button:focus-visible,a:focus-visible{outline-offset:4px}
+
+  html{
+    scroll-behavior:smooth;
+    overflow-x:hidden;
+    font-size:100%;
+    -webkit-text-size-adjust:100%;
+  }
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--font-sans);font-size:15.5px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    word-break:keep-all;line-break:strict;
+    overflow-x:hidden;
+    min-height:100vh;
+    min-height:100dvh;
+    position:relative;
+    padding-bottom:calc(80px + var(--safe-bottom));
+  }
+
+  /* ============ AMBIENT BG GLOW ============ */
+  .ambient-bg{
+    position:fixed;inset:0;z-index:0;
+    pointer-events:none;
+    overflow:hidden;
+  }
+  .ambient-bg::before,
+  .ambient-bg::after{
+    content:"";
+    position:absolute;
+    width:60vw;height:60vw;
+    max-width:480px;max-height:480px;
+    border-radius:50%;
+    filter:blur(80px);
+    opacity:.4;
+  }
+  .ambient-bg::before{
+    top:-15%;left:-20%;
+    background:radial-gradient(circle, var(--pink-soft), transparent 70%);
+  }
+  .ambient-bg::after{
+    bottom:-10%;right:-25%;
+    background:radial-gradient(circle, #cdb4ff, transparent 70%);
+    opacity:.3;
+  }
+
+  /* ============ NAV ============ */
+  nav{
+    position:sticky;top:0;z-index:30;
+    background:rgba(246,244,241,.85);
+    backdrop-filter:blur(14px) saturate(180%);
+    -webkit-backdrop-filter:blur(14px) saturate(180%);
+    border-bottom:.5px solid transparent;
+    transition:border-color .25s var(--ease-out);
+  }
+  nav.is-scrolled{border-bottom-color:var(--line-08)}
+  nav .row{
+    max-width:520px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 20px;
+  }
+  nav .logo{display:flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer}
+  nav .logo .mark{display:inline-block;width:22px;height:14px;position:relative}
+  nav .logo .mark svg{width:100%;height:100%;overflow:visible}
+  nav .logo .word{
+    font-family:var(--font-serif);font-weight:400;font-style:italic;
+    font-size:18px;letter-spacing:-.01em;color:var(--ink);
+  }
+  nav .user-chip{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:6px 12px 6px 6px;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:999px;
+    font-size:12.5px;font-weight:500;color:var(--ink-2);
+    transition:background .2s var(--ease-out), border-color .2s var(--ease-out);
+    box-shadow:0 1px 2px var(--line-04);
+    cursor:pointer;
+  }
+  nav .user-chip:hover{background:#fff;border-color:var(--line-12)}
+  nav .user-chip .avatar{
+    width:22px;height:22px;border-radius:50%;
+    background:linear-gradient(135deg, var(--pink), var(--violet));
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:10px;font-weight:600;
+    letter-spacing:0;
+  }
+
+    /* ============ CONSENT MODAL (first-time user agreement) ============ */
+  .consent-modal-overlay{
+    position:fixed;inset:0;z-index:200;
+    background:rgba(20,10,30,.45);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    opacity:0;
+    transition:opacity .35s var(--ease-out);
+    display:flex;align-items:flex-end;justify-content:center;
+  }
+  .consent-modal-overlay.is-open{opacity:1}
+
+  .consent-modal{
+    width:100%;
+    max-width:520px;
+    background:#fff;
+    border-top-left-radius:24px;
+    border-top-right-radius:24px;
+    padding:14px 24px calc(28px + var(--safe-bottom, 0px));
+    max-height:90vh;
+    overflow-y:auto;
+    transform:translateY(100%);
+    transition:transform .4s var(--ease-out-soft);
+  }
+  .consent-modal-overlay.is-open .consent-modal{transform:translateY(0)}
+
+  .consent-modal-handle{
+    width:36px;height:4px;
+    margin:0 auto 20px;
+    background:var(--muted-2);
+    border-radius:2px;
+    opacity:.5;
+  }
+  .consent-modal-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:22px;color:var(--ink);
+    line-height:1.35;
+    letter-spacing:-.015em;
+    margin-bottom:8px;
+  }
+  .consent-modal-title em{
+    font-style:italic;
+    color:var(--ink);
+  }
+  .consent-modal-desc{
+    font-family:var(--font-sans);
+    font-size:13.5px;color:var(--muted);
+    line-height:1.7;
+    letter-spacing:-.005em;
+    margin-bottom:24px;
+  }
+
+  .consent-list{
+    list-style:none;
+    display:flex;flex-direction:column;
+    gap:0;
+    margin-bottom:14px;
+  }
+  .consent-item{
+    border-bottom:.5px solid var(--line-08);
+  }
+  .consent-item:last-child{border-bottom:none}
+
+  .consent-row{
+    display:flex;align-items:center;gap:12px;
+    padding:14px 4px;
+    cursor:pointer;
+  }
+  .consent-check{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+    width:0;height:0;
+  }
+  .consent-check-box{
+    width:20px;height:20px;
+    flex-shrink:0;
+    border:1.5px solid var(--line-18);
+    border-radius:6px;
+    background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;
+    transition:background .2s var(--ease-out), border-color .2s var(--ease-out);
+  }
+  .consent-check-box svg{
+    width:12px;height:12px;
+    opacity:0;
+    transition:opacity .2s var(--ease-out);
+  }
+  .consent-check:checked + .consent-check-box{
+    background:var(--ink);
+    border-color:var(--ink);
+  }
+  .consent-check:checked + .consent-check-box svg{opacity:1}
+  .consent-check:focus-visible + .consent-check-box{
+    outline:2px solid var(--ink);
+    outline-offset:2px;
+  }
+
+  .consent-text{
+    flex:1;
+    display:flex;align-items:center;gap:8px;
+    flex-wrap:wrap;
+  }
+  .consent-tag{
+    display:inline-block;
+    padding:2px 7px;
+    background:rgba(255,159,188,.22);
+    color:#a04060;
+    border-radius:999px;
+    font-family:var(--font-sans);
+    font-size:10.5px;font-weight:600;
+    letter-spacing:-.002em;
+    flex-shrink:0;
+  }
+  .consent-tag-optional{
+    background:var(--bg-soft);
+    color:var(--muted);
+  }
+  .consent-label{
+    font-family:var(--font-sans);
+    font-size:14px;color:var(--ink-2);
+    letter-spacing:-.005em;
+    line-height:1.4;
+    flex:1;
+    min-width:0;
+  }
+  .consent-link{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:24px;height:24px;
+    color:var(--muted);
+    border-radius:6px;
+    transition:background .15s var(--ease-out), color .15s var(--ease-out);
+    text-decoration:none;
+    flex-shrink:0;
+  }
+  .consent-link:hover{
+    background:var(--bg-soft);
+    color:var(--ink);
+  }
+
+  .consent-all-row{
+    padding:4px 0 16px;
+    margin-bottom:20px;
+    border-bottom:.5px solid var(--line-08);
+  }
+  .consent-row-all{
+    padding:10px 4px;
+  }
+  .consent-label-all{
+    font-weight:500;
+    color:var(--ink);
+  }
+
+  .btn-consent-submit{
+    display:flex;align-items:center;justify-content:center;
+    width:100%;
+    padding:16px;
+    border-radius:14px;
+    background:var(--kakao);color:var(--kakao-ink);
+    font-family:var(--font-sans);
+    font-size:15px;font-weight:600;letter-spacing:-.005em;
+    border:none;
+    box-shadow:0 1px 0 rgba(0,0,0,.05), 0 10px 24px -12px rgba(20,10,30,.22);
+    transition:transform var(--dur-fast) var(--ease-out), opacity var(--dur-base) var(--ease-out), background var(--dur-base) var(--ease-out);
+    cursor:pointer;
+    margin-bottom:8px;
+  }
+  .btn-consent-submit:disabled{
+    background:var(--bg-soft);
+    color:var(--muted-2);
+    box-shadow:none;
+    cursor:not-allowed;
+  }
+  .btn-consent-submit:not(:disabled):active{transform:scale(.985)}
+
+  .btn-consent-cancel{
+    display:flex;align-items:center;justify-content:center;
+    width:100%;
+    padding:12px;
+    background:transparent;
+    color:var(--muted);
+    font-family:var(--font-sans);
+    font-size:13px;font-weight:500;letter-spacing:-.005em;
+    border:none;
+    cursor:pointer;
+    transition:color .2s var(--ease-out);
+  }
+  .btn-consent-cancel:hover{color:var(--ink-2)}
+
+
+  /* ============ MAIN ============ */
+  main{
+    position:relative;z-index:1;
+    max-width:520px;
+    margin:0 auto;
+    padding:36px 20px 60px;
+  }
+
+  /* ============ PAGE HEADER ============ */
+  .page-header{
+    margin-bottom:32px;
+    opacity:0;
+    transform:translateY(8px);
+    animation:fadeUp .7s .1s var(--ease-out-soft) forwards;
+  }
+  @keyframes fadeUp{to{opacity:1;transform:none}}
+
+  .page-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:clamp(28px, 8vw, 36px);
+    line-height:1.2;letter-spacing:-.02em;
+    color:var(--ink);
+    margin-bottom:8px;
+  }
+  .page-title em{
+    font-style:italic;
+    color:var(--ink);
+  }
+  .page-meta{
+    font-family:var(--font-sans);
+    font-size:13.5px;color:var(--muted);
+    letter-spacing:-.005em;
+  }
+  .page-meta em{
+    font-style:normal;
+    font-weight:500;
+    color:var(--ink-2);
+  }
+
+  /* ============ HISTORY LIST ============ */
+  .history-list{
+    display:flex;flex-direction:column;
+    gap:14px;
+  }
+
+  /* ============ HISTORY CARD ============ */
+  .history-card{
+    position:relative;
+    display:block;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:18px;
+    padding:22px 22px 20px;
+    text-decoration:none;
+    color:inherit;
+    transition:border-color .25s var(--ease-out), box-shadow .25s var(--ease-out), transform .25s var(--ease-out);
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 8px 20px -14px rgba(20,10,30,.06);
+    opacity:0;
+    transform:translateY(12px);
+    animation:fadeUp .65s var(--ease-out-soft) forwards;
+    overflow:hidden;
+  }
+  .history-card:nth-of-type(1){animation-delay:.18s}
+  .history-card:nth-of-type(2){animation-delay:.28s}
+  .history-card:nth-of-type(3){animation-delay:.38s}
+  .history-card:nth-of-type(4){animation-delay:.48s}
+  .history-card:nth-of-type(5){animation-delay:.58s}
+
+  .history-card:hover{
+    border-color:var(--line-12);
+    transform:translateY(-2px);
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 16px 32px -14px rgba(20,10,30,.12);
+  }
+  .history-card:active{
+    transform:translateY(-1px) scale(.998);
+  }
+
+  /* Subtle pink halo on top-right for visual identity */
+  .history-card::before{
+    content:"";
+    position:absolute;
+    width:120px;height:120px;
+    right:-40px;top:-40px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(255,159,188,.18), transparent 65%);
+    filter:blur(16px);
+    pointer-events:none;
+    opacity:0;
+    transition:opacity .35s var(--ease-out);
+  }
+  .history-card:hover::before{opacity:1}
+
+  .history-card-head{
+    display:flex;align-items:center;gap:12px;
+    margin-bottom:14px;
+    position:relative;
+  }
+  .history-card-mark{
+    width:32px;height:20px;
+    flex-shrink:0;
+    position:relative;
+  }
+  .history-card-mark svg{width:100%;height:100%;overflow:visible}
+  .history-card-target{
+    flex:1;
+    font-family:var(--font-serif);font-weight:400;
+    font-size:18px;color:var(--ink);
+    line-height:1.2;
+    letter-spacing:-.005em;
+  }
+  .history-card-target em{
+    font-style:normal;
+    font-weight:500;
+    color:var(--ink);
+    padding:0 5px;
+    border-radius:4px;
+    background:rgba(255,159,188,.22);
+  }
+  .history-card-arrow{
+    flex-shrink:0;
+    color:var(--muted-2);
+    transition:color .25s var(--ease-out), transform .25s var(--ease-out);
+  }
+  .history-card:hover .history-card-arrow{
+    color:var(--ink);
+    transform:translateX(2px);
+  }
+
+  .history-card-meta{
+    display:flex;align-items:center;gap:8px;
+    flex-wrap:wrap;
+    font-family:var(--font-sans);
+    font-size:12px;color:var(--muted);
+    letter-spacing:-.002em;
+    position:relative;
+  }
+  .history-card-meta-dot{
+    width:3px;height:3px;
+    border-radius:50%;
+    background:var(--muted-2);
+    flex-shrink:0;
+  }
+  .history-card-date{
+    color:var(--ink-2);
+    font-weight:500;
+  }
+
+  /* ============ NEW ANALYSIS CTA (bottom of list) ============ */
+  .new-analysis-cta{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    margin-top:24px;
+    padding:16px;
+    border-radius:14px;
+    background:transparent;
+    border:1.5px dashed var(--line-12);
+    color:var(--muted);
+    font-family:var(--font-sans);
+    font-size:13.5px;font-weight:500;
+    letter-spacing:-.005em;
+    text-decoration:none;
+    transition:background .25s var(--ease-out), border-color .25s var(--ease-out), color .25s var(--ease-out);
+    opacity:0;
+    transform:translateY(8px);
+    animation:fadeUp .7s .8s var(--ease-out-soft) forwards;
+  }
+  .new-analysis-cta:hover{
+    background:#fff;
+    border-color:var(--line-18);
+    border-style:solid;
+    color:var(--ink);
+  }
+  .new-analysis-cta:active{transform:translateY(-1px) scale(.998)}
+
+  /* ============ EMPTY STATE ============ */
+  .empty-state{
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    padding:60px 24px 40px;
+    text-align:center;
+    min-height:50vh;
+    justify-content:center;
+  }
+  .empty-state.is-visible{display:flex}
+  body.is-empty .history-list,
+  body.is-empty .new-analysis-cta{display:none}
+  body.is-empty .empty-state{display:flex}
+
+  .empty-mark{
+    width:64px;height:38px;
+    position:relative;
+    margin-bottom:24px;
+    opacity:0;
+    animation:fadeUp .9s .15s var(--ease-out-soft) forwards;
+  }
+  .empty-mark svg{width:100%;height:100%;overflow:visible}
+  .empty-mark::after{
+    content:"";
+    position:absolute;
+    inset:-30%;
+    background:radial-gradient(circle, rgba(255,159,188,.3), transparent 70%);
+    z-index:-1;
+    filter:blur(18px);
+  }
+
+  .empty-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:22px;color:var(--ink);
+    line-height:1.4;
+    letter-spacing:-.015em;
+    margin-bottom:12px;
+    max-width:300px;
+    opacity:0;
+    animation:fadeUp .7s .3s var(--ease-out-soft) forwards;
+  }
+  .empty-title em{
+    font-style:italic;
+    color:var(--ink);
+  }
+  .empty-desc{
+    font-family:var(--font-sans);
+    font-size:13.5px;color:var(--muted);
+    line-height:1.7;
+    letter-spacing:-.005em;
+    margin-bottom:32px;
+    max-width:280px;
+    opacity:0;
+    animation:fadeUp .7s .45s var(--ease-out-soft) forwards;
+  }
+  .empty-cta{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;
+    max-width:280px;
+    padding:15px;
+    border-radius:14px;
+    background:var(--ink);color:#fff;
+    font-family:var(--font-sans);
+    font-size:14.5px;font-weight:500;letter-spacing:-.005em;
+    border:none;
+    box-shadow:0 1px 0 rgba(0,0,0,.05), 0 10px 24px -12px rgba(20,10,30,.22);
+    transition:transform var(--dur-fast) var(--ease-out);
+    cursor:pointer;
+    text-decoration:none;
+    opacity:0;
+    animation:fadeUp .7s .6s var(--ease-out-soft) forwards;
+  }
+  .empty-cta:active{transform:scale(.985)}
+  .empty-cta svg{transition:transform .3s var(--ease-out-soft)}
+  .empty-cta:hover svg{transform:translateX(3px)}
+
+  /* ============ LOADING STATE (skeleton cards) ============ */
+  .loading-state{
+    display:none;
+    flex-direction:column;
+    gap:14px;
+  }
+  .loading-state.is-visible{display:flex}
+  body.is-loading .history-list,
+  body.is-loading .new-analysis-cta,
+  body.is-loading .empty-state{display:none}
+  body.is-loading .loading-state{display:flex}
+
+  .skeleton-card{
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:18px;
+    padding:22px 22px 20px;
+    box-shadow:0 1px 2px var(--line-04);
+  }
+  .skeleton-row{
+    display:flex;align-items:center;gap:12px;
+    margin-bottom:14px;
+  }
+  .skeleton-block{
+    background:linear-gradient(90deg, var(--bg-soft) 0%, #f5f1ea 50%, var(--bg-soft) 100%);
+    background-size:200% 100%;
+    border-radius:6px;
+    animation:shimmer 1.6s var(--ease-in-out) infinite;
+  }
+  @keyframes shimmer{
+    0%{background-position:100% 0}
+    100%{background-position:-100% 0}
+  }
+  .skeleton-mark{
+    width:32px;height:20px;
+    border-radius:8px;
+    flex-shrink:0;
+  }
+  .skeleton-title{
+    flex:1;
+    height:16px;
+  }
+  .skeleton-arrow{
+    width:14px;height:14px;
+    border-radius:3px;
+    flex-shrink:0;
+  }
+  .skeleton-meta{
+    height:11px;
+    width:70%;
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:360px){
+    main{padding:28px 16px 48px}
+    .page-header{margin-bottom:24px}
+    .history-card{padding:20px 18px 18px}
+    .empty-state{padding:48px 20px 32px}
+  }
+
+  /* ============ REDUCED MOTION ============ */
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;
+    }
+    .page-header,
+    .history-card,
+    .new-analysis-cta,
+    .empty-mark,
+    .empty-title,
+    .empty-desc,
+    .empty-cta{
+      opacity:1 !important;
+      transform:none !important;
+    }
+    .skeleton-block{animation:none !important}
+  }
+</style>
+</head>
+<body>
+
+<!-- =================== AMBIENT BG =================== -->
+<div class="ambient-bg" aria-hidden="true"></div>
+
+<!-- =================== NAV =================== -->
+<nav id="nav">
+  <div class="row">
+    <a class="logo" href="/" aria-label="deepvibe 홈으로">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 30 18" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="logo-pink" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff6f91" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#ff9fbc" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".7"/>
+            </radialGradient>
+            <radialGradient id="logo-violet" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#b967ff" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#caa3ff" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#dec4ff" stop-opacity=".7"/>
+            </radialGradient>
+          </defs>
+          <circle cx="11" cy="9" r="7.5" fill="url(#logo-pink)" style="mix-blend-mode:multiply"/>
+          <circle cx="19" cy="9" r="7.5" fill="url(#logo-violet)" style="mix-blend-mode:multiply"/>
+        </svg>
+      </span>
+      <span class="word">deepvibe</span>
+    </a>
+    <!-- Auth UI injected by auth-ui.js -->
+  </div>
+</nav>
+
+<!-- =================== MAIN =================== -->
+<main>
+
+  <!-- Page header -->
+  <header class="page-header">
+    <h1 class="page-title">내가 그린 <em>결</em></h1>
+    <p class="page-meta" id="pageMeta">지금까지 <em>세 편</em>이에요</p>
+  </header>
+
+  <!-- ============ LOADING STATE (skeleton) ============ -->
+  <div class="loading-state" id="loadingState" aria-hidden="true">
+    <div class="skeleton-card">
+      <div class="skeleton-row">
+        <div class="skeleton-block skeleton-mark"></div>
+        <div class="skeleton-block skeleton-title"></div>
+        <div class="skeleton-block skeleton-arrow"></div>
+      </div>
+      <div class="skeleton-block skeleton-meta"></div>
+    </div>
+    <div class="skeleton-card">
+      <div class="skeleton-row">
+        <div class="skeleton-block skeleton-mark"></div>
+        <div class="skeleton-block skeleton-title"></div>
+        <div class="skeleton-block skeleton-arrow"></div>
+      </div>
+      <div class="skeleton-block skeleton-meta"></div>
+    </div>
+    <div class="skeleton-card">
+      <div class="skeleton-row">
+        <div class="skeleton-block skeleton-mark"></div>
+        <div class="skeleton-block skeleton-title"></div>
+        <div class="skeleton-block skeleton-arrow"></div>
+      </div>
+      <div class="skeleton-block skeleton-meta"></div>
+    </div>
+  </div>
+
+  <!-- ============ HISTORY LIST (default state) ============ -->
+  <div class="history-list" id="historyList">
+
+    <a href="/report" class="history-card">
+      <div class="history-card-head">
+        <div class="history-card-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 20" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="card1-pink" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ff6f91" stop-opacity=".95"/>
+                <stop offset="70%" stop-color="#ff9fbc" stop-opacity=".85"/>
+                <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".7"/>
+              </radialGradient>
+              <radialGradient id="card1-violet" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#b967ff" stop-opacity=".95"/>
+                <stop offset="70%" stop-color="#caa3ff" stop-opacity=".85"/>
+                <stop offset="100%" stop-color="#dec4ff" stop-opacity=".7"/>
+              </radialGradient>
+            </defs>
+            <circle cx="11.5" cy="10" r="8" fill="url(#card1-pink)" style="mix-blend-mode:multiply"/>
+            <circle cx="20.5" cy="10" r="8" fill="url(#card1-violet)" style="mix-blend-mode:multiply"/>
+          </svg>
+        </div>
+        <div class="history-card-target"><em>지훈</em>님과의 결</div>
+        <svg class="history-card-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M5 3 L9 7 L5 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="history-card-meta">
+        <span class="history-card-date">5월 18일에 도착</span>
+        <span class="history-card-meta-dot"></span>
+        <span>94일 · 1,247개 메시지</span>
+      </div>
+    </a>
+
+    <a href="/report" class="history-card">
+      <div class="history-card-head">
+        <div class="history-card-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 20" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11.5" cy="10" r="8" fill="url(#card1-pink)" style="mix-blend-mode:multiply"/>
+            <circle cx="20.5" cy="10" r="8" fill="url(#card1-violet)" style="mix-blend-mode:multiply"/>
+          </svg>
+        </div>
+        <div class="history-card-target"><em>채린</em>이와의 결</div>
+        <svg class="history-card-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M5 3 L9 7 L5 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="history-card-meta">
+        <span class="history-card-date">5월 10일에 도착</span>
+        <span class="history-card-meta-dot"></span>
+        <span>123일 · 892개 메시지</span>
+      </div>
+    </a>
+
+    <a href="/report" class="history-card">
+      <div class="history-card-head">
+        <div class="history-card-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 20" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11.5" cy="10" r="8" fill="url(#card1-pink)" style="mix-blend-mode:multiply"/>
+            <circle cx="20.5" cy="10" r="8" fill="url(#card1-violet)" style="mix-blend-mode:multiply"/>
+          </svg>
+        </div>
+        <div class="history-card-target"><em>동훈</em>씨와의 결</div>
+        <svg class="history-card-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M5 3 L9 7 L5 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="history-card-meta">
+        <span class="history-card-date">4월 22일에 도착</span>
+        <span class="history-card-meta-dot"></span>
+        <span>312일 · 4,521개 메시지</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- New analysis CTA (shown after list) -->
+  <a href="/upload" class="new-analysis-cta">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M7 3 V11 M3 7 H11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    </svg>
+    새 분석 시작하기
+  </a>
+
+  <!-- ============ EMPTY STATE ============ -->
+  <div class="empty-state" id="emptyState" aria-hidden="true">
+    <div class="empty-mark" aria-hidden="true">
+      <svg viewBox="0 0 64 38" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="empty-pink" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ff6f91" stop-opacity=".95"/>
+            <stop offset="70%" stop-color="#ff9fbc" stop-opacity=".82"/>
+            <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".68"/>
+          </radialGradient>
+          <radialGradient id="empty-violet" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#b967ff" stop-opacity=".95"/>
+            <stop offset="70%" stop-color="#cdb4ff" stop-opacity=".82"/>
+            <stop offset="100%" stop-color="#cdb4ff" stop-opacity=".68"/>
+          </radialGradient>
+        </defs>
+        <circle cx="23" cy="19" r="17" fill="url(#empty-pink)" style="mix-blend-mode:multiply"/>
+        <circle cx="41" cy="19" r="17" fill="url(#empty-violet)" style="mix-blend-mode:multiply"/>
+      </svg>
+    </div>
+    <h2 class="empty-title">아직 만난 <em>결</em>이 없어요</h2>
+    <p class="empty-desc">카톡 대화를 올리면, 두 사람 사이의 결을 한 편의 리포트로 만나볼 수 있어요.</p>
+    <a href="/upload" class="empty-cta">
+      <span>첫 분석 시작하기</span>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M3 8 H13 M9 4 L13 8 L9 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+
+</main>
+
+<!-- Authentication UI manager (loads after DOM) -->
+<script src="auth-ui.js" defer></script>
+
+<script>
+(() => {
+  // Nav scroll state
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 4) nav.classList.add('is-scrolled');
+    else nav.classList.remove('is-scrolled');
+  }, { passive: true });
+
+  // ============================================================
+  // STATE MANAGEMENT
+  // ============================================================
+  // Default state: load mock data (3 history items)
+  // Test states via URL: ?state=empty | loading | default
+  const urlParams = new URLSearchParams(window.location.search);
+  const stateParam = urlParams.get('state');
+
+  const pageMeta = document.getElementById('pageMeta');
+
+  if (stateParam === 'empty') {
+    document.body.classList.add('is-empty');
+    pageMeta.innerHTML = '두 사람 사이의 결을 찾아볼 수 있어요';
+  } else if (stateParam === 'loading') {
+    document.body.classList.add('is-loading');
+    pageMeta.innerHTML = '결을 불러오는 중이에요';
+    // Auto-resolve to default state after 2s (for demo)
+    setTimeout(() => {
+      document.body.classList.remove('is-loading');
+      pageMeta.innerHTML = '지금까지 <em>세 편</em>이에요';
+    }, 2000);
+  }
+  // Default state requires no class — list is shown by default
+})();
+</script>
+</body>
+</html>

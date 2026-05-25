@@ -7,7 +7,7 @@
 <title>deepvibe — 카톡 대화로 읽는 우리 사이</title>
 
 <!-- ============ SEO Meta ============ -->
-<meta name="description" content="카톡 대화로 두 사람 사이의 결을 분석해요. 친밀도, 대화 속도, 감정 시그널까지 — 한 편의 리포트로 받아보세요. 분석은 내 기기에서만 진행돼요."/>
+<meta name="description" content="카톡 대화로 두 사람 사이의 결을 분석해요. 친밀도, 대화 속도, 감정 시그널까지 — 한 편의 리포트로 받아보세요. 분석이 끝나면 원본은 바로 지워져요."/>
 <meta name="keywords" content="카톡 분석, 카카오톡 대화 분석, 연애 분석, 썸 분석, 관계 분석, 친밀도 분석, 커플 위젯, D-Day 위젯"/>
 <meta name="author" content="deepvibe"/>
 <meta name="robots" content="index, follow"/>
@@ -16,7 +16,7 @@
 <meta property="og:type" content="website"/>
 <meta property="og:title" content="deepvibe — 카톡 대화로 읽는 우리 사이"/>
 <meta property="og:description" content="두 사람 사이에 흐르는 결을, AI가 카톡 대화로 분석해요. 친밀도부터 감정 시그널까지, 한 편의 리포트로."/>
-<meta property="og:image" content="https://deepvibe-phi.vercel.app/og-index.png"/>
+<meta property="og:image" content="https://deepvibe-phi.vercel.app/api/og?type=index"/>
 <meta property="og:image:type" content="image/png"/>
 <meta property="og:image:width" content="1200"/>
 <meta property="og:image:height" content="630"/>
@@ -28,7 +28,7 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="deepvibe — 카톡 대화로 읽는 우리 사이"/>
 <meta name="twitter:description" content="두 사람 사이에 흐르는 결을, AI가 카톡 대화로 분석해요."/>
-<meta name="twitter:image" content="https://deepvibe-phi.vercel.app/og-index.png"/>
+<meta name="twitter:image" content="https://deepvibe-phi.vercel.app/api/og?type=index"/>
 
 <!-- ============ Mobile / Apple ============ -->
 <meta name="apple-mobile-web-app-title" content="deepvibe"/>
@@ -347,7 +347,8 @@
     transform:translateY(0);
     pointer-events:auto;
   }
-  .auth-dropdown button{
+  .auth-dropdown button,
+  .auth-dropdown a{
     display:block;width:100%;
     padding:9px 12px;
     background:transparent;border:none;
@@ -357,8 +358,202 @@
     border-radius:8px;
     cursor:pointer;
     transition:background .15s var(--ease-out);
+    text-decoration:none;
+    box-sizing:border-box;
   }
-  .auth-dropdown button:hover{background:var(--bg-soft)}
+  .auth-dropdown button:hover,
+  .auth-dropdown a:hover{background:var(--bg-soft)}
+  /* ============ CONSENT MODAL (first-time user agreement) ============ */
+  .consent-modal-overlay{
+    position:fixed;inset:0;z-index:200;
+    background:rgba(20,10,30,.45);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    opacity:0;
+    transition:opacity .35s var(--ease-out);
+    display:flex;align-items:flex-end;justify-content:center;
+  }
+  .consent-modal-overlay.is-open{opacity:1}
+
+  .consent-modal{
+    width:100%;
+    max-width:520px;
+    background:#fff;
+    border-top-left-radius:24px;
+    border-top-right-radius:24px;
+    padding:14px 24px calc(28px + var(--safe-bottom, 0px));
+    max-height:90vh;
+    overflow-y:auto;
+    transform:translateY(100%);
+    transition:transform .4s var(--ease-out-soft);
+  }
+  .consent-modal-overlay.is-open .consent-modal{transform:translateY(0)}
+
+  .consent-modal-handle{
+    width:36px;height:4px;
+    margin:0 auto 20px;
+    background:var(--muted-2);
+    border-radius:2px;
+    opacity:.5;
+  }
+  .consent-modal-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:22px;color:var(--ink);
+    line-height:1.35;
+    letter-spacing:-.015em;
+    margin-bottom:8px;
+  }
+  .consent-modal-title em{
+    font-style:italic;
+    color:var(--ink);
+  }
+  .consent-modal-desc{
+    font-family:var(--font-sans);
+    font-size:13.5px;color:var(--muted);
+    line-height:1.7;
+    letter-spacing:-.005em;
+    margin-bottom:24px;
+  }
+
+  .consent-list{
+    list-style:none;
+    display:flex;flex-direction:column;
+    gap:0;
+    margin-bottom:14px;
+  }
+  .consent-item{
+    border-bottom:.5px solid var(--line-08);
+  }
+  .consent-item:last-child{border-bottom:none}
+
+  .consent-row{
+    display:flex;align-items:center;gap:12px;
+    padding:14px 4px;
+    cursor:pointer;
+  }
+  .consent-check{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+    width:0;height:0;
+  }
+  .consent-check-box{
+    width:20px;height:20px;
+    flex-shrink:0;
+    border:1.5px solid var(--line-18);
+    border-radius:6px;
+    background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;
+    transition:background .2s var(--ease-out), border-color .2s var(--ease-out);
+  }
+  .consent-check-box svg{
+    width:12px;height:12px;
+    opacity:0;
+    transition:opacity .2s var(--ease-out);
+  }
+  .consent-check:checked + .consent-check-box{
+    background:var(--ink);
+    border-color:var(--ink);
+  }
+  .consent-check:checked + .consent-check-box svg{opacity:1}
+  .consent-check:focus-visible + .consent-check-box{
+    outline:2px solid var(--ink);
+    outline-offset:2px;
+  }
+
+  .consent-text{
+    flex:1;
+    display:flex;align-items:center;gap:8px;
+    flex-wrap:wrap;
+  }
+  .consent-tag{
+    display:inline-block;
+    padding:2px 7px;
+    background:rgba(255,159,188,.22);
+    color:#a04060;
+    border-radius:999px;
+    font-family:var(--font-sans);
+    font-size:10.5px;font-weight:600;
+    letter-spacing:-.002em;
+    flex-shrink:0;
+  }
+  .consent-tag-optional{
+    background:var(--bg-soft);
+    color:var(--muted);
+  }
+  .consent-label{
+    font-family:var(--font-sans);
+    font-size:14px;color:var(--ink-2);
+    letter-spacing:-.005em;
+    line-height:1.4;
+    flex:1;
+    min-width:0;
+  }
+  .consent-link{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:24px;height:24px;
+    color:var(--muted);
+    border-radius:6px;
+    transition:background .15s var(--ease-out), color .15s var(--ease-out);
+    text-decoration:none;
+    flex-shrink:0;
+  }
+  .consent-link:hover{
+    background:var(--bg-soft);
+    color:var(--ink);
+  }
+
+  .consent-all-row{
+    padding:4px 0 16px;
+    margin-bottom:20px;
+    border-bottom:.5px solid var(--line-08);
+  }
+  .consent-row-all{
+    padding:10px 4px;
+  }
+  .consent-label-all{
+    font-weight:500;
+    color:var(--ink);
+  }
+
+  .btn-consent-submit{
+    display:flex;align-items:center;justify-content:center;
+    width:100%;
+    padding:16px;
+    border-radius:14px;
+    background:var(--kakao);color:var(--kakao-ink);
+    font-family:var(--font-sans);
+    font-size:15px;font-weight:600;letter-spacing:-.005em;
+    border:none;
+    box-shadow:0 1px 0 rgba(0,0,0,.05), 0 10px 24px -12px rgba(20,10,30,.22);
+    transition:transform var(--dur-fast) var(--ease-out), opacity var(--dur-base) var(--ease-out), background var(--dur-base) var(--ease-out);
+    cursor:pointer;
+    margin-bottom:8px;
+  }
+  .btn-consent-submit:disabled{
+    background:var(--bg-soft);
+    color:var(--muted-2);
+    box-shadow:none;
+    cursor:not-allowed;
+  }
+  .btn-consent-submit:not(:disabled):active{transform:scale(.985)}
+
+  .btn-consent-cancel{
+    display:flex;align-items:center;justify-content:center;
+    width:100%;
+    padding:12px;
+    background:transparent;
+    color:var(--muted);
+    font-family:var(--font-sans);
+    font-size:13px;font-weight:500;letter-spacing:-.005em;
+    border:none;
+    cursor:pointer;
+    transition:color .2s var(--ease-out);
+  }
+  .btn-consent-cancel:hover{color:var(--ink-2)}
+
+
 
   /* ============ HERO — analysis-first ============ */
   .hero{
@@ -1582,6 +1777,7 @@
 
   /* ============ INVITE ============ */
   .invite{
+    display:block;
     background:linear-gradient(160deg,#fff 0%,#fff 65%,rgba(255,243,235,.6) 100%);
     border-radius:16px;
     border:.5px solid var(--line-soft);
@@ -1591,7 +1787,19 @@
     box-shadow:
       0 1px 2px rgba(20,10,30,.03),
       0 14px 28px -20px rgba(20,10,30,.12);
+    color:inherit;
+    text-decoration:none;
+    transition:transform .25s var(--ease-out), box-shadow .25s var(--ease-out);
+    -webkit-tap-highlight-color:transparent;
+    cursor:pointer;
   }
+  .invite:hover{
+    transform:translateY(-2px);
+    box-shadow:
+      0 1px 2px rgba(20,10,30,.03),
+      0 20px 36px -18px rgba(20,10,30,.18);
+  }
+  .invite:active{transform:translateY(0)}
   .invite::before{
     content:"";position:absolute;inset:-30%;
     background:
@@ -1627,6 +1835,20 @@
     margin-top:8px;font-size:12px;color:var(--muted);line-height:1.55;
     max-width:280px;margin-left:auto;margin-right:auto;
     letter-spacing:-.002em;
+  }
+  .invite-cta{
+    display:inline-flex;align-items:center;gap:4px;
+    margin-top:14px;
+    font-family:var(--font-sans);
+    font-size:13px;font-weight:500;
+    color:var(--ink);
+    letter-spacing:-.005em;
+  }
+  .invite-cta svg{
+    transition:transform .2s var(--ease-out);
+  }
+  .invite:hover .invite-cta svg{
+    transform:translateX(3px);
   }
 
   /* ============ FAQ ============ */
@@ -2076,7 +2298,7 @@
         AI가 <em>먼저</em> 찾아드려요.
       </h3>
       <p class="journey-body">
-        조건이 아니라 <em>결</em>을 봅니다. 성향과 가치관까지 분석해서, 보이지 않는 부분이 닮은 사람을 추천해요.
+        조건이 아니라 <em>결</em>을 봅니다. 보이지 않는 부분이 닮은 사람을 그려드려요.
       </p>
     </article>
 
@@ -2088,7 +2310,7 @@
         <em>명쾌한 답</em>으로.
       </h3>
       <p class="journey-body">
-        카톡 대화의 패턴으로 상대의 호감도를 읽고, <em>다음 한마디</em>까지 코칭해드려요.
+        카톡 대화의 패턴으로 상대의 호감도를 읽고, <em>다음 한마디</em>까지 함께 그려요.
       </p>
     </article>
 
@@ -2296,8 +2518,8 @@
         <div class="tl-row">
           <div class="tl-day"><span class="num">100</span><span class="unit">일</span></div>
           <div class="tl-body">
-            <div class="tl-title"><em>익숙해진 결</em>을 점검</div>
-            <div class="tl-example">사라진 감정 신호, 줄어든 주제</div>
+            <div class="tl-title"><em>달라진 결</em>을 살펴</div>
+            <div class="tl-example">새 감정과 자리잡은 주제</div>
           </div>
           <span class="tl-pill paid">점검</span>
         </div>
@@ -2307,8 +2529,8 @@
         <div class="tl-row">
           <div class="tl-day"><span class="num">200</span><span class="unit">일</span></div>
           <div class="tl-body">
-            <div class="tl-title"><em>무뎌진 부분</em>을 다시</div>
-            <div class="tl-example">놓치고 있던 신호와 회복 포인트</div>
+            <div class="tl-title"><em>결을 다시</em> 맞춰</div>
+            <div class="tl-example">변화의 신호와 다음 한 달</div>
           </div>
           <span class="tl-pill paid">재정비</span>
         </div>
@@ -2330,7 +2552,7 @@
 
 <!-- =================== INVITE =================== -->
 <section class="features reveal" style="padding-top:var(--pad-section-sm);padding-bottom:var(--pad-section-sm)">
-  <div class="invite">
+  <a class="invite" href="/invite">
     <div class="invite-icon" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none">
         <path d="M12 4 L12 20 M4 12 L20 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -2338,7 +2560,13 @@
     </div>
     <h3>친구를 초대하면<br>분석권 <em>한 장</em>이 더 와요.</h3>
     <p>친구도 첫 분석을 받고, 나에게는 다음 재분석권 한 장.</p>
-  </div>
+    <div class="invite-cta">
+      초대 링크 보기
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M3 6 H9 M6.5 3.5 L9 6 L6.5 8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </a>
 </section>
 
 <!-- =================== FAQ =================== -->
@@ -2348,11 +2576,11 @@
 
   <details>
     <summary>제 카톡 대화는 안전한가요?</summary>
-    <p>대화 분석은 사용자의 기기 안에서 이뤄지고, 원본 텍스트는 서버에 저장되지 않아요. 분석 결과 요약과 D-Day 정보만 계정에 묶여 있어요.</p>
+    <p>업로드한 카톡 원본은 분석이 끝나면 바로 지워지고, 어디에도 보관되지 않아요. 분석 결과 요약과 D-Day 정보만 내 계정에 묶여 있어요.</p>
   </details>
   <details>
     <summary>분석은 얼마나 정확한가요?</summary>
-    <p>자체 학습한 한국어 대화 분석 모델을 사용해요. 대화 톤·답장 패턴·이모티콘 사용 등 100여 개 신호를 종합해 호감도를 측정해요. 다만 사람의 마음을 100% 알 수는 없어요 — 결정에 참고하는 자료로 활용해 주세요.</p>
+    <p>한국어 대화 분석 AI를 사용해요. 대화 톤·답장 패턴·이모티콘 사용 등 여러 신호를 종합해 호감도를 그려요. 다만 사람의 마음을 100% 알 수는 없어요 — 결정에 참고하는 자료로 활용해 주세요.</p>
   </details>
   <details>
     <summary>첫 분석이 무료라면, 그 다음은요?</summary>

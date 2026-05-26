@@ -4,15 +4,124 @@
  * Wires up nav (login button ↔ user chip), Sticky CTA login click,
  * page guards, and the logout dropdown. Depends on auth.js (window.dvAuth).
  *
- * Loaded on all 3 pages. Each page can opt into guards via data-auth-required
+ * Loaded on all pages. Each page can opt into guards via data-auth-required
  * on the <body> tag — for now this is OFF in placeholder mode so the design
  * is still reviewable without forcing a (mock) login on every visit.
+ *
+ * v124: CSS is now self-injected (see injectStyles below) so this module
+ * works on any page with a <nav class="row"> regardless of HTML CSS.
  */
 (() => {
   if (!window.dvAuth) {
     console.warn('[dvAuthUI] dvAuth not loaded — auth-ui will not run.');
     return;
   }
+
+  // ============================================================
+  // SELF-CONTAINED STYLES — inject once per page
+  // Idempotent: only injects if not already present
+  // Uses CSS variables from main stylesheet (--ink-2, --line-08, etc.)
+  // ============================================================
+  const STYLE_ID = 'dv-auth-ui-styles';
+  const injectStyles = () => {
+    if (document.getElementById(STYLE_ID)) return;
+    const style = document.createElement('style');
+    style.id = STYLE_ID;
+    style.textContent = `
+      /* ============ Login Button (signed-out state) ============ */
+      nav .nav-login{
+        position:relative;
+        display:inline-flex;align-items:center;
+        padding:8px 4px;
+        background:transparent;
+        border:none;
+        color:var(--ink-2);
+        font-family:var(--font-sans);
+        font-size:11px;font-weight:500;letter-spacing:-.005em;
+        min-height:36px;
+        cursor:pointer;
+        transition:color var(--dur-base, .25s) var(--ease-out, ease-out);
+      }
+      nav .nav-login:hover{color:var(--ink)}
+      nav .nav-login:active{color:var(--muted)}
+      nav .nav-login::after{
+        content:"";position:absolute;
+        left:4px;right:4px;bottom:6px;
+        height:.5px;
+        background:currentColor;
+        opacity:0;
+        transform:scaleX(0);transform-origin:left;
+        transition:opacity .4s var(--ease-out, ease-out), transform .4s var(--ease-out, ease-out);
+      }
+      nav .nav-login:hover::after{opacity:.5;transform:scaleX(1)}
+
+      /* ============ User Chip (signed-in state) ============ */
+      nav .user-chip{
+        display:inline-flex;align-items:center;gap:8px;
+        padding:6px 12px 6px 6px;
+        background:#fff;
+        border:.5px solid var(--line-08);
+        border-radius:999px;
+        font-family:var(--font-sans);
+        font-size:12.5px;font-weight:500;color:var(--ink-2);
+        transition:background .2s var(--ease-out, ease-out), border-color .2s var(--ease-out, ease-out);
+        box-shadow:0 1px 2px var(--line-04);
+        cursor:pointer;
+      }
+      nav .user-chip:hover{background:#fff;border-color:var(--line-12)}
+      nav .user-chip .avatar{
+        width:22px;height:22px;border-radius:50%;
+        background:linear-gradient(135deg, var(--pink, #ff9fbc), var(--violet, #cdb4ff));
+        display:flex;align-items:center;justify-content:center;
+        color:#fff;font-size:10px;font-weight:600;
+        letter-spacing:0;
+        overflow:hidden;
+      }
+      nav .user-chip .avatar img{
+        width:100%;height:100%;object-fit:cover;
+      }
+
+      /* ============ Auth Dropdown (logout menu) ============ */
+      .auth-dropdown{
+        position:absolute;
+        top:calc(100% + 6px);right:20px;
+        min-width:140px;
+        background:#fff;
+        border:.5px solid var(--line-08);
+        border-radius:12px;
+        box-shadow:0 8px 24px -10px rgba(20,10,30,.18), 0 1px 2px var(--line-04);
+        padding:6px;
+        opacity:0;
+        transform:translateY(-4px);
+        pointer-events:none;
+        transition:opacity .2s var(--ease-out, ease-out), transform .2s var(--ease-out, ease-out);
+        z-index:100;
+      }
+      .auth-dropdown.is-open{
+        opacity:1;
+        transform:translateY(0);
+        pointer-events:auto;
+      }
+      .auth-dropdown button,
+      .auth-dropdown a{
+        display:block;width:100%;
+        padding:9px 12px;
+        background:transparent;border:none;
+        text-align:left;
+        font-family:var(--font-sans);
+        font-size:13px;color:var(--ink-2);
+        border-radius:8px;
+        cursor:pointer;
+        transition:background .15s var(--ease-out, ease-out);
+        text-decoration:none;
+        box-sizing:border-box;
+      }
+      .auth-dropdown button:hover,
+      .auth-dropdown a:hover{background:var(--bg-soft, #f7f4f2)}
+    `;
+    document.head.appendChild(style);
+  };
+  injectStyles();
 
   // ============================================================
   // INIT — dvAuth init (preload SDK if real key)

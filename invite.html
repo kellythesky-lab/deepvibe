@@ -92,7 +92,14 @@
     font-family:var(--font-serif);font-weight:400;font-style:italic;
     font-size:18px;letter-spacing:-.01em;color:var(--ink);
   }
-  nav .back{
+
+  /* ============ PAGE BACK (v124 통일 컴포넌트) ============ */
+  .page-back{
+    max-width:520px;
+    margin:0 auto;
+    padding:16px 20px 0;
+  }
+  .page-back-link{
     display:inline-flex;align-items:center;gap:4px;
     padding:6px 10px 6px 8px;
     background:transparent;border:none;
@@ -103,14 +110,14 @@
     transition:background .2s var(--ease-out), color .2s var(--ease-out);
     cursor:pointer;
   }
-  nav .back:hover{background:var(--bg-soft);color:var(--ink)}
+  .page-back-link:hover{background:var(--bg-soft);color:var(--ink)}
 
   /* ============ MAIN ============ */
   main{
     position:relative;
     max-width:520px;
     margin:0 auto;
-    padding:32px 20px 60px;
+    padding:16px 20px 60px;  /* v124: page-back이 위에 있어 32 → 16 */
   }
 
   /* ============ PAGE HEADER ============ */
@@ -513,14 +520,18 @@
       </span>
       <span class="word">deepvibe</span>
     </a>
-    <a class="back" href="javascript:history.back()" aria-label="이전 페이지로">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-        <path d="M9 3 L5 7 L9 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      뒤로
-    </a>
   </div>
 </nav>
+
+<!-- Page back (v124 통일 컴포넌트) -->
+<div class="page-back">
+  <a class="page-back-link" href="javascript:history.back()" aria-label="이전 페이지로">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M9 3 L5 7 L9 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    이전
+  </a>
+</div>
 
 <!-- =================== MAIN =================== -->
 <main>
@@ -534,7 +545,7 @@
       </svg>
     </div>
     <h1 class="page-title">친구를 <em>초대해요</em></h1>
-    <p class="page-sub">친구가 시작하면, 분석권 한 장이 더 와요</p>
+    <p class="page-sub">친구가 시작하면, 분석권 한 장이 더 와요.</p>
   </header>
 
   <!-- Link card -->
@@ -648,7 +659,7 @@
           </div>
           <span class="invite-status expired">만료됨</span>
         </div>
-        <div class="invite-card-meta">5월 10일 초대 · 7일 후 만료</div>
+        <div class="invite-card-meta">5월 10일 초대 · 5월 17일 만료</div>
         <button class="invite-resend" type="button">
           다시 보내기
           <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
@@ -688,6 +699,10 @@
     document.getElementById('stat-rewards').textContent = '0';
   } else if (state === 'loading') {
     document.body.classList.add('is-loading');
+    // v124: loading 상태에서 카운터도 placeholder로 (값이 있으면 모순)
+    document.getElementById('stat-sent').textContent = '–';
+    document.getElementById('stat-joined').textContent = '–';
+    document.getElementById('stat-rewards').textContent = '–';
   }
 
   // ============ Copy link ============

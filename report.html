@@ -395,11 +395,30 @@
 
 
 
+  /* ============ PAGE BACK (v124 통일 컴포넌트) ============ */
+  .page-back{
+    max-width:520px;
+    margin:0 auto;
+    padding:16px 20px 0;
+  }
+  .page-back-link{
+    display:inline-flex;align-items:center;gap:4px;
+    padding:6px 10px 6px 8px;
+    background:transparent;border:none;
+    color:var(--muted);
+    font-size:12.5px;font-weight:500;letter-spacing:-.005em;
+    text-decoration:none;
+    border-radius:8px;
+    transition:background .2s var(--ease-out), color .2s var(--ease-out);
+    cursor:pointer;
+  }
+  .page-back-link:hover{background:var(--bg-soft);color:var(--ink)}
+
   /* ============ MAIN ============ */
   main{
     max-width:520px;width:100%;
     margin:0 auto;
-    padding:32px 20px 40px;
+    padding:16px 20px 40px;  /* v124: page-back 위에 있어 32 → 16 */
   }
 
   /* ============ HERO ============ */
@@ -2020,10 +2039,204 @@
     pointer-events:none;
   }
 
+  /* ============ SHARE MODAL (v124 신설) ============
+     Z안의 모달 부분 — 결과 공유 옵션을 슬라이드업으로 표시.
+     기존 .dday-modal 패턴 재사용 (별도 클래스로 안전성 확보). */
+  .share-modal-overlay{
+    position:fixed;inset:0;z-index:50;
+    background:rgba(20,10,30,.35);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .35s var(--ease-out), visibility 0s linear .35s;
+  }
+  .share-modal-overlay.is-open{
+    opacity:1;
+    visibility:visible;
+    transition:opacity .35s var(--ease-out), visibility 0s linear 0s;
+  }
+  .share-modal{
+    position:fixed;
+    left:0;right:0;bottom:0;
+    z-index:51;
+    background:#fff;
+    border-top-left-radius:24px;
+    border-top-right-radius:24px;
+    max-height:92vh;
+    overflow-y:auto;
+    transform:translateY(100%);
+    transition:transform .45s var(--ease-out-soft);
+    padding-bottom:calc(28px + env(safe-area-inset-bottom,0px));
+    -webkit-overflow-scrolling:touch;
+  }
+  .share-modal.is-open{transform:translateY(0)}
+  .share-modal-handle{
+    width:36px;height:4px;
+    margin:10px auto 0;
+    background:var(--muted-2);
+    border-radius:2px;
+    opacity:.5;
+  }
+  .share-modal-header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 24px 12px;
+  }
+  .share-modal-title{
+    font-family:var(--font-serif);font-weight:400;
+    font-size:19px;color:var(--ink);
+    letter-spacing:-.01em;
+    line-height:1.3;
+  }
+  .share-modal-close{
+    width:36px;height:36px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:10px;
+    color:var(--muted);
+    background:transparent;
+    transition:background .2s var(--ease-out);
+    border:none;
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .share-modal-close:hover{background:var(--bg-soft);color:var(--ink)}
+
+  /* OG 이미지 미리보기 영역 */
+  .share-modal-preview{
+    margin:4px 24px 18px;
+    border-radius:16px;
+    overflow:hidden;
+    background:var(--bg-soft);
+    aspect-ratio:1200/630;
+    border:.5px solid var(--line-08);
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 8px 22px -12px rgba(20,10,30,.08);
+    position:relative;
+  }
+  .share-modal-preview img{
+    width:100%;height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .share-modal-preview-loading{
+    position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(90deg, var(--bg-soft) 0%, #f5f1ea 50%, var(--bg-soft) 100%);
+    background-size:200% 100%;
+    animation:share-shimmer 1.6s var(--ease-in-out) infinite;
+    color:var(--muted);
+    font-size:12.5px;
+    font-family:var(--font-sans);
+  }
+  @keyframes share-shimmer{
+    0%{background-position:100% 0}
+    100%{background-position:-100% 0}
+  }
+
+  /* 본문 영역 */
+  .share-modal-body{padding:0 24px 16px}
+  
+  /* 메시지 (preview 위) */
+  .share-modal-message{
+    margin:0 24px 12px;
+    font-family:var(--font-sans);
+    font-size:13px;color:var(--muted);
+    letter-spacing:-.002em;
+    line-height:1.55;
+    text-align:center;
+  }
+  .share-modal-message em{
+    font-style:normal;
+    color:var(--ink);
+    font-weight:500;
+  }
+
+  /* 액션 버튼 2-Column */
+  .share-modal-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-bottom:16px;
+  }
+  .share-modal-btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    gap:7px;
+    padding:14px 14px;
+    border-radius:14px;
+    border:none;
+    cursor:pointer;
+    font-family:var(--font-sans);
+    font-size:14px;font-weight:500;
+    letter-spacing:-.005em;
+    transition:transform .15s var(--ease-out), background .2s var(--ease-out);
+    -webkit-tap-highlight-color:transparent;
+    width:100%;
+  }
+  .share-modal-btn:active{transform:scale(.98)}
+  .share-modal-btn.copy{
+    background:var(--bg-soft);
+    color:var(--ink);
+  }
+  .share-modal-btn.copy:hover{background:var(--line-08)}
+  .share-modal-btn.kakao{
+    background:var(--kakao);
+    color:var(--kakao-ink);
+    box-shadow:
+      0 1px 0 rgba(0,0,0,.05),
+      0 6px 16px -8px rgba(20,10,30,.18);
+  }
+  .share-modal-btn svg{flex-shrink:0}
+
+  /* 부가 안내 (친구 초대 보너스) */
+  .share-modal-bonus{
+    padding:16px 18px;
+    background:linear-gradient(160deg,var(--bg-soft) 0%,rgba(255,243,235,.6) 100%);
+    border-radius:14px;
+    border:.5px solid var(--line-08);
+    text-align:center;
+  }
+  .share-modal-bonus-title{
+    font-family:var(--font-sans);
+    font-size:13px;font-weight:500;
+    color:var(--ink);
+    letter-spacing:-.005em;
+    margin-bottom:4px;
+  }
+  .share-modal-bonus-title em{
+    font-style:normal;
+    color:#a04060;
+    font-weight:600;
+  }
+  .share-modal-bonus-desc{
+    font-family:var(--font-sans);
+    font-size:11.5px;color:var(--muted);
+    letter-spacing:-.002em;
+    margin-bottom:10px;
+  }
+  .share-modal-bonus-link{
+    display:inline-flex;align-items:center;gap:4px;
+    font-family:var(--font-sans);
+    font-size:12.5px;font-weight:500;
+    color:var(--ink);
+    letter-spacing:-.005em;
+    text-decoration:underline;
+    text-decoration-thickness:.5px;
+    text-underline-offset:3px;
+    text-decoration-color:var(--line-18);
+    transition:text-decoration-color .2s var(--ease-out);
+  }
+  .share-modal-bonus-link:hover{text-decoration-color:var(--ink)}
+  .share-modal-bonus-link svg{
+    transition:transform .2s var(--ease-out);
+  }
+  .share-modal-bonus-link:hover svg{transform:translateX(2px)}
+
   /* ============ TOAST (shared) ============ */
   .toast{
     position:fixed;
-    bottom:24px;left:50%;
+    bottom:calc(24px + var(--safe-bottom, 0px));
+    left:50%;
     transform:translate(-50%, 100%);
     z-index:60;
     padding:12px 18px;
@@ -2104,6 +2317,16 @@
   </div>
 </nav>
 
+<!-- Page back (v124 통일 컴포넌트) -->
+<div class="page-back">
+  <a class="page-back-link" href="javascript:history.back()" aria-label="이전 페이지로">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M9 3 L5 7 L9 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    이전
+  </a>
+</div>
+
 <!-- =================== MAIN =================== -->
 <main>
 
@@ -2172,7 +2395,7 @@
     <article class="card card-s1 reveal">
       <h2 class="card-title">상대의 <em>호감도</em></h2>
       <div class="card-body">
-        <p class="card-summary">8월에서 11월까지, <em>꾸준히 올라간 곡선</em>이에요</p>
+        <p class="card-summary">8월에서 11월까지, <em>꾸준히 올라간 곡선</em>이에요.</p>
 
         <div class="affinity-chart">
           <div class="affinity-chart-label">
@@ -2224,7 +2447,7 @@
     <article class="card card-s2 reveal">
       <h2 class="card-title">결정적인 <em>순간</em></h2>
       <div class="card-body">
-        <p class="card-summary">두 사람의 결이 <em>달라진 순간들</em>이에요</p>
+        <p class="card-summary">두 사람의 결이 <em>달라진 순간들</em>이에요.</p>
 
         <div class="moment-list">
           <div class="moment-item">
@@ -2290,7 +2513,7 @@
     <article class="card card-s3 reveal">
       <h2 class="card-title">감정의 <em>시그널</em></h2>
       <div class="card-body">
-        <p class="card-summary">대화 속에 가장 많이 흐른 건 <em>설렘과 친근함</em>이었어요</p>
+        <p class="card-summary">대화 속에 가장 많이 흐른 건 <em>설렘과 친근함</em>이었어요.</p>
 
         <div class="signal-bars">
           <div class="signal-row">
@@ -2359,7 +2582,7 @@
     <article class="card card-s4 reveal">
       <h2 class="card-title">답장의 <em>속도</em></h2>
       <div class="card-body">
-        <p class="card-summary">평균 4분, <em>거의 실시간</em>이에요</p>
+        <p class="card-summary">평균 4분, <em>거의 실시간</em>이에요.</p>
 
         <div class="tempo-hero">
           <span class="tempo-hero-num">4.2</span>
@@ -2461,7 +2684,7 @@
     <article class="card card-s5 reveal">
       <h2 class="card-title">말투의 <em>변화</em></h2>
       <div class="card-body">
-        <p class="card-summary">말끝이 부드러워지고, <em>호칭이 가까워졌어요</em></p>
+        <p class="card-summary">말끝이 부드러워지고, <em>호칭이 가까워졌어요</em>.</p>
 
         <div class="style-section">
           <div class="style-section-label">자주 쓰는 말</div>
@@ -2497,7 +2720,7 @@
     <article class="card card-s6 reveal">
       <h2 class="card-title">자주 나눈 <em>이야기</em></h2>
       <div class="card-body">
-        <p class="card-summary">서로의 하루를 <em>가장 자주 물어봤어요</em></p>
+        <p class="card-summary">서로의 하루를 <em>가장 자주 물어봤어요</em>.</p>
 
         <div class="topic-list">
           <div class="topic-item">
@@ -2634,7 +2857,7 @@
     <article class="card card-s7 reveal">
       <h2 class="card-title">다가오는 <em>시간</em></h2>
       <div class="card-body">
-        <p class="card-summary">두 사람의 대화에 <em>미래가 들어왔어요</em></p>
+        <p class="card-summary">두 사람의 대화에 <em>미래가 들어왔어요</em>.</p>
 
         <!-- Level 3: 시간별 미래 표현 등장 막대 -->
         <div class="future-bars">
@@ -2884,6 +3107,62 @@
   </button>
 </div>
 
+<!-- =================== SHARE MODAL (v124) =================== -->
+<div class="share-modal-overlay" id="shareModalOverlay" aria-hidden="true"></div>
+<div class="share-modal" id="shareModal" role="dialog" aria-modal="true" aria-labelledby="shareModalTitle" aria-hidden="true">
+  <div class="share-modal-handle" aria-hidden="true"></div>
+  <div class="share-modal-header">
+    <h2 class="share-modal-title" id="shareModalTitle">결과 공유하기</h2>
+    <button class="share-modal-close" id="shareModalClose" aria-label="닫기">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M5 5 L15 15 M15 5 L5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- OG 이미지 미리보기 -->
+  <div class="share-modal-preview">
+    <div class="share-modal-preview-loading" id="shareModalPreviewLoading">이미지 준비 중…</div>
+    <img id="shareModalPreviewImg" src="" alt="공유 카드 미리보기" style="display:none">
+  </div>
+
+  <!-- 메시지 -->
+  <p class="share-modal-message">
+    <em>지훈</em>님과의 결을 친구에게도 들려주세요.
+  </p>
+
+  <div class="share-modal-body">
+    <!-- 2-Column 액션 -->
+    <div class="share-modal-actions">
+      <button class="share-modal-btn copy" id="shareModalCopy" type="button">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect x="4" y="5" width="8" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M6 5 V3.5 a1 1 0 0 1 1 -1 H12.5 a1 1 0 0 1 1 1 V9 a1 1 0 0 1 -1 1 H12" stroke="currentColor" stroke-width="1.4"/>
+        </svg>
+        링크 복사
+      </button>
+      <button class="share-modal-btn kakao" id="shareModalKakao" type="button">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 1.5C4.27 1.5 1.25 3.87 1.25 6.8c0 1.86 1.24 3.5 3.11 4.45l-.79 2.87c-.05.19.14.35.31.24l3.44-2.31c.23.02.45.04.68.04 3.73 0 6.75-2.37 6.75-5.3S11.73 1.5 8 1.5z"/>
+        </svg>
+        카카오톡 공유
+      </button>
+    </div>
+
+    <!-- 친구 초대 보너스 -->
+    <div class="share-modal-bonus">
+      <div class="share-modal-bonus-title">친구가 시작하면 분석권 <em>한 장</em>이 더 와요.</div>
+      <div class="share-modal-bonus-desc">친구도 첫 분석을 받고, 나에게는 재분석권 한 장.</div>
+      <a class="share-modal-bonus-link" href="/invite">
+        초대 링크 보기
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M3 6 H9 M6.5 3.5 L9 6 L6.5 8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</div>
+
 <!-- =================== TOAST =================== -->
 <div class="toast" id="toast" role="status" aria-live="polite">
   <span id="toastText"></span>
@@ -2955,6 +3234,37 @@
   if (errorParam) {
     showReportError(errorParam, urlParams.get('id') ? `Analysis ID: ${urlParams.get('id')}` : null);
     return; // Skip the rest of report initialization
+  }
+
+  // ============================================================
+  // v124: PLACEHOLDER 데이터 동적 치환
+  // - ?partner=이름 → "지훈" 모두 치환
+  // - 로그인 시 카카오 닉네임 → "민지" 모두 치환
+  // - placeholder 단계에서 다른 이름 데모용
+  // ============================================================
+  const replaceTextNodes = (root, find, replace) => {
+    if (find === replace) return;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+    const nodes = [];
+    let n;
+    while (n = walker.nextNode()) {
+      if (n.nodeValue.includes(find)) nodes.push(n);
+    }
+    nodes.forEach(node => {
+      node.nodeValue = node.nodeValue.split(find).join(replace);
+    });
+  };
+
+  const partnerName = urlParams.get('partner');
+  if (partnerName) {
+    replaceTextNodes(document.body, '지훈', partnerName);
+  }
+
+  const userName = window.dvAuth && window.dvAuth.isSignedIn()
+    ? window.dvAuth.getUser()?.nickname
+    : null;
+  if (userName && userName !== '민지') {
+    replaceTextNodes(document.body, '민지', userName);
   }
 
   // Reveal cards on scroll
@@ -3112,9 +3422,18 @@
   });
 
   // ============================================================
-  // SHARE — Web Share API with clipboard fallback
+  // ============================================================
+  // SHARE MODAL — v124 신설 (Z안의 모달)
+  // 기존 Web Share API 직접 호출 → 모달 오픈 → 모달 내부에서 옵션 선택
   // ============================================================
   const shareCard = document.querySelector('.action-card-share');
+  const shareModal = document.getElementById('shareModal');
+  const shareModalOverlay = document.getElementById('shareModalOverlay');
+  const shareModalClose = document.getElementById('shareModalClose');
+  const shareModalCopy = document.getElementById('shareModalCopy');
+  const shareModalKakao = document.getElementById('shareModalKakao');
+  const shareModalPreviewImg = document.getElementById('shareModalPreviewImg');
+  const shareModalPreviewLoading = document.getElementById('shareModalPreviewLoading');
 
   const SHARE_DATA = {
     title: 'deepvibe',
@@ -3122,6 +3441,40 @@
     url: window.location.origin || 'https://deepvibe-phi.vercel.app',
   };
 
+  const OG_PREVIEW_URL = (window.location.origin || 'https://deepvibe-phi.vercel.app') + '/api/og?type=report';
+
+  // 모달 오픈
+  const openShareModal = () => {
+    // OG 이미지 미리보기 lazy load (모달 열 때 한 번만)
+    if (shareModalPreviewImg && !shareModalPreviewImg.src) {
+      shareModalPreviewImg.src = OG_PREVIEW_URL;
+      shareModalPreviewImg.onload = () => {
+        shareModalPreviewImg.style.display = 'block';
+        if (shareModalPreviewLoading) shareModalPreviewLoading.style.display = 'none';
+      };
+      shareModalPreviewImg.onerror = () => {
+        // OG fetch 실패 시 fallback 정적 PNG
+        shareModalPreviewImg.src = '/og-report.png';
+      };
+    }
+
+    shareModal.classList.add('is-open');
+    shareModalOverlay.classList.add('is-open');
+    shareModal.setAttribute('aria-hidden', 'false');
+    shareModalOverlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  };
+
+  // 모달 닫기
+  const closeShareModal = () => {
+    shareModal.classList.remove('is-open');
+    shareModalOverlay.classList.remove('is-open');
+    shareModal.setAttribute('aria-hidden', 'true');
+    shareModalOverlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  };
+
+  // 링크 복사 액션
   const tryClipboardCopy = async () => {
     const fullText = `${SHARE_DATA.text}\n${SHARE_DATA.url}`;
     try {
@@ -3130,7 +3483,6 @@
         showToast('링크가 복사됐어요', { icon: 'check' });
         return;
       }
-      // Older browsers fallback: temporary textarea
       const textarea = document.createElement('textarea');
       textarea.value = fullText;
       textarea.style.position = 'fixed';
@@ -3147,26 +3499,41 @@
     }
   };
 
-  if (shareCard) {
-    shareCard.addEventListener('click', async (e) => {
-      e.preventDefault();
-      if (navigator.share) {
-        try {
-          await navigator.share(SHARE_DATA);
-          // User completed share — quietly succeed (system already shows feedback)
-        } catch (err) {
-          // AbortError = user cancelled the share sheet — that's fine, do nothing
-          if (err && err.name !== 'AbortError') {
-            // Other error — fall back to clipboard
-            tryClipboardCopy();
-          }
+  // 카카오톡 공유 액션
+  const shareToKakao = async () => {
+    // Web Share API 우선 (카카오톡이 시스템 공유 시트에 나옴)
+    if (navigator.share) {
+      try {
+        await navigator.share(SHARE_DATA);
+        closeShareModal();
+      } catch (err) {
+        if (err && err.name !== 'AbortError') {
+          // 실패 시 fallback 복사
+          tryClipboardCopy();
         }
-      } else {
-        // No Web Share API support → clipboard fallback
-        tryClipboardCopy();
       }
+    } else {
+      // 실제 카카오 SDK 연동 시: Kakao.Share.sendDefault({...})
+      showToast('카카오톡 공유 (준비 중)');
+    }
+  };
+
+  // 이벤트 바인딩
+  if (shareCard) {
+    shareCard.addEventListener('click', (e) => {
+      e.preventDefault();
+      openShareModal();
     });
   }
+  if (shareModalClose) shareModalClose.addEventListener('click', closeShareModal);
+  if (shareModalOverlay) shareModalOverlay.addEventListener('click', closeShareModal);
+  if (shareModalCopy) shareModalCopy.addEventListener('click', tryClipboardCopy);
+  if (shareModalKakao) shareModalKakao.addEventListener('click', shareToKakao);
+
+  // ESC 키로 모달 닫기
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && shareModal.classList.contains('is-open')) closeShareModal();
+  });
 })();
 </script>
 </body>

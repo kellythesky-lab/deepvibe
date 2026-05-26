@@ -1508,7 +1508,7 @@
         <circle cx="41" cy="19" r="17" fill="url(#hero-violet)" style="mix-blend-mode:multiply"/>
       </svg>
     </div>
-    <h1>
+    <h1 id="uploadHeroTitle">
       민지님,<br>
       <em>대화</em>를 들려주세요.
     </h1>
@@ -1772,7 +1772,7 @@
   <!-- Complete state — fades in when analysis finishes -->
   <div class="analyzing-complete" id="analyzingComplete" aria-hidden="true">
     <div class="complete-title">두 사람의 <em>결</em>이, 도착했어요.</div>
-    <a href="#" class="btn-complete" id="btnComplete">
+    <a href="/report" class="btn-complete" id="btnComplete">
       <span>우리의 결을 확인하러 가기</span>
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
         <path d="M3 8 H13 M9 4 L13 8 L9 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1813,8 +1813,28 @@
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
+
+  // v124: Hero 카피의 사용자 이름 동적 치환
+  // 로그인된 사용자의 카카오 닉네임으로 "민지" placeholder 교체
+  const uploadHeroTitle = $('uploadHeroTitle');
+  if (uploadHeroTitle && window.dvAuth && window.dvAuth.isSignedIn()) {
+    const user = window.dvAuth.getUser();
+    if (user && user.nickname) {
+      // <em> 태그는 그대로 두고, 첫 부분의 이름만 치환
+      uploadHeroTitle.innerHTML = uploadHeroTitle.innerHTML.replace('민지', user.nickname);
+    }
+  }
+
   const nav = $('nav');
   const partnerInput = $('partnerName');
+
+  // v124: ?partner=이름 URL 파라미터로 입력 필드 자동 채우기 (데모용)
+  const uploadParams = new URLSearchParams(window.location.search);
+  const partnerParam = uploadParams.get('partner');
+  if (partnerParam && partnerInput) {
+    partnerInput.value = partnerParam;
+  }
+
   const dropzone = $('dropzone');
   const fileInput = $('fileInput');
   const fileState = $('fileState');
@@ -2124,6 +2144,12 @@
     // Wire up button to navigate
     if (reportUrl) {
       btnComplete.setAttribute('href', reportUrl);
+    } else {
+      // v124: 사용자 입력한 partner 이름을 /report로 전달 (placeholder 단계)
+      const partnerValue = partnerInput.value.trim();
+      if (partnerValue) {
+        btnComplete.setAttribute('href', `/report?partner=${encodeURIComponent(partnerValue)}`);
+      }
     }
   };
 

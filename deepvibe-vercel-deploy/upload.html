@@ -1,0 +1,2321 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#F6F4F1"/>
+<title>대화 업로드 — deepvibe</title>
+
+<meta name="description" content="카톡 대화를 업로드하면, 두 사람 사이에 흐르는 결을 분석해드려요."/>
+<meta name="robots" content="noindex, nofollow"/>
+
+<!-- ============ Open Graph (Facebook / KakaoTalk / etc) ============ -->
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://deepvibe-phi.vercel.app/upload"/>
+<meta property="og:title" content="대화를 들려주세요 — deepvibe"/>
+<meta property="og:description" content="한 편의 리포트로, 두 사람의 결을 정리해드려요. 분석이 끝나면 원본은 바로 지워져요."/>
+<meta property="og:image" content="https://deepvibe-phi.vercel.app/api/og?type=upload"/>
+<meta property="og:image:type" content="image/png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:alt" content="대화를 들려주세요 — deepvibe"/>
+<meta property="og:site_name" content="deepvibe"/>
+<meta property="og:locale" content="ko_KR"/>
+
+<!-- ============ Twitter Card ============ -->
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="대화를 들려주세요 — deepvibe"/>
+<meta name="twitter:description" content="한 편의 리포트로, 두 사람의 결을 정리해드려요."/>
+<meta name="twitter:image" content="https://deepvibe-phi.vercel.app/api/og?type=upload"/>
+
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<link rel="apple-touch-icon" href="favicon.svg"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============ Design Tokens (deepvibe Design System v119) ============ */
+  :root{
+    --bg:#F6F4F1;
+    --bg-soft:#EFEBE5;
+    --bg-warm:#F0E9DE;
+    --ink:#15131A;
+    --ink-2:#2a262f;
+    --muted:#7a7680;
+    --muted-2:#a8a4ac;
+    --line-04:rgba(20,10,30,.04);
+    --line-08:rgba(20,10,30,.08);
+    --line-12:rgba(20,10,30,.12);
+    --line-18:rgba(20,10,30,.18);
+    --kakao:#FEE500;
+    --kakao-ink:#3D1E1E;
+    --pink:#ff6f91;
+    --pink-soft:#ffb4c6;
+    --pink-bg:rgba(255,159,188,.22);
+    --violet:#b967ff;
+    --success:#4ab07a;
+    --danger:#d04a4a;
+
+    --font-serif:'Fraunces','Noto Serif KR',serif;
+    --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Pretendard','Noto Sans KR',sans-serif;
+
+    --ease-out:cubic-bezier(.22,1,.36,1);
+    --ease-out-soft:cubic-bezier(.16,1,.3,1);
+    --ease-in-out:cubic-bezier(.65,0,.35,1);
+    --dur-fast:.18s;
+    --dur-base:.32s;
+    --dur-slow:.55s;
+
+    --r-sm:6px;
+    --r-md:14px;
+    --r-lg:20px;
+    --r-pill:999px;
+
+    --safe-bottom:env(safe-area-inset-bottom,0px);
+    --safe-top:env(safe-area-inset-top,0px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+  :focus{outline:none}
+  :focus-visible{
+    outline:2px solid var(--ink);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+  button:focus-visible,a:focus-visible{outline-offset:4px}
+
+  html{
+    scroll-behavior:smooth;
+    overflow-x:hidden;
+    font-size:100%;
+    -webkit-text-size-adjust:100%;
+  }
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--font-sans);font-size:15.5px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    word-break:keep-all;line-break:strict;
+    overflow-x:hidden;
+    min-height:100vh;
+    min-height:100dvh;
+    position:relative;
+  }
+
+  /* ============ AMBIENT BG GLOW (brand signature) ============ */
+  .ambient-bg{
+    position:fixed;inset:0;z-index:0;
+    pointer-events:none;
+    overflow:hidden;
+  }
+  .ambient-bg::before,
+  .ambient-bg::after{
+    content:"";
+    position:absolute;
+    width:60vw;height:60vw;
+    max-width:480px;max-height:480px;
+    border-radius:50%;
+    filter:blur(80px);
+    opacity:.5;
+  }
+  .ambient-bg::before{
+    top:-15%;left:-20%;
+    background:radial-gradient(circle, var(--pink-soft), transparent 70%);
+  }
+  .ambient-bg::after{
+    bottom:-10%;right:-25%;
+    background:radial-gradient(circle, #cdb4ff, transparent 70%);
+    opacity:.4;
+  }
+
+  /* ============ NAV ============ */
+  nav{
+    position:sticky;top:0;z-index:30;
+    background:rgba(246,244,241,.85);
+    backdrop-filter:blur(14px) saturate(180%);
+    -webkit-backdrop-filter:blur(14px) saturate(180%);
+    border-bottom:.5px solid transparent;
+    transition:border-color .25s var(--ease-out);
+  }
+  nav.is-scrolled{border-bottom-color:var(--line-08)}
+  nav .row{
+    max-width:520px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 20px;
+  }
+  nav .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+  nav .logo .mark{display:inline-block;width:22px;height:14px;position:relative}
+  nav .logo .mark svg{width:100%;height:100%;overflow:visible}
+  nav .logo .word{
+    font-family:var(--font-serif);font-weight:400;font-style:italic;
+    font-size:18px;letter-spacing:-.01em;color:var(--ink);
+  }
+  nav .user-chip{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:6px 12px 6px 6px;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:999px;
+    font-size:12.5px;font-weight:500;color:var(--ink-2);
+    transition:background .2s var(--ease-out), border-color .2s var(--ease-out);
+    box-shadow:0 1px 2px var(--line-04);
+    cursor:pointer;
+  }
+  nav .user-chip:hover{background:#fff;border-color:var(--line-12)}
+  nav .user-chip .avatar{
+    width:22px;height:22px;border-radius:50%;
+    background:linear-gradient(135deg, var(--pink), var(--violet));
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:10px;font-weight:600;
+    letter-spacing:0;
+    overflow:hidden;
+  }
+  nav .user-chip .avatar img{
+    width:100%;height:100%;object-fit:cover;
+  }
+
+  /* ============ Nav Login button (signed-out state, dynamic) ============ */
+  nav .nav-login{
+    position:relative;
+    display:inline-flex;align-items:center;
+    padding:8px 4px;
+    background:transparent;
+    color:var(--ink-2);
+    font-family:var(--font-sans);
+    font-size:11px;font-weight:500;letter-spacing:-.005em;
+    min-height:36px;
+    cursor:pointer;
+    transition:color .32s var(--ease-out);
+  }
+  nav .nav-login:hover{color:var(--ink)}
+
+  /* ============ Auth Dropdown (logout menu) ============ */
+  .auth-dropdown{
+    position:absolute;
+    top:calc(100% + 6px);right:20px;
+    min-width:140px;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:12px;
+    box-shadow:0 8px 24px -10px rgba(20,10,30,.18), 0 1px 2px var(--line-04);
+    padding:6px;
+    opacity:0;
+    transform:translateY(-4px);
+    pointer-events:none;
+    transition:opacity .2s var(--ease-out), transform .2s var(--ease-out);
+    z-index:100;
+  }
+  .auth-dropdown.is-open{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+  }
+  .auth-dropdown button,
+  .auth-dropdown a{
+    display:block;width:100%;
+    padding:9px 12px;
+    background:transparent;border:none;
+    text-align:left;
+    font-family:var(--font-sans);
+    font-size:13px;color:var(--ink-2);
+    border-radius:8px;
+    cursor:pointer;
+    transition:background .15s var(--ease-out);
+    text-decoration:none;
+    box-sizing:border-box;
+  }
+  .auth-dropdown button:hover,
+  .auth-dropdown a:hover{background:var(--bg-soft)}
+  /* ============ CONSENT MODAL (first-time user agreement) ============ */
+  .consent-modal-overlay{
+    position:fixed;inset:0;z-index:200;
+    background:rgba(20,10,30,.45);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    opacity:0;
+    transition:opacity .35s var(--ease-out);
+    display:flex;align-items:flex-end;justify-content:center;
+  }
+  .consent-modal-overlay.is-open{opacity:1}
+
+  .consent-modal{
+    width:100%;
+    max-width:520px;
+    background:#fff;
+    border-top-left-radius:24px;
+    border-top-right-radius:24px;
+    padding:14px 24px calc(28px + var(--safe-bottom, 0px));
+    max-height:90vh;
+    overflow-y:auto;
+    transform:translateY(100%);
+    transition:transform .4s var(--ease-out-soft);
+  }
+  .consent-modal-overlay.is-open .consent-modal{transform:translateY(0)}
+
+  .consent-modal-handle{
+    width:36px;height:4px;
+    margin:0 auto 20px;
+    background:var(--muted-2);
+    border-radius:2px;
+    opacity:.5;
+  }
+  .consent-modal-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:22px;color:var(--ink);
+    line-height:1.35;
+    letter-spacing:-.015em;
+    margin-bottom:8px;
+  }
+  .consent-modal-title em{
+    font-style:italic;
+    color:var(--ink);
+  }
+  .consent-modal-desc{
+    font-family:var(--font-sans);
+    font-size:13.5px;color:var(--muted);
+    line-height:1.7;
+    letter-spacing:-.005em;
+    margin-bottom:24px;
+  }
+
+  .consent-list{
+    list-style:none;
+    display:flex;flex-direction:column;
+    gap:0;
+    margin-bottom:14px;
+  }
+  .consent-item{
+    border-bottom:.5px solid var(--line-08);
+  }
+  .consent-item:last-child{border-bottom:none}
+
+  .consent-row{
+    display:flex;align-items:center;gap:12px;
+    padding:14px 4px;
+    cursor:pointer;
+  }
+  .consent-check{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+    width:0;height:0;
+  }
+  .consent-check-box{
+    width:20px;height:20px;
+    flex-shrink:0;
+    border:1.5px solid var(--line-18);
+    border-radius:6px;
+    background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;
+    transition:background .2s var(--ease-out), border-color .2s var(--ease-out);
+  }
+  .consent-check-box svg{
+    width:12px;height:12px;
+    opacity:0;
+    transition:opacity .2s var(--ease-out);
+  }
+  .consent-check:checked + .consent-check-box{
+    background:var(--ink);
+    border-color:var(--ink);
+  }
+  .consent-check:checked + .consent-check-box svg{opacity:1}
+  .consent-check:focus-visible + .consent-check-box{
+    outline:2px solid var(--ink);
+    outline-offset:2px;
+  }
+
+  .consent-text{
+    flex:1;
+    display:flex;align-items:center;gap:8px;
+    flex-wrap:wrap;
+  }
+  .consent-tag{
+    display:inline-block;
+    padding:2px 7px;
+    background:rgba(255,159,188,.22);
+    color:#a04060;
+    border-radius:999px;
+    font-family:var(--font-sans);
+    font-size:10.5px;font-weight:600;
+    letter-spacing:-.002em;
+    flex-shrink:0;
+  }
+  .consent-tag-optional{
+    background:var(--bg-soft);
+    color:var(--muted);
+  }
+  .consent-label{
+    font-family:var(--font-sans);
+    font-size:14px;color:var(--ink-2);
+    letter-spacing:-.005em;
+    line-height:1.4;
+    flex:1;
+    min-width:0;
+  }
+  .consent-link{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:24px;height:24px;
+    color:var(--muted);
+    border-radius:6px;
+    transition:background .15s var(--ease-out), color .15s var(--ease-out);
+    text-decoration:none;
+    flex-shrink:0;
+  }
+  .consent-link:hover{
+    background:var(--bg-soft);
+    color:var(--ink);
+  }
+
+  .consent-all-row{
+    padding:4px 0 16px;
+    margin-bottom:20px;
+    border-bottom:.5px solid var(--line-08);
+  }
+  .consent-row-all{
+    padding:10px 4px;
+  }
+  .consent-label-all{
+    font-weight:500;
+    color:var(--ink);
+  }
+
+  .btn-consent-submit{
+    display:flex;align-items:center;justify-content:center;
+    width:100%;
+    padding:16px;
+    border-radius:14px;
+    background:var(--kakao);color:var(--kakao-ink);
+    font-family:var(--font-sans);
+    font-size:15px;font-weight:600;letter-spacing:-.005em;
+    border:none;
+    box-shadow:0 1px 0 rgba(0,0,0,.05), 0 10px 24px -12px rgba(20,10,30,.22);
+    transition:transform var(--dur-fast) var(--ease-out), opacity var(--dur-base) var(--ease-out), background var(--dur-base) var(--ease-out);
+    cursor:pointer;
+    margin-bottom:8px;
+  }
+  .btn-consent-submit:disabled{
+    background:var(--bg-soft);
+    color:var(--muted-2);
+    box-shadow:none;
+    cursor:not-allowed;
+  }
+  .btn-consent-submit:not(:disabled):active{transform:scale(.985)}
+
+  .btn-consent-cancel{
+    display:flex;align-items:center;justify-content:center;
+    width:100%;
+    padding:12px;
+    background:transparent;
+    color:var(--muted);
+    font-family:var(--font-sans);
+    font-size:13px;font-weight:500;letter-spacing:-.005em;
+    border:none;
+    cursor:pointer;
+    transition:color .2s var(--ease-out);
+  }
+  .btn-consent-cancel:hover{color:var(--ink-2)}
+
+
+
+  /* ============ MAIN ============ */
+  main{
+    position:relative;z-index:1;
+    max-width:520px;width:100%;
+    margin:0 auto;
+    padding:48px 20px 80px;
+  }
+
+  /* ============ HERO HEADER ============ */
+  .upload-header{
+    margin-bottom:40px;
+    text-align:center;
+    opacity:0;
+    transform:translateY(8px);
+    animation:fadeUp .7s .1s var(--ease-out-soft) forwards;
+  }
+  @keyframes fadeUp{to{opacity:1;transform:none}}
+
+  /* Brand signature: vesica piscis mark above title */
+  .upload-mark{
+    display:inline-block;
+    position:relative;
+    width:64px;height:38px;
+    margin:0 auto 22px;
+  }
+  .upload-mark svg{
+    width:100%;height:100%;
+    overflow:visible;
+  }
+  .upload-mark::after{
+    content:"";
+    position:absolute;
+    inset:-20%;
+    background:radial-gradient(circle, rgba(255,159,188,.4), transparent 65%);
+    z-index:-1;
+    filter:blur(16px);
+  }
+
+  .upload-header h1{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:clamp(28px, 8vw, 36px);
+    line-height:1.2;letter-spacing:-.02em;
+    color:var(--ink);
+    margin-bottom:12px;
+  }
+  .upload-header h1 em{
+    font-style:italic;
+    color:var(--ink);
+  }
+  .upload-header p{
+    font-size:14.5px;color:var(--muted);
+    line-height:1.7;
+    max-width:360px;
+    margin:0 auto;
+  }
+  .upload-header p em{
+    font-style:normal;
+    color:var(--ink-2);
+    font-weight:500;
+  }
+
+  /* ============ FORM CARDS ============ */
+  .upload-form{
+    display:flex;flex-direction:column;gap:18px;
+  }
+
+  .form-card{
+    position:relative;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:20px;
+    padding:24px 22px;
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 8px 22px -12px rgba(20,10,30,.06),
+      0 22px 44px -24px rgba(20,10,30,.08);
+    transition:border-color .25s var(--ease-out), box-shadow .25s var(--ease-out), transform .25s var(--ease-out);
+    opacity:0;
+    transform:translateY(14px);
+    animation:fadeUp .7s var(--ease-out-soft) forwards;
+  }
+  .form-card:nth-of-type(1){animation-delay:.25s}
+  .form-card:nth-of-type(2){animation-delay:.4s}
+  .form-card:hover{
+    border-color:var(--line-12);
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 12px 28px -12px rgba(20,10,30,.1),
+      0 26px 50px -24px rgba(20,10,30,.12);
+  }
+
+  .form-card-head{
+    display:flex;align-items:center;gap:10px;
+    margin-bottom:6px;
+  }
+  .form-card-num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:24px;height:24px;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--pink-bg), rgba(202,163,255,.22));
+    font-family:var(--font-serif);font-weight:500;font-size:13px;
+    color:var(--ink);
+    letter-spacing:0;
+    flex-shrink:0;
+  }
+  .form-card-label{
+    font-family:var(--font-sans);
+    font-size:15px;font-weight:500;color:var(--ink);
+    letter-spacing:-.005em;
+  }
+  .form-card-hint{
+    font-size:13px;color:var(--muted);
+    line-height:1.6;
+    margin-bottom:14px;
+  }
+  .form-card-hint em{
+    font-style:normal;
+    color:var(--ink-2);
+    font-weight:500;
+  }
+
+  /* ============ INPUT ============ */
+  /* Input field with a subtle pink-tinted border as default state.
+     Acts as a quiet activation signal — the field itself looks "ready to use"
+     rather than needing an external accent bar.
+     Mobile-friendly: visible on every device, no hover dependency. */
+  .input-wrap{
+    position:relative;
+  }
+
+  .partner-input{
+    width:100%;
+    padding:14px 16px;
+    background:#fff;
+    border:.5px solid rgba(255,159,188,.32);
+    border-radius:12px;
+    font-family:var(--font-sans);font-size:15.5px;
+    color:var(--ink);
+    letter-spacing:-.005em;
+    box-shadow:inset 0 1px 2px rgba(20,10,30,.03);
+    transition:border-color .2s var(--ease-out), box-shadow .2s var(--ease-out);
+  }
+  .partner-input::placeholder{
+    color:var(--muted);
+    font-weight:400;
+  }
+  .partner-input:hover{
+    border-color:var(--pink-soft);
+  }
+  .partner-input:focus-visible{
+    outline:none;
+    background:#fff;
+    border-color:var(--pink-soft);
+    box-shadow:0 0 0 4px var(--pink-bg);
+  }
+  /* When user has typed something, fade the pink hint back to neutral */
+  .input-wrap.is-filled .partner-input:not(:focus){
+    border-color:var(--line-12);
+  }
+
+  /* ============ DROPZONE ============ */
+  .dropzone{
+    position:relative;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:40px 20px 36px;
+    /* Default state = previously "hovered" state.
+       Mobile-first: users on touch devices won't see a hover state,
+       so the inviting visual must be the default. */
+    background:#fff;
+    border:1.5px dashed var(--pink-soft);
+    border-radius:18px;
+    cursor:pointer;
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 10px 24px -14px rgba(20,10,30,.08),
+      0 0 0 4px var(--pink-bg);
+    transition:
+      background .25s var(--ease-out),
+      border-color .25s var(--ease-out),
+      transform .35s var(--ease-out-soft),
+      box-shadow .35s var(--ease-out-soft);
+    overflow:hidden;
+  }
+  .dropzone::before{
+    content:"";
+    position:absolute;
+    width:240px;height:240px;
+    right:-70px;top:-70px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(255,159,188,.26), transparent 65%);
+    filter:blur(24px);
+    pointer-events:none;
+    transition:opacity .3s var(--ease-out), transform .5s var(--ease-out-soft);
+  }
+  /* Hover: incremental boost (desktop only — adds extra depth) */
+  .dropzone:hover{
+    transform:translateY(-2px);
+    border-color:var(--pink);
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 16px 36px -14px rgba(20,10,30,.14),
+      0 0 0 5px var(--pink-bg);
+  }
+  .dropzone:hover::before{
+    transform:translate(-20px, 20px) scale(1.1);
+  }
+  .dropzone:active{
+    transform:translateY(-1px) scale(.998);
+  }
+  .dropzone.is-dragging{
+    background:var(--pink-bg);
+    border-color:var(--pink);
+    border-style:solid;
+    transform:translateY(-2px) scale(1.005);
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 18px 40px -16px rgba(255,111,145,.3),
+      0 0 0 6px rgba(255,159,188,.18);
+  }
+  .dropzone.is-dragging::before{opacity:0}
+  .dropzone.has-file{
+    background:linear-gradient(180deg, rgba(74,176,122,.04) 0%, #fff 100%);
+    border-color:var(--success);
+    border-style:solid;
+    cursor:default;
+    transform:none;
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 6px 16px -10px rgba(20,10,30,.06);
+  }
+  .dropzone.has-file:hover{
+    transform:none;
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 6px 16px -10px rgba(20,10,30,.06);
+  }
+  .dropzone.has-file::before{opacity:0}
+  .dropzone.has-error{
+    background:#fff;
+    border-color:var(--danger);
+    border-style:solid;
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 6px 16px -10px rgba(20,10,30,.06);
+  }
+  .dropzone.has-error::before{opacity:0}
+
+  .dropzone-icon-wrap{
+    position:relative;
+    width:56px;height:56px;
+    margin-bottom:16px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .dropzone-icon-wrap::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    background:radial-gradient(circle, var(--pink-bg), transparent 65%);
+    transition:opacity .3s var(--ease-out);
+  }
+  .dropzone-icon{
+    position:relative;
+    width:32px;height:32px;
+    color:var(--pink);
+    animation:nudge 2.8s var(--ease-in-out) infinite;
+    transition:transform .3s var(--ease-out-soft), color .25s var(--ease-out);
+  }
+  @keyframes nudge{
+    0%, 100%{transform:translateY(0)}
+    50%{transform:translateY(-3px)}
+  }
+  .dropzone:hover .dropzone-icon{
+    animation-duration:1.6s;
+  }
+  .dropzone.is-dragging .dropzone-icon{
+    animation:none;
+    transform:translateY(-4px) scale(1.1);
+  }
+  .dropzone.has-file .dropzone-icon,
+  .dropzone.has-error .dropzone-icon{
+    animation:none;
+    transform:none;
+  }
+  .dropzone.has-file .dropzone-icon{color:var(--success)}
+  .dropzone.has-error .dropzone-icon{color:var(--danger)}
+  .dropzone.has-file .dropzone-icon-wrap::before,
+  .dropzone.has-error .dropzone-icon-wrap::before{background:none}
+
+  .dropzone-text{
+    font-family:var(--font-serif);font-weight:400;
+    font-size:16.5px;color:var(--ink);
+    text-align:center;
+    line-height:1.4;
+    margin-bottom:6px;
+    letter-spacing:-.005em;
+  }
+  .dropzone-text em{
+    font-style:normal;
+    font-weight:500;
+    color:var(--ink);
+    padding:0 5px;
+    background:var(--pink-bg);
+    border-radius:4px;
+  }
+  .dropzone-hint{
+    font-size:12.5px;color:var(--muted);
+    text-align:center;
+    letter-spacing:-.002em;
+  }
+
+  .file-input{
+    position:absolute;
+    width:1px;height:1px;
+    padding:0;margin:-1px;
+    overflow:hidden;
+    clip:rect(0,0,0,0);
+    border:0;
+  }
+
+  /* ============ FILE STATE ============ */
+  .file-state{
+    display:none;
+    align-items:center;gap:12px;
+    padding:14px 16px;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:14px;
+    margin-top:14px;
+    box-shadow:0 1px 2px var(--line-04);
+  }
+  .file-state.is-visible{display:flex}
+  .file-state .file-icon{
+    width:38px;height:38px;
+    border-radius:10px;
+    background:linear-gradient(135deg, var(--pink-bg), rgba(202,163,255,.18));
+    display:flex;align-items:center;justify-content:center;
+    color:var(--ink-2);
+    flex-shrink:0;
+  }
+  .file-state .file-info{flex:1;min-width:0}
+  .file-state .file-name{
+    font-size:13.5px;font-weight:500;color:var(--ink);
+    line-height:1.4;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    letter-spacing:-.005em;
+  }
+  .file-state .file-meta{
+    font-size:11.5px;color:var(--muted);
+    margin-top:3px;
+    letter-spacing:-.002em;
+  }
+  .file-state .file-meta .success{color:var(--success);font-weight:500}
+  .file-state .file-meta .danger{color:var(--danger);font-weight:500}
+  .file-state .file-remove{
+    width:32px;height:32px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:10px;
+    color:var(--muted);
+    background:transparent;
+    transition:background .2s var(--ease-out), color .2s var(--ease-out);
+    flex-shrink:0;
+    border:none;
+    cursor:pointer;
+  }
+  .file-state .file-remove:hover{
+    background:var(--bg-soft);
+    color:var(--ink);
+  }
+
+  /* ============ ERROR MESSAGE (Inline Form Validation) ============ */
+  .error-message{
+    display:none;
+    flex-direction:column;
+    gap:10px;
+    padding:14px 16px;
+    background:rgba(208,74,74,.06);
+    border:.5px solid rgba(208,74,74,.18);
+    border-radius:12px;
+    margin-top:12px;
+    font-family:var(--font-sans);
+    font-size:13px;color:var(--danger);
+    line-height:1.5;
+    letter-spacing:-.002em;
+  }
+  .error-message.is-visible{display:flex}
+
+  .error-message-row{
+    display:flex;align-items:flex-start;gap:8px;
+  }
+  .error-message-row svg{flex-shrink:0;margin-top:2px}
+
+  /* Optional action row — appears under the message for recoverable errors */
+  .error-message-actions{
+    display:none;
+    gap:10px;
+    flex-wrap:wrap;
+    padding-left:24px;
+  }
+  .error-message-actions.is-visible{display:flex}
+  .error-message-action{
+    display:inline-flex;align-items:center;gap:5px;
+    padding:7px 12px;
+    background:#fff;
+    border:.5px solid rgba(208,74,74,.28);
+    border-radius:999px;
+    font-family:var(--font-sans);
+    font-size:12px;font-weight:500;
+    color:var(--danger);
+    letter-spacing:-.005em;
+    cursor:pointer;
+    transition:background .2s var(--ease-out), border-color .2s var(--ease-out);
+  }
+  .error-message-action:hover{
+    background:rgba(208,74,74,.06);
+    border-color:rgba(208,74,74,.42);
+  }
+  .error-message-action svg{
+    flex-shrink:0;
+  }
+
+  /* ============ HELP LINK ============ */
+  .help-link{
+    display:inline-flex;align-items:center;gap:5px;
+    margin-top:16px;
+    font-family:var(--font-sans);
+    font-size:13px;font-weight:500;
+    color:var(--muted);
+    background:transparent;
+    padding:8px 0;
+    letter-spacing:-.005em;
+    cursor:pointer;
+    transition:color .2s var(--ease-out);
+    border:none;
+  }
+  .help-link:hover{color:var(--ink)}
+  .help-link svg{transition:transform .2s var(--ease-out)}
+  .help-link:hover svg{transform:translateX(2px)}
+
+  /* ============ SUBMIT ============ */
+  .submit-wrap{
+    margin-top:32px;
+    opacity:0;
+    transform:translateY(8px);
+    animation:fadeUp .7s .6s var(--ease-out-soft) forwards;
+  }
+  .btn-analyze{
+    position:relative;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    width:100%;
+    padding:17px;
+    border-radius:14px;
+    background:var(--kakao);color:var(--kakao-ink);
+    font-size:15.5px;font-weight:600;letter-spacing:-.005em;
+    border:none;
+    box-shadow:
+      0 1px 0 rgba(0,0,0,.05),
+      0 10px 24px -12px rgba(20,10,30,.22);
+    transition:
+      transform var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out),
+      opacity var(--dur-base) var(--ease-out);
+    cursor:pointer;
+  }
+  .btn-analyze:disabled{
+    background:var(--bg-soft);
+    color:var(--muted-2);
+    box-shadow:none;
+    cursor:not-allowed;
+  }
+  .btn-analyze:not(:disabled):active{transform:scale(.985)}
+  .btn-analyze .spinner{
+    display:none;
+    width:18px;height:18px;
+    border:2px solid rgba(61,30,30,.2);
+    border-top-color:var(--kakao-ink);
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .btn-analyze.is-loading .spinner{display:inline-block}
+  .btn-analyze.is-loading .btn-label{display:none}
+
+  .submit-meta{
+    margin-top:14px;
+    display:flex;align-items:center;justify-content:center;gap:6px;
+    font-size:11.5px;color:var(--muted);
+    line-height:1.6;
+    letter-spacing:-.002em;
+  }
+  .submit-meta svg{color:var(--muted);flex-shrink:0}
+  .submit-meta .em-safe{color:var(--ink-2);font-weight:500}
+
+  /* ============ MODAL ============ */
+  .modal-overlay{
+    position:fixed;inset:0;z-index:50;
+    background:rgba(20,10,30,.35);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .35s var(--ease-out), visibility 0s linear .35s;
+  }
+  .modal-overlay.is-open{
+    opacity:1;
+    visibility:visible;
+    transition:opacity .35s var(--ease-out), visibility 0s linear 0s;
+  }
+  .modal{
+    position:fixed;
+    left:0;right:0;bottom:0;
+    z-index:51;
+    background:#fff;
+    border-top-left-radius:24px;
+    border-top-right-radius:24px;
+    max-height:90vh;
+    overflow-y:auto;
+    transform:translateY(100%);
+    transition:transform .45s var(--ease-out-soft);
+    padding-bottom:calc(24px + var(--safe-bottom));
+  }
+  .modal.is-open{transform:translateY(0)}
+  .modal-handle{
+    width:36px;height:4px;
+    margin:10px auto 0;
+    background:var(--muted-2);
+    border-radius:2px;
+    opacity:.5;
+  }
+  .modal-header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 24px 8px;
+  }
+  .modal-title{
+    font-family:var(--font-serif);font-weight:400;
+    font-size:20px;color:var(--ink);
+    letter-spacing:-.01em;
+  }
+  .modal-close{
+    width:36px;height:36px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:10px;
+    color:var(--muted);
+    background:transparent;
+    transition:background .2s var(--ease-out);
+    border:none;
+    cursor:pointer;
+  }
+  .modal-close:hover{background:var(--bg-soft);color:var(--ink)}
+
+  .modal-tabs{
+    display:flex;gap:6px;
+    padding:0 24px;
+    margin-top:8px;
+  }
+  .modal-tab{
+    flex:1;
+    padding:11px 14px;
+    background:var(--bg-soft);
+    border:none;
+    border-radius:10px;
+    font-size:13px;font-weight:500;
+    color:var(--muted);
+    letter-spacing:-.005em;
+    transition:background .2s var(--ease-out), color .2s var(--ease-out);
+    cursor:pointer;
+  }
+  .modal-tab.is-active{background:var(--ink);color:#fff}
+
+  .modal-body{padding:20px 24px 24px}
+  .guide-steps{
+    display:flex;flex-direction:column;gap:18px;
+    list-style:none;
+  }
+  .guide-step{display:flex;gap:14px;align-items:flex-start}
+  .guide-step-num{
+    flex-shrink:0;
+    width:28px;height:28px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--pink-bg), rgba(202,163,255,.22));
+    font-family:var(--font-serif);font-weight:500;font-size:14px;
+    color:var(--ink-2);
+    line-height:1;
+  }
+  .guide-step-body{flex:1;padding-top:3px}
+  .guide-step-title{
+    font-size:14.5px;font-weight:500;
+    color:var(--ink);
+    line-height:1.4;
+    margin-bottom:4px;
+    letter-spacing:-.005em;
+  }
+  .guide-step-desc{
+    font-size:13px;color:var(--muted);
+    line-height:1.6;
+  }
+  .guide-step-desc kbd{
+    display:inline-block;
+    padding:1px 6px;
+    background:var(--bg-soft);
+    border:.5px solid var(--line-08);
+    border-radius:4px;
+    font-family:var(--font-sans);
+    font-size:11.5px;color:var(--ink-2);
+    font-weight:500;
+    margin:0 2px;
+    letter-spacing:0;
+    line-height:1.5;
+  }
+  .guide-note{
+    margin-top:22px;
+    padding-top:18px;
+    border-top:.5px solid var(--line-08);
+    font-size:12.5px;color:var(--muted);
+    line-height:1.6;
+    display:flex;gap:8px;
+    align-items:flex-start;
+  }
+  .guide-note-icon{
+    flex-shrink:0;
+    width:14px;height:14px;
+    color:var(--muted-2);
+    margin-top:2px;
+  }
+  .guide-note strong{color:var(--ink-2);font-weight:500}
+
+  /* ============ ANALYZING OVERLAY ============ */
+  .analyzing-overlay{
+    position:fixed;inset:0;z-index:60;
+    background:var(--bg);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:40px 20px;
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .5s var(--ease-out), visibility 0s linear .5s;
+    overflow:hidden;
+  }
+  .analyzing-overlay.is-active{
+    opacity:1;
+    visibility:visible;
+    transition:opacity .5s var(--ease-out), visibility 0s linear 0s;
+  }
+  .analyzing-overlay::before,
+  .analyzing-overlay::after{
+    content:"";
+    position:absolute;
+    width:50vw;height:50vw;
+    max-width:400px;max-height:400px;
+    border-radius:50%;
+    filter:blur(70px);
+    opacity:.5;
+    pointer-events:none;
+  }
+  .analyzing-overlay::before{
+    top:10%;left:-15%;
+    background:radial-gradient(circle, var(--pink-soft), transparent 70%);
+  }
+  .analyzing-overlay::after{
+    bottom:10%;right:-15%;
+    background:radial-gradient(circle, #cdb4ff, transparent 70%);
+    opacity:.4;
+  }
+  .analyzing-orbit{
+    position:relative;
+    width:120px;height:120px;
+    margin-bottom:40px;
+  }
+  .analyzing-orbit::before,
+  .analyzing-orbit::after{
+    content:"";
+    position:absolute;inset:0;
+    border-radius:50%;
+    border:1px solid var(--line-12);
+  }
+  .analyzing-orbit::after{
+    inset:14px;
+    border-color:var(--line-08);
+  }
+  .orbit-dot{
+    position:absolute;
+    width:12px;height:12px;
+    border-radius:50%;
+    top:-6px;left:50%;
+    margin-left:-6px;
+    transform-origin:50% 66px;
+  }
+  .orbit-dot-1{
+    background:var(--pink-soft);
+    animation:orbit 3.2s linear infinite;
+  }
+  .orbit-dot-2{
+    background:#d4b3ff;
+    animation:orbit 3.2s linear infinite;
+    animation-delay:-1.6s;
+  }
+  @keyframes orbit{
+    from{transform:rotate(0deg)}
+    to{transform:rotate(360deg)}
+  }
+  .analyzing-text{
+    position:relative;
+    font-family:var(--font-serif);font-weight:300;
+    font-size:22px;color:var(--ink);
+    text-align:center;
+    line-height:1.4;
+    margin-bottom:28px;
+    letter-spacing:-.015em;
+    /* Container that holds all stage messages stacked.
+       Fixed height accommodates 2-line max korean text without overlap. */
+    height:64px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:100%;
+    max-width:340px;
+    padding:0 20px;
+  }
+  .analyzing-text em{font-style:italic;color:var(--ink)}
+  .analyzing-stage{
+    position:absolute;
+    inset:0;
+    padding:0 20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    opacity:0;
+    transform:translateY(8px);
+    transition:opacity .35s var(--ease-out-soft), transform .45s var(--ease-out-soft);
+    will-change:opacity, transform;
+    pointer-events:none;
+  }
+  .analyzing-stage.is-active{
+    opacity:1;
+    transform:translateY(0);
+    transition:opacity .5s .2s var(--ease-out-soft), transform .55s .2s var(--ease-out-soft);
+  }
+  .analyzing-stage.is-leaving{
+    opacity:0;
+    transform:translateY(-8px);
+    transition:opacity .2s var(--ease-out-soft), transform .3s var(--ease-out-soft);
+  }
+
+  /* Dot progress: 5 dots, filled sequentially */
+  .analyzing-dots{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:20px;
+  }
+  .analyzing-dot{
+    width:6px;height:6px;
+    border-radius:50%;
+    background:var(--line-12);
+    transition:background .4s var(--ease-out), transform .4s var(--ease-out-soft);
+  }
+  .analyzing-dot.is-active{
+    background:var(--pink-soft);
+    transform:scale(1.4);
+  }
+  .analyzing-dot.is-done{
+    background:var(--muted);
+    transform:scale(1);
+  }
+
+  .analyzing-sub{
+    position:relative;
+    font-size:13.5px;color:var(--muted);
+    text-align:center;
+    line-height:1.6;
+    max-width:320px;
+    transition:opacity .4s var(--ease-out);
+  }
+
+  /* ============ COMPLETE STATE — orbit converges into vesica piscis ============
+     When analysis finishes, the loading state transitions to completion:
+     1. Two orbit dots converge to center, orbit rings shrink and fade
+     2. Stage text + dots + sub fade out
+     3. Title + button fade in
+     The vesica piscis (overlapping circles) is the brand signature — same as
+     the navbar logo and hero mark on upload.html. */
+
+  /* Completed orbit: smaller, static, two circles overlap (vesica piscis) */
+  .analyzing-orbit.is-complete::before,
+  .analyzing-orbit.is-complete::after{
+    opacity:0;
+    transform:scale(0);
+    transition:opacity .4s var(--ease-out), transform .5s var(--ease-out-soft);
+  }
+  .analyzing-orbit{
+    transition:width .5s var(--ease-out-soft), height .5s var(--ease-out-soft), margin-bottom .5s var(--ease-out-soft);
+  }
+  .analyzing-orbit.is-complete{
+    width:64px;
+    height:38px;
+    margin-bottom:32px;
+  }
+  /* Orbit dots stop and translate to form vesica piscis */
+  .orbit-dot{
+    transition:transform .6s var(--ease-out-soft), width .5s var(--ease-out-soft), height .5s var(--ease-out-soft), top .5s var(--ease-out-soft), margin .5s var(--ease-out-soft), background .4s var(--ease-out);
+  }
+  .analyzing-orbit.is-complete .orbit-dot{
+    animation:none;
+    width:34px;
+    height:34px;
+    top:50%;
+    margin-top:-17px;
+    margin-left:0;
+  }
+  .analyzing-orbit.is-complete .orbit-dot-1{
+    left:0;
+    transform:translateX(0);
+    background:radial-gradient(circle, #ff9fbc 0%, var(--pink-soft) 70%, rgba(255,180,198,.7) 100%);
+    mix-blend-mode:multiply;
+  }
+  .analyzing-orbit.is-complete .orbit-dot-2{
+    left:auto;
+    right:0;
+    transform:translateX(0);
+    background:radial-gradient(circle, #b967ff 0%, #cdb4ff 70%, rgba(205,180,255,.7) 100%);
+    mix-blend-mode:multiply;
+  }
+
+  /* Stage text + dots + sub fade out on complete */
+  .analyzing-text.is-complete .analyzing-stage,
+  .analyzing-dots.is-complete .analyzing-dot,
+  .analyzing-sub.is-complete{
+    opacity:0;
+  }
+  .analyzing-text.is-complete,
+  .analyzing-dots.is-complete{
+    height:0;
+    margin-bottom:0;
+    overflow:hidden;
+    transition:height .4s var(--ease-out-soft), margin-bottom .4s var(--ease-out-soft);
+  }
+
+  /* Complete state: title + button (hidden by default, fade in when ready) */
+  .analyzing-complete{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:100%;
+    max-width:340px;
+    opacity:0;
+    transform:translateY(8px);
+    transition:opacity .5s .3s var(--ease-out-soft), transform .55s .3s var(--ease-out-soft);
+    pointer-events:none;
+  }
+  .analyzing-complete.is-visible{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+  }
+  .complete-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:24px;color:var(--ink);
+    text-align:center;
+    line-height:1.4;
+    letter-spacing:-.02em;
+    margin-bottom:32px;
+  }
+  .complete-title em{
+    font-style:italic;
+    color:var(--ink);
+  }
+  .btn-complete{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;
+    padding:17px;
+    border-radius:14px;
+    background:var(--kakao);color:var(--kakao-ink);
+    font-family:var(--font-sans);
+    font-size:15.5px;font-weight:600;letter-spacing:-.005em;
+    border:none;
+    box-shadow:
+      0 1px 0 rgba(0,0,0,.05),
+      0 10px 24px -12px rgba(20,10,30,.22);
+    transition:transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+    cursor:pointer;
+    text-decoration:none;
+  }
+  .btn-complete:active{
+    transform:scale(.985);
+  }
+  .btn-complete svg{
+    transition:transform .3s var(--ease-out-soft);
+  }
+  .btn-complete:hover svg{
+    transform:translateX(3px);
+  }
+
+  /* ============ ANALYZING ERROR (Critical mid-analysis failure) ============ */
+  .analyzing-error{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:100%;
+    max-width:340px;
+    opacity:0;
+    transform:translateY(8px);
+    transition:opacity .5s .15s var(--ease-out-soft), transform .55s .15s var(--ease-out-soft);
+    pointer-events:none;
+  }
+  .analyzing-error.is-visible{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+  }
+  .error-mark{
+    width:48px;height:48px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:50%;
+    background:rgba(208,74,74,.08);
+    margin-bottom:22px;
+    color:var(--danger);
+  }
+  .error-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:22px;color:var(--ink);
+    text-align:center;
+    line-height:1.4;
+    letter-spacing:-.015em;
+    margin-bottom:10px;
+  }
+  .error-desc{
+    font-family:var(--font-sans);
+    font-size:13.5px;color:var(--muted);
+    text-align:center;
+    line-height:1.6;
+    letter-spacing:-.005em;
+    margin-bottom:28px;
+    max-width:280px;
+  }
+  .error-actions{
+    display:flex;flex-direction:column;
+    gap:10px;
+    width:100%;
+  }
+  .btn-error-retry{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;
+    padding:15px;
+    border-radius:14px;
+    background:var(--ink);color:#fff;
+    font-family:var(--font-sans);
+    font-size:14.5px;font-weight:500;letter-spacing:-.005em;
+    border:none;
+    box-shadow:0 1px 0 rgba(0,0,0,.05), 0 10px 24px -12px rgba(20,10,30,.22);
+    transition:transform var(--dur-fast) var(--ease-out);
+    cursor:pointer;
+  }
+  .btn-error-retry:active{transform:scale(.985)}
+  .btn-error-secondary{
+    display:flex;align-items:center;justify-content:center;
+    width:100%;
+    padding:13px;
+    border-radius:14px;
+    background:transparent;
+    color:var(--muted);
+    font-family:var(--font-sans);
+    font-size:13.5px;font-weight:500;letter-spacing:-.005em;
+    border:none;
+    cursor:pointer;
+    transition:color .2s var(--ease-out);
+    text-decoration:none;
+  }
+  .btn-error-secondary:hover{color:var(--ink)}
+
+  /* ============ NETWORK BANNER (Sticky top — global offline state) ============ */
+  .network-banner{
+    position:fixed;
+    top:calc(var(--safe-top, 0px));
+    left:0;right:0;
+    z-index:90;
+    transform:translateY(-110%);
+    transition:transform .35s var(--ease-out-soft);
+    pointer-events:none;
+  }
+  .network-banner.is-visible{
+    transform:translateY(0);
+    pointer-events:auto;
+  }
+  .network-banner-inner{
+    max-width:520px;
+    margin:0 auto;
+    padding:10px 16px calc(10px + var(--safe-top, 0px));
+    background:rgba(208,74,74,.95);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    color:#fff;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    font-family:var(--font-sans);
+    font-size:12.5px;font-weight:500;
+    letter-spacing:-.005em;
+  }
+  .network-banner-inner svg{flex-shrink:0}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:360px){
+    main{padding:32px 16px 60px}
+    .upload-header{margin-bottom:32px}
+    .form-card{padding:20px 18px}
+    .dropzone{padding:32px 16px 28px}
+    .modal-body{padding:16px 20px 20px}
+  }
+
+  /* ============ REDUCED MOTION ============ */
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;
+    }
+    .upload-header,
+    .form-card,
+    .submit-wrap{opacity:1 !important;transform:none !important}
+    .orbit-dot,
+    .dropzone-icon{animation:none !important}
+    /* Analyzing stage transitions still happen instantly (no slide), still readable */
+    .analyzing-stage{transform:none !important}
+    .analyzing-dot{transform:none !important}
+    .analyzing-complete{transform:none !important}
+    .analyzing-error{transform:none !important}
+    .analyzing-orbit.is-complete{transition:none !important}
+    .network-banner{transition:none !important}
+  }
+</style>
+
+<!-- ============ Auth Module (Phase 1: placeholder Kakao key) ============ -->
+<script src="auth.js" defer></script>
+<script src="auth-ui.js" defer></script>
+</head>
+<body>
+
+<!-- =================== AMBIENT BACKGROUND =================== -->
+<div class="ambient-bg" aria-hidden="true"></div>
+
+<!-- =================== NAV =================== -->
+<nav id="nav">
+  <div class="row">
+    <a class="logo" href="index.html" aria-label="deepvibe 홈으로">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 30 18" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="logo-pink" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff6f91" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#ff9fbc" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".7"/>
+            </radialGradient>
+            <radialGradient id="logo-violet" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#b967ff" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#cdb4ff" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#cdb4ff" stop-opacity=".7"/>
+            </radialGradient>
+          </defs>
+          <circle cx="11" cy="9" r="8" fill="url(#logo-pink)" style="mix-blend-mode:multiply"/>
+          <circle cx="19" cy="9" r="8" fill="url(#logo-violet)" style="mix-blend-mode:multiply"/>
+        </svg>
+      </span>
+      <span class="word">deepvibe</span>
+    </a>
+    <!-- Auth UI (login button or user chip) is injected by auth-ui.js -->
+  </div>
+</nav>
+
+<!-- =================== MAIN =================== -->
+<main>
+
+  <!-- Hero header -->
+  <header class="upload-header">
+    <div class="upload-mark" aria-hidden="true">
+      <svg viewBox="0 0 64 38" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="hero-pink" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ff6f91" stop-opacity=".95"/>
+            <stop offset="70%" stop-color="#ff9fbc" stop-opacity=".82"/>
+            <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".68"/>
+          </radialGradient>
+          <radialGradient id="hero-violet" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#b967ff" stop-opacity=".95"/>
+            <stop offset="70%" stop-color="#cdb4ff" stop-opacity=".82"/>
+            <stop offset="100%" stop-color="#cdb4ff" stop-opacity=".68"/>
+          </radialGradient>
+        </defs>
+        <circle cx="23" cy="19" r="17" fill="url(#hero-pink)" style="mix-blend-mode:multiply"/>
+        <circle cx="41" cy="19" r="17" fill="url(#hero-violet)" style="mix-blend-mode:multiply"/>
+      </svg>
+    </div>
+    <h1 id="uploadHeroTitle">
+      민지님,<br>
+      <em>대화</em>를 들려주세요.
+    </h1>
+    <p>
+      한 편의 리포트로, 두 사람의 <em>결</em>을 정리해드려요.
+    </p>
+  </header>
+
+  <!-- Form -->
+  <form class="upload-form" id="uploadForm" autocomplete="off" novalidate>
+
+    <!-- Step 1: Partner name -->
+    <div class="form-card">
+      <div class="form-card-head">
+        <span class="form-card-num">1</span>
+        <label class="form-card-label" for="partnerName">결이 궁금한 상대는 누구인가요?</label>
+      </div>
+      <p class="form-card-hint">대화에서 정확히 찾으려면, <em>카톡에 저장된 이름</em>과 같아야 해요.</p>
+      <div class="input-wrap">
+        <input
+          type="text"
+          id="partnerName"
+          name="partnerName"
+          class="partner-input"
+          placeholder="대화 상대의 이름"
+          maxlength="20"
+          aria-required="true"
+        >
+      </div>
+    </div>
+
+    <!-- Step 2: Upload -->
+    <div class="form-card">
+      <div class="form-card-head">
+        <span class="form-card-num">2</span>
+        <span class="form-card-label">대화를 올려주세요</span>
+      </div>
+      <p class="form-card-hint">카톡에서 내보낸 .txt 파일이면 충분해요.<br>분석이 끝나면 <em>원본은 바로 지워져요</em>.</p>
+
+      <label class="dropzone" id="dropzone" for="fileInput">
+        <div class="dropzone-icon-wrap">
+          <svg class="dropzone-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <path d="M16 22V8M16 8L10 14M16 8L22 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6 20V23C6 24.5 7.5 26 9 26H23C24.5 26 26 24.5 26 23V20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="dropzone-text">
+          파일을 <em>여기에</em> 놓아주세요
+        </div>
+        <div class="dropzone-hint">탭해서 선택할 수도 있어요 · .txt 파일</div>
+        <input type="file" id="fileInput" class="file-input" accept=".txt,text/plain" aria-label="카톡 대화 파일">
+      </label>
+
+      <!-- File state -->
+      <div class="file-state" id="fileState">
+        <div class="file-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M3.5 2.5 H11 L16 7 V17 H3.5 Z" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M11 2.5 V7 H16" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M6.5 11 H12 M6.5 13.5 H11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="file-info">
+          <div class="file-name" id="fileName">KakaoTalkChats.txt</div>
+          <div class="file-meta" id="fileMeta"><span class="success">✓ 인식됨</span> · 1,247줄 · 184 KB</div>
+        </div>
+        <button type="button" class="file-remove" id="fileRemove" aria-label="파일 제거">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M4 4 L12 12 M12 4 L4 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Error message (inline form validation) -->
+      <div class="error-message" id="errorMessage" role="alert">
+        <div class="error-message-row">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M8 5 V8.5 M8 10.5 V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span id="errorText">파일을 읽을 수 없어요</span>
+        </div>
+        <div class="error-message-actions" id="errorActions">
+          <!-- Action buttons injected dynamically based on error type -->
+        </div>
+      </div>
+
+      <!-- Help link -->
+      <button type="button" class="help-link" id="helpLink" aria-haspopup="dialog">
+        카톡 대화, 어떻게 내보내요?
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M3 7 H10 M7 4 L10 7 L7 10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-wrap">
+      <button type="submit" class="btn-analyze" id="btnAnalyze" disabled>
+        <span class="spinner" aria-hidden="true"></span>
+        <span class="btn-label">이제 결을 읽어볼게요</span>
+      </button>
+      <div class="submit-meta">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+          <path d="M7 1.5 L11.5 3.2 V7 C 11.5 9.8, 9.5 11.7, 7 12.5 C 4.5 11.7, 2.5 9.8, 2.5 7 V3.2 Z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
+          <path d="M5 7 L6.5 8.5 L9 6" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        분석이 끝나면 <span class="em-safe">원본은 바로 지워져요</span>
+      </div>
+    </div>
+
+  </form>
+
+</main>
+
+<!-- =================== GUIDE MODAL =================== -->
+<div class="modal-overlay" id="modalOverlay" aria-hidden="true"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+  <div class="modal-handle" aria-hidden="true"></div>
+  <div class="modal-header">
+    <h2 class="modal-title" id="modalTitle">카톡 대화 내보내기</h2>
+    <button class="modal-close" id="modalClose" aria-label="닫기">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M5 5 L15 15 M15 5 L5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="modal-tabs" role="tablist">
+    <button class="modal-tab is-active" id="tabIos" data-tab="ios" role="tab" aria-selected="true">iPhone</button>
+    <button class="modal-tab" id="tabAndroid" data-tab="android" role="tab" aria-selected="false">Android</button>
+  </div>
+
+  <div class="modal-body">
+
+    <!-- iOS Guide -->
+    <div class="guide-tabpanel" id="panelIos" role="tabpanel">
+      <ol class="guide-steps">
+        <li class="guide-step">
+          <span class="guide-step-num">1</span>
+          <div class="guide-step-body">
+            <div class="guide-step-title">대화방 열기</div>
+            <div class="guide-step-desc">카카오톡을 열고, 상대와의 1:1 채팅방을 탭해요.</div>
+          </div>
+        </li>
+        <li class="guide-step">
+          <span class="guide-step-num">2</span>
+          <div class="guide-step-body">
+            <div class="guide-step-title">메뉴 열기</div>
+            <div class="guide-step-desc">채팅방 우측 상단의 <kbd>≡</kbd> 아이콘을 탭하면 설정 메뉴가 열려요.</div>
+          </div>
+        </li>
+        <li class="guide-step">
+          <span class="guide-step-num">3</span>
+          <div class="guide-step-body">
+            <div class="guide-step-title">내보내기 선택</div>
+            <div class="guide-step-desc"><kbd>채팅방 설정</kbd> → <kbd>대화 내용 내보내기</kbd> → <kbd>모든 메시지 내보내기</kbd>를 선택해요.</div>
+          </div>
+        </li>
+        <li class="guide-step">
+          <span class="guide-step-num">4</span>
+          <div class="guide-step-body">
+            <div class="guide-step-title">텍스트로 저장</div>
+            <div class="guide-step-desc"><kbd>텍스트 메시지만</kbd>을 선택하고, 공유 시트에서 <kbd>파일에 저장</kbd> 또는 메일/메모로 내보내요.</div>
+          </div>
+        </li>
+        <li class="guide-step">
+          <span class="guide-step-num">5</span>
+          <div class="guide-step-body">
+            <div class="guide-step-title">deepvibe에 올리기</div>
+            <div class="guide-step-desc">저장한 .txt 파일을 위 업로드 영역에 끌어다 놓거나 탭해서 선택해요.</div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="guide-note">
+        <svg class="guide-note-icon" viewBox="0 0 18 18" fill="none">
+          <path d="M9 1.5 L14.5 3.5 V8.5 C 14.5 12, 12 14.5, 9 16 C 6 14.5, 3.5 12, 3.5 8.5 V3.5 Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+          <path d="M6 9 L8 11 L12 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div>업로드된 대화는 분석이 끝나면 사라져요. <strong>서버에 저장되지 않아요.</strong></div>
+      </div>
+    </div>
+
+    <!-- Android Guide -->
+    <div class="guide-tabpanel" id="panelAndroid" role="tabpanel" hidden>
+      <ol class="guide-steps">
+        <li class="guide-step">
+          <span class="guide-step-num">1</span>
+          <div class="guide-step-body">
+            <div class="guide-step-title">대화방 열기</div>
+            <div class="guide-step-desc">카카오톡을 열고, 상대와의 1:1 채팅방을 탭해요.</div>
+          </div>
+        </li>
+        <li class="guide-step">
+          <span class="guide-step-num">2</span>
+          <div class="guide-step-body">
+            <div class="guide-step-title">메뉴 열기</div>
+            <div class="guide-step-desc">우측 상단 <kbd>≡</kbd> 아이콘 → <kbd>채팅방 서랍</kbd>이 열려요.</div>
+          </div>
+        </li>
+        <li class="guide-step">
+          <span class="guide-step-num">3</span>
+          <div class="guide-step-body">
+            <div class="guide-step-title">내보내기 선택</div>
+            <div class="guide-step-desc">우측 상단 <kbd>⚙</kbd> 톱니바퀴 → <kbd>대화 내용 내보내기</kbd>를 탭해요.</div>
+          </div>
+        </li>
+        <li class="guide-step">
+          <span class="guide-step-num">4</span>
+          <div class="guide-step-body">
+            <div class="guide-step-title">텍스트로 저장</div>
+            <div class="guide-step-desc"><kbd>텍스트 메시지만 보내기</kbd>를 선택한 뒤, 메일 또는 파일 앱으로 전송해요.</div>
+          </div>
+        </li>
+        <li class="guide-step">
+          <span class="guide-step-num">5</span>
+          <div class="guide-step-body">
+            <div class="guide-step-title">deepvibe에 올리기</div>
+            <div class="guide-step-desc">받은 .txt 파일을 위 업로드 영역에 끌어다 놓거나 탭해서 선택해요.</div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="guide-note">
+        <svg class="guide-note-icon" viewBox="0 0 18 18" fill="none">
+          <path d="M9 1.5 L14.5 3.5 V8.5 C 14.5 12, 12 14.5, 9 16 C 6 14.5, 3.5 12, 3.5 8.5 V3.5 Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+          <path d="M6 9 L8 11 L12 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div>업로드된 대화는 분석이 끝나면 사라져요. <strong>서버에 저장되지 않아요.</strong></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- =================== ANALYZING OVERLAY =================== -->
+<div class="analyzing-overlay" id="analyzingOverlay" aria-hidden="true">
+  <div class="analyzing-orbit" aria-hidden="true">
+    <div class="orbit-dot orbit-dot-1"></div>
+    <div class="orbit-dot orbit-dot-2"></div>
+  </div>
+  <div class="analyzing-text" aria-live="polite">
+    <div class="analyzing-stage is-active" data-stage="0">두 사람의 대화를 읽고 있어요</div>
+    <div class="analyzing-stage" data-stage="1">호감의 흐름을 그려보고 있어요</div>
+    <div class="analyzing-stage" data-stage="2">답장 속도의 패턴을 살펴보고 있어요</div>
+    <div class="analyzing-stage" data-stage="3">결정적인 순간을 모으고 있어요</div>
+    <div class="analyzing-stage" data-stage="4">한 편의 리포트로 정리하고 있어요</div>
+  </div>
+  <div class="analyzing-dots" aria-hidden="true">
+    <span class="analyzing-dot is-active"></span>
+    <span class="analyzing-dot"></span>
+    <span class="analyzing-dot"></span>
+    <span class="analyzing-dot"></span>
+    <span class="analyzing-dot"></span>
+  </div>
+  <div class="analyzing-sub">
+    곧, 한 편의 리포트로 만나요.
+  </div>
+
+  <!-- Complete state — fades in when analysis finishes -->
+  <div class="analyzing-complete" id="analyzingComplete" aria-hidden="true">
+    <div class="complete-title">두 사람의 <em>결</em>이, 도착했어요.</div>
+    <a href="/report" class="btn-complete" id="btnComplete">
+      <span>우리의 결을 확인하러 가기</span>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M3 8 H13 M9 4 L13 8 L9 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+
+  <!-- Error state — fades in when analysis fails mid-flight -->
+  <div class="analyzing-error" id="analyzingError" aria-hidden="true" role="alert">
+    <div class="error-mark" aria-hidden="true">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M12 7 V13 M12 16 V16.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="error-title" id="errorOverlayTitle">분석을 마무리하지 못했어요</div>
+    <p class="error-desc" id="errorOverlayDesc">잠시 후 다시 시도해 주세요. 같은 일이 반복되면, 카톡 파일을 새로 내보내볼까요?</p>
+    <div class="error-actions">
+      <button type="button" class="btn-error-retry" id="btnErrorRetry">
+        다시 시도하기
+      </button>
+      <a href="/" class="btn-error-secondary">처음으로 돌아가기</a>
+    </div>
+  </div>
+</div>
+
+<!-- =================== NETWORK BANNER (Global offline indicator) =================== -->
+<div class="network-banner" id="networkBanner" role="status" aria-live="polite">
+  <div class="network-banner-inner">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <path d="M2 5 C 4 3, 10 3, 12 5 M4 7.5 C 5.2 6.5, 8.8 6.5, 10 7.5 M5.8 10 C 6.4 9.5, 7.6 9.5, 8.2 10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M1.5 1.5 L12.5 12.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    </svg>
+    <span>인터넷 연결이 끊겼어요</span>
+  </div>
+</div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+
+  // v124: Hero 카피의 사용자 이름 동적 치환
+  // 로그인된 사용자의 카카오 닉네임으로 "민지" placeholder 교체
+  const uploadHeroTitle = $('uploadHeroTitle');
+  if (uploadHeroTitle && window.dvAuth && window.dvAuth.isSignedIn()) {
+    const user = window.dvAuth.getUser();
+    if (user && user.nickname) {
+      // <em> 태그는 그대로 두고, 첫 부분의 이름만 치환
+      uploadHeroTitle.innerHTML = uploadHeroTitle.innerHTML.replace('민지', user.nickname);
+    }
+  }
+
+  const nav = $('nav');
+  const partnerInput = $('partnerName');
+
+  // v124: ?partner=이름 URL 파라미터로 입력 필드 자동 채우기 (데모용)
+  const uploadParams = new URLSearchParams(window.location.search);
+  const partnerParam = uploadParams.get('partner');
+  if (partnerParam && partnerInput) {
+    partnerInput.value = partnerParam;
+  }
+
+  const dropzone = $('dropzone');
+  const fileInput = $('fileInput');
+  const fileState = $('fileState');
+  const fileName = $('fileName');
+  const fileMeta = $('fileMeta');
+  const fileRemove = $('fileRemove');
+  const errorMessage = $('errorMessage');
+  const errorText = $('errorText');
+  const errorActions = $('errorActions');
+  const helpLink = $('helpLink');
+  const modal = $('modal');
+  const modalOverlay = $('modalOverlay');
+  const modalClose = $('modalClose');
+  const tabIos = $('tabIos');
+  const tabAndroid = $('tabAndroid');
+  const panelIos = $('panelIos');
+  const panelAndroid = $('panelAndroid');
+  const btnAnalyze = $('btnAnalyze');
+  const uploadForm = $('uploadForm');
+  const analyzingOverlay = $('analyzingOverlay');
+  const analyzingError = $('analyzingError');
+  const errorOverlayTitle = $('errorOverlayTitle');
+  const errorOverlayDesc = $('errorOverlayDesc');
+  const btnErrorRetry = $('btnErrorRetry');
+  const networkBanner = $('networkBanner');
+
+  let validFile = null;
+
+  const onScroll = () => {
+    if (window.scrollY > 4) nav.classList.add('is-scrolled');
+    else nav.classList.remove('is-scrolled');
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const inputWrap = partnerInput.parentElement;
+  const updateSubmitState = () => {
+    const hasName = partnerInput.value.trim().length >= 1;
+    const hasFile = !!validFile;
+    btnAnalyze.disabled = !(hasName && hasFile);
+    // Hide left accent bar once user has typed something
+    inputWrap.classList.toggle('is-filled', hasName);
+  };
+  partnerInput.addEventListener('input', updateSubmitState);
+
+  const formatBytes = (bytes) => {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(0) + ' KB';
+    return (bytes / 1024 / 1024).toFixed(1) + ' MB';
+  };
+
+  const looksLikeKakaoExport = (text) => {
+    const lines = text.split('\n').slice(0, 200);
+    const datePattern = /(\d{4}[년.]\s?\d{1,2}[월.]\s?\d{1,2}[일.]?|[A-Z][a-z]+ \d{1,2},)/;
+    const namePattern = /, .+? :/;
+    let hits = 0;
+    for (const line of lines) {
+      if (datePattern.test(line) && namePattern.test(line)) hits++;
+      if (hits >= 3) return true;
+    }
+    return false;
+  };
+
+  const countConversationLines = (text) => {
+    return text.split('\n').filter(l => /.{1,30} : /.test(l)).length;
+  };
+
+  // Show inline error.
+  // opts.actions = array of { label, onClick, icon } — optional recovery buttons
+  // (e.g., "내보내기 가이드", "다시 시도")
+  const showError = (msg, opts = {}) => {
+    errorText.textContent = msg;
+    errorMessage.classList.add('is-visible');
+    dropzone.classList.add('has-error');
+    dropzone.classList.remove('has-file');
+    fileState.classList.remove('is-visible');
+    validFile = null;
+    updateSubmitState();
+
+    // Inject action buttons if provided
+    errorActions.innerHTML = '';
+    const actions = opts.actions || [];
+    if (actions.length > 0) {
+      actions.forEach(action => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'error-message-action';
+        btn.textContent = action.label;
+        btn.addEventListener('click', action.onClick);
+        errorActions.appendChild(btn);
+      });
+      errorActions.classList.add('is-visible');
+    } else {
+      errorActions.classList.remove('is-visible');
+    }
+  };
+
+  const clearError = () => {
+    errorMessage.classList.remove('is-visible');
+    errorActions.classList.remove('is-visible');
+    errorActions.innerHTML = '';
+    dropzone.classList.remove('has-error');
+  };
+
+  const showFile = (file, lineCount) => {
+    fileName.textContent = file.name;
+    fileMeta.innerHTML = `<span class="success">✓ 인식됨</span> · ${lineCount.toLocaleString()}줄 · ${formatBytes(file.size)}`;
+    fileState.classList.add('is-visible');
+    dropzone.classList.add('has-file');
+    clearError();
+    validFile = file;
+    updateSubmitState();
+  };
+
+  const handleFile = (file) => {
+    clearError();
+    if (!file.name.toLowerCase().endsWith('.txt')) {
+      showError('.txt 파일이 아닌 것 같아요. 카톡에서 "텍스트만" 옵션으로 다시 내보내주세요', {
+        actions: [
+          { label: '내보내기 가이드 보기', onClick: openModal },
+        ],
+      });
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      showError('파일이 너무 커요. 더 짧은 기간으로 다시 내보내볼까요?', {
+        actions: [
+          { label: '내보내기 가이드 보기', onClick: openModal },
+        ],
+      });
+      return;
+    }
+    if (file.size < 100) {
+      showError('대화가 너무 짧아요. 50줄 이상 필요해요');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const text = e.target.result;
+      if (!looksLikeKakaoExport(text)) {
+        showError('카톡 대화 파일이 아닌 것 같아요. 다시 확인해 주세요', {
+          actions: [
+            { label: '내보내기 가이드 보기', onClick: openModal },
+          ],
+        });
+        return;
+      }
+      const lineCount = countConversationLines(text);
+      if (lineCount < 50) {
+        showError(`대화가 짧아요 (${lineCount}줄). 50줄 이상 필요해요`);
+        return;
+      }
+      showFile(file, lineCount);
+    };
+    reader.onerror = () => {
+      showError('파일을 읽지 못했어요. 다시 시도해 주세요', {
+        actions: [
+          { label: '다시 시도', onClick: () => fileInput.click() },
+        ],
+      });
+    };
+    reader.readAsText(file, 'UTF-8');
+  };
+
+  fileInput.addEventListener('change', (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) handleFile(file);
+  });
+
+  ['dragenter', 'dragover'].forEach(evt => {
+    dropzone.addEventListener(evt, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropzone.classList.add('is-dragging');
+    });
+  });
+  ['dragleave', 'drop'].forEach(evt => {
+    dropzone.addEventListener(evt, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropzone.classList.remove('is-dragging');
+    });
+  });
+  dropzone.addEventListener('drop', (e) => {
+    const dt = e.dataTransfer;
+    if (!dt || !dt.files || !dt.files[0]) return;
+    handleFile(dt.files[0]);
+  });
+  window.addEventListener('dragover', (e) => e.preventDefault());
+  window.addEventListener('drop', (e) => e.preventDefault());
+
+  fileRemove.addEventListener('click', () => {
+    fileInput.value = '';
+    validFile = null;
+    fileState.classList.remove('is-visible');
+    dropzone.classList.remove('has-file');
+    clearError();
+    updateSubmitState();
+  });
+
+  const openModal = () => {
+    modal.classList.add('is-open');
+    modalOverlay.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    modalOverlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  };
+  const closeModal = () => {
+    modal.classList.remove('is-open');
+    modalOverlay.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    modalOverlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  };
+  helpLink.addEventListener('click', openModal);
+  modalClose.addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+  });
+
+  const switchTab = (which) => {
+    if (which === 'ios') {
+      tabIos.classList.add('is-active');
+      tabIos.setAttribute('aria-selected', 'true');
+      tabAndroid.classList.remove('is-active');
+      tabAndroid.setAttribute('aria-selected', 'false');
+      panelIos.hidden = false;
+      panelAndroid.hidden = true;
+    } else {
+      tabAndroid.classList.add('is-active');
+      tabAndroid.setAttribute('aria-selected', 'true');
+      tabIos.classList.remove('is-active');
+      tabIos.setAttribute('aria-selected', 'false');
+      panelIos.hidden = true;
+      panelAndroid.hidden = false;
+    }
+  };
+  tabIos.addEventListener('click', () => switchTab('ios'));
+  tabAndroid.addEventListener('click', () => switchTab('android'));
+  if (/android/i.test(navigator.userAgent)) switchTab('android');
+
+  /* Analyzing — 5-stage narrative sequence with dot progress.
+     Each stage runs ~3s. Last stage holds indefinitely until backend responds. */
+  const STAGE_DURATION = 3000;  // ms per stage
+  const stages = analyzingOverlay.querySelectorAll('.analyzing-stage');
+  const dots = analyzingOverlay.querySelectorAll('.analyzing-dot');
+
+  const advanceStage = (toIndex) => {
+    stages.forEach((el, i) => {
+      el.classList.remove('is-active', 'is-leaving');
+      if (i < toIndex) el.classList.add('is-leaving');
+      else if (i === toIndex) el.classList.add('is-active');
+    });
+    dots.forEach((el, i) => {
+      el.classList.remove('is-active', 'is-done');
+      if (i < toIndex) el.classList.add('is-done');
+      else if (i === toIndex) el.classList.add('is-active');
+    });
+  };
+
+  let stageTimers = [];
+  const startStageSequence = () => {
+    // Stage 0 is already active on initial render — just schedule the rest.
+    // Stages 1, 2, 3 advance on a timer. Stage 4 (last) holds indefinitely.
+    for (let i = 1; i < stages.length; i++) {
+      const t = setTimeout(() => advanceStage(i), STAGE_DURATION * i);
+      stageTimers.push(t);
+    }
+  };
+
+  const stopStageSequence = () => {
+    stageTimers.forEach(clearTimeout);
+    stageTimers = [];
+  };
+
+  /* Trigger completion state — orbit converges, stages fade out, complete fades in.
+     Call this when backend returns analysis result, passing the report URL. */
+  const orbit = analyzingOverlay.querySelector('.analyzing-orbit');
+  const stageText = analyzingOverlay.querySelector('.analyzing-text');
+  const dotsWrap = analyzingOverlay.querySelector('.analyzing-dots');
+  const subText = analyzingOverlay.querySelector('.analyzing-sub');
+  const completeWrap = $('analyzingComplete');
+  const btnComplete = $('btnComplete');
+
+  const showComplete = (reportUrl) => {
+    stopStageSequence();
+    // Mark all dots as done for completeness (visual sync before fade)
+    dots.forEach(el => {
+      el.classList.remove('is-active');
+      el.classList.add('is-done');
+    });
+    // Mark every stage as leaving so they all fade away cleanly
+    stages.forEach(el => {
+      el.classList.remove('is-active');
+      el.classList.add('is-leaving');
+    });
+    // Trigger orbit convergence + loading state fade-out
+    orbit.classList.add('is-complete');
+    stageText.classList.add('is-complete');
+    dotsWrap.classList.add('is-complete');
+    subText.classList.add('is-complete');
+    // After orbit settles, reveal complete state
+    setTimeout(() => {
+      completeWrap.classList.add('is-visible');
+      completeWrap.setAttribute('aria-hidden', 'false');
+    }, 500);
+    // Wire up button to navigate
+    if (reportUrl) {
+      btnComplete.setAttribute('href', reportUrl);
+    } else {
+      // v124: 사용자 입력한 partner 이름을 /report로 전달 (placeholder 단계)
+      const partnerValue = partnerInput.value.trim();
+      if (partnerValue) {
+        btnComplete.setAttribute('href', `/report?partner=${encodeURIComponent(partnerValue)}`);
+      }
+    }
+  };
+
+  /* Trigger error state — stops analysis, fades out orbit, shows error message.
+     errorType: 'server' (5xx) | 'timeout' | 'network' | 'unknown' */
+  const showAnalyzingError = (errorType = 'unknown') => {
+    stopStageSequence();
+    // Halt orbit (visual cue: stops spinning)
+    orbit.classList.add('is-complete');
+    stageText.classList.add('is-complete');
+    dotsWrap.classList.add('is-complete');
+    subText.classList.add('is-complete');
+
+    // Tailor copy by error type
+    const copy = {
+      server: {
+        title: '분석을 마무리하지 못했어요',
+        desc: '잠시 후 다시 시도해 주세요. 같은 일이 반복되면, 카톡 파일을 새로 내보내볼까요?',
+      },
+      timeout: {
+        title: '분석이 길어지고 있어요',
+        desc: '서버가 잠시 바쁜 것 같아요. 잠시 후 다시 시도해 주세요.',
+      },
+      network: {
+        title: '연결이 끊겼어요',
+        desc: '인터넷이 다시 연결되면 자동으로 시도할게요. 잠시만 기다려 주세요.',
+      },
+      unknown: {
+        title: '예상하지 못한 문제가 생겼어요',
+        desc: '잠시 후 다시 시도해 주세요. 문제가 계속되면 처음으로 돌아가 다시 올려볼까요?',
+      },
+    };
+    const { title, desc } = copy[errorType] || copy.unknown;
+    errorOverlayTitle.textContent = title;
+    errorOverlayDesc.textContent = desc;
+
+    // Reveal error state
+    setTimeout(() => {
+      analyzingError.classList.add('is-visible');
+      analyzingError.setAttribute('aria-hidden', 'false');
+    }, 400);
+  };
+
+  // Retry button — reset everything and go back to form
+  btnErrorRetry.addEventListener('click', () => {
+    resetOverlay();
+    // Form state is preserved (file, name) so user can re-submit immediately
+  });
+
+  uploadForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (btnAnalyze.disabled) return;
+    btnAnalyze.classList.add('is-loading');
+    btnAnalyze.disabled = true;
+    setTimeout(() => {
+      analyzingOverlay.classList.add('is-active');
+      analyzingOverlay.setAttribute('aria-hidden', 'false');
+      startStageSequence();
+      // In real flow: POST to backend, then call:
+      //   showComplete(`/report/${analysisId}`)
+      // when the response arrives.
+      //
+      // For now (no backend yet): simulate analysis duration, then route to /report.
+      // Duration = run through every stage once + 1.5s breathing room on the final stage.
+      const simulatedDuration = STAGE_DURATION * stages.length + 1500;
+      setTimeout(() => showComplete('/report'), simulatedDuration);
+    }, 400);
+  });
+
+  /* DEV: ?test=loading — preview the analyzing overlay without uploading.
+          ?test=complete — preview the completed state directly.
+     Press Escape to dismiss. Remove this block before production. */
+  const url = new URL(window.location.href);
+  const testMode = url.searchParams.get('test');
+
+  const resetOverlay = () => {
+    analyzingOverlay.classList.remove('is-active');
+    analyzingOverlay.setAttribute('aria-hidden', 'true');
+    stopStageSequence();
+    orbit.classList.remove('is-complete');
+    stageText.classList.remove('is-complete');
+    dotsWrap.classList.remove('is-complete');
+    subText.classList.remove('is-complete');
+    completeWrap.classList.remove('is-visible');
+    completeWrap.setAttribute('aria-hidden', 'true');
+    analyzingError.classList.remove('is-visible');
+    analyzingError.setAttribute('aria-hidden', 'true');
+    stages.forEach((el, i) => {
+      el.classList.remove('is-active', 'is-leaving');
+      if (i === 0) el.classList.add('is-active');
+    });
+    dots.forEach((el, i) => {
+      el.classList.remove('is-active', 'is-done');
+      if (i === 0) el.classList.add('is-active');
+    });
+  };
+
+  // ============================================================
+  // NETWORK CONNECTIVITY — show banner when offline
+  // ============================================================
+  const updateNetworkBanner = () => {
+    if (!navigator.onLine) {
+      networkBanner.classList.add('is-visible');
+    } else {
+      networkBanner.classList.remove('is-visible');
+    }
+  };
+  window.addEventListener('online', updateNetworkBanner);
+  window.addEventListener('offline', updateNetworkBanner);
+  // Initial check on load
+  updateNetworkBanner();
+
+  if (testMode === 'loading' || testMode === 'complete' || testMode === 'full') {
+    setTimeout(() => {
+      analyzingOverlay.classList.add('is-active');
+      analyzingOverlay.setAttribute('aria-hidden', 'false');
+      if (testMode === 'complete') {
+        // Skip stages and jump straight to complete state
+        showComplete('#');
+      } else if (testMode === 'full') {
+        // Run through all stages, then trigger complete after final stage
+        startStageSequence();
+        setTimeout(() => showComplete('#'), STAGE_DURATION * stages.length + 1000);
+      } else {
+        startStageSequence();
+      }
+    }, 200);
+
+    // Allow clicking the complete button to dismiss in test mode
+    btnComplete.addEventListener('click', (e) => {
+      if (btnComplete.getAttribute('href') === '#') {
+        e.preventDefault();
+        resetOverlay();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') resetOverlay();
+    });
+  }
+
+  /* DEV: ?test=error-server | error-timeout | error-network | error-unknown
+          ?test=offline (force network banner)
+     Preview error states without an actual failure. */
+  if (testMode && testMode.startsWith('error-')) {
+    const errorType = testMode.replace('error-', '');
+    setTimeout(() => {
+      analyzingOverlay.classList.add('is-active');
+      analyzingOverlay.setAttribute('aria-hidden', 'false');
+      startStageSequence();
+      // Trigger error after 2 seconds of "loading"
+      setTimeout(() => showAnalyzingError(errorType), 2000);
+    }, 200);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') resetOverlay();
+    });
+  }
+
+  if (testMode === 'offline') {
+    // Force network banner regardless of actual online state
+    networkBanner.classList.add('is-visible');
+  }
+
+  updateSubmitState();
+})();
+</script>
+</body>
+</html>

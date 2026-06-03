@@ -1,0 +1,864 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#F6F4F1"/>
+<title>내 계정 — deepvibe</title>
+
+<meta name="description" content="알림, 데이터, 계정 정보를 관리해요."/>
+<meta name="robots" content="noindex, nofollow"/>
+
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<link rel="apple-touch-icon" href="favicon.svg"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F4F1;
+    --bg-soft:#EFEBE5;
+    --ink:#15131A;
+    --ink-2:#2a262f;
+    --muted:#7a7680;
+    --muted-2:#a8a4ac;
+    --line-04:rgba(20,10,30,.04);
+    --line-08:rgba(20,10,30,.08);
+    --line-12:rgba(20,10,30,.12);
+    --kakao:#FEE500;
+    --kakao-ink:#3D1E1E;
+    --pink:#ff6f91;
+    --pink-soft:#ffb4c6;
+    --violet:#b967ff;
+    --danger:#a04040;
+    --danger-bg:rgba(208,74,74,.08);
+
+    --font-serif:'Fraunces','Noto Serif KR',serif;
+    --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Pretendard','Noto Sans KR',sans-serif;
+
+    --ease-out:cubic-bezier(.22,1,.36,1);
+    --ease-out-soft:cubic-bezier(.16,1,.3,1);
+    --dur-fast:.18s;
+    --dur-base:.32s;
+
+    --safe-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+  :focus{outline:none}
+  :focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:4px}
+
+  html{scroll-behavior:smooth;overflow-x:hidden;font-size:100%;-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--font-sans);font-size:15px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    word-break:keep-all;line-break:strict;
+    overflow-x:hidden;
+    min-height:100vh;min-height:100dvh;
+    position:relative;
+  }
+
+  /* ============ NAV ============ */
+  nav{
+    position:sticky;top:0;z-index:30;
+    background:rgba(246,244,241,.85);
+    backdrop-filter:blur(14px) saturate(180%);
+    -webkit-backdrop-filter:blur(14px) saturate(180%);
+    border-bottom:.5px solid transparent;
+  }
+  nav .row{
+    max-width:520px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 20px;
+  }
+  nav .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+  nav .logo .mark{display:inline-block;width:22px;height:14px;position:relative}
+  nav .logo .mark svg{width:100%;height:100%;overflow:visible}
+  nav .logo .word{
+    font-family:var(--font-serif);font-weight:400;font-style:italic;
+    font-size:18px;letter-spacing:-.01em;color:var(--ink);
+  }
+
+  /* ============ PAGE BACK (v124 통일 컴포넌트) ============ */
+  .page-back{
+    max-width:520px;
+    margin:0 auto;
+    padding:16px 20px 0;
+  }
+  .page-back-link{
+    display:inline-flex;align-items:center;gap:4px;
+    padding:6px 10px 6px 8px;
+    background:transparent;border:none;
+    color:var(--muted);
+    font-size:12.5px;font-weight:500;letter-spacing:-.005em;
+    text-decoration:none;
+    border-radius:8px;
+    transition:background .2s var(--ease-out), color .2s var(--ease-out);
+    cursor:pointer;
+  }
+  .page-back-link:hover{background:var(--bg-soft);color:var(--ink)}
+
+  /* ============ MAIN ============ */
+  main{
+    max-width:520px;width:100%;
+    margin:0 auto;
+    padding:16px 20px 60px;
+  }
+
+  /* ============ PAGE HEADER ============ */
+  .page-header{
+    text-align:center;
+    margin-bottom:32px;
+    opacity:0;
+    transform:translateY(8px);
+    animation:fadeUp .7s .1s var(--ease-out-soft) forwards;
+  }
+  @keyframes fadeUp{to{opacity:1;transform:none}}
+
+  .page-mark{
+    display:inline-flex;align-items:center;justify-content:center;
+    margin-bottom:14px;
+  }
+  .page-mark svg{width:44px;height:30px;overflow:visible}
+
+  .page-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:clamp(28px, 8vw, 34px);
+    line-height:1.2;letter-spacing:-.02em;
+    color:var(--ink);
+    margin-bottom:8px;
+  }
+  .page-title em{font-style:italic;color:var(--ink)}
+
+  .page-sub{
+    font-size:14px;color:var(--muted);
+    line-height:1.6;
+  }
+
+  /* ============ ACCOUNT SECTIONS ============ */
+  .account-sections{
+    display:flex;flex-direction:column;gap:18px;
+  }
+  .account-section{
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:18px;
+    padding:20px 22px 22px;
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 8px 22px -14px rgba(20,10,30,.06);
+    opacity:0;
+    transform:translateY(10px);
+    animation:fadeUp .7s var(--ease-out-soft) forwards;
+  }
+  .account-section:nth-child(1){animation-delay:.2s}
+  .account-section:nth-child(2){animation-delay:.3s}
+  .account-section:nth-child(3){animation-delay:.4s}
+  .account-section:nth-child(4){animation-delay:.5s}
+
+  .section-label{
+    font-family:var(--font-sans);
+    font-size:11px;font-weight:500;
+    color:var(--muted);
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    margin-bottom:14px;
+  }
+
+  /* ============ PROFILE SECTION (1) ============ */
+  .profile-row{
+    display:flex;align-items:center;gap:14px;
+  }
+  .profile-avatar{
+    flex-shrink:0;
+    width:48px;height:48px;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--pink), var(--violet));
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;
+    font-family:var(--font-serif);font-weight:400;
+    font-size:20px;
+    letter-spacing:0;
+    overflow:hidden;
+  }
+  .profile-avatar img{width:100%;height:100%;object-fit:cover}
+  .profile-info{flex:1;min-width:0}
+  .profile-name{
+    font-family:var(--font-serif);font-weight:400;
+    font-size:18px;color:var(--ink);
+    line-height:1.2;
+    margin-bottom:3px;
+    letter-spacing:-.005em;
+  }
+  .profile-id{
+    font-size:12.5px;color:var(--muted);
+    font-family:ui-monospace, 'SF Mono', Menlo, monospace;
+    letter-spacing:0;
+  }
+
+  /* ============ SETTING ROW (alarm toggle) ============ */
+  .setting-list{
+    display:flex;flex-direction:column;
+  }
+  .setting-row{
+    display:flex;align-items:center;gap:12px;
+    padding:12px 0;
+    border-bottom:.5px solid var(--line-08);
+  }
+  .setting-row:last-child{border-bottom:none;padding-bottom:0}
+  .setting-row:first-child{padding-top:0}
+
+  .setting-text{flex:1;min-width:0}
+  .setting-title{
+    font-size:14px;font-weight:500;
+    color:var(--ink);
+    line-height:1.4;
+    letter-spacing:-.005em;
+  }
+  .setting-desc{
+    font-size:12.5px;color:var(--muted);
+    margin-top:3px;
+    line-height:1.5;
+    letter-spacing:-.002em;
+  }
+
+  /* Toggle (Apple style) */
+  .toggle{
+    position:relative;
+    width:46px;height:26px;
+    flex-shrink:0;
+    cursor:pointer;
+  }
+  .toggle input{
+    opacity:0;width:0;height:0;
+    position:absolute;
+  }
+  .toggle-slider{
+    position:absolute;inset:0;
+    background:var(--line-12);
+    border-radius:999px;
+    transition:background .25s var(--ease-out);
+  }
+  .toggle-slider::before{
+    content:"";
+    position:absolute;
+    left:2px;top:2px;
+    width:22px;height:22px;
+    background:#fff;
+    border-radius:50%;
+    box-shadow:0 1px 3px rgba(20,10,30,.18);
+    transition:transform .25s var(--ease-out);
+  }
+  .toggle input:checked + .toggle-slider{
+    background:var(--ink);
+  }
+  .toggle input:checked + .toggle-slider::before{
+    transform:translateX(20px);
+  }
+  .toggle input:focus-visible + .toggle-slider{
+    box-shadow:0 0 0 3px rgba(255,159,188,.32);
+  }
+
+  /* ===== 매칭 별명 인라인 입력 ===== */
+  .nick-edit{
+    width:118px;
+    flex-shrink:0;
+    padding:8px 12px;
+    background:#fff;
+    border:.5px solid var(--line-12);
+    border-radius:9px;
+    font-family:var(--font-sans);
+    font-size:13.5px;font-weight:500;
+    color:var(--ink);
+    letter-spacing:-.005em;
+    transition:background .2s var(--ease-out), border-color .2s var(--ease-out), box-shadow .2s var(--ease-out);
+  }
+  .nick-edit::placeholder{color:var(--muted-2);font-weight:400}
+  .nick-edit:focus-visible{
+    outline:none;
+    background:#fff;
+    border-color:var(--pink-soft);
+    box-shadow:0 0 0 3px var(--pink-bg);
+  }
+
+  /* ============ ACTION ROW (data, account) ============ */
+  .action-list{
+    display:flex;flex-direction:column;
+  }
+  .action-row{
+    display:flex;align-items:center;gap:12px;
+    width:100%;
+    padding:14px 0;
+    border-bottom:.5px solid var(--line-08);
+    color:var(--ink);
+    text-decoration:none;
+    cursor:pointer;
+    transition:color .15s var(--ease-out);
+    /* button 기본 스타일 리셋 (a와 동일하게) */
+    background:transparent;
+    border-left:none;border-right:none;border-top:none;
+    font-family:inherit;
+    text-align:left;
+    -webkit-appearance:none;appearance:none;
+  }
+  .action-row:last-child{border-bottom:none;padding-bottom:0}
+  .action-row:first-child{padding-top:0}
+  .action-row:hover{color:var(--ink-2)}
+  .action-row.danger{color:var(--danger)}
+  .action-row.danger:hover{color:#7d3030}
+
+  .action-text{flex:1;min-width:0}
+  .action-title{
+    font-size:14px;font-weight:500;
+    line-height:1.4;
+    letter-spacing:-.005em;
+  }
+  .action-desc{
+    font-size:12.5px;color:var(--muted);
+    margin-top:3px;
+    line-height:1.5;
+    letter-spacing:-.002em;
+  }
+  .action-arrow{
+    color:var(--muted-2);
+    flex-shrink:0;
+    transition:transform .2s var(--ease-out);
+  }
+  .action-row:hover .action-arrow{transform:translateX(2px)}
+  .action-row.danger .action-arrow{color:var(--danger)}
+
+  /* ============ TOAST ============ */
+  .toast{
+    position:fixed;
+    bottom:calc(24px + var(--safe-bottom));
+    left:50%;
+    transform:translate(-50%, 100%);
+    z-index:60;
+    padding:12px 20px;
+    background:rgba(21,19,26,.94);
+    color:#fff;
+    border-radius:999px;
+    font-size:13.5px;
+    font-weight:500;
+    letter-spacing:-.005em;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.08) inset,
+      0 12px 32px -10px rgba(20,10,30,.32);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .3s var(--ease-out), transform .3s var(--ease-out);
+  }
+  .toast.is-shown{
+    opacity:1;
+    transform:translate(-50%, 0);
+    pointer-events:auto;
+  }
+
+  /* ============ CONFIRM MODAL ============ */
+  .confirm-overlay{
+    position:fixed;inset:0;z-index:50;
+    background:rgba(20,10,30,.42);
+    backdrop-filter:blur(4px);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .3s var(--ease-out);
+  }
+  .confirm-overlay.is-open{opacity:1;pointer-events:auto}
+
+  .confirm-modal{
+    position:fixed;
+    left:50%;top:50%;
+    transform:translate(-50%, -45%);
+    width:calc(100% - 40px);
+    max-width:360px;
+    background:#fff;
+    border-radius:18px;
+    padding:24px 24px 20px;
+    z-index:51;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .3s var(--ease-out), transform .3s var(--ease-out-soft);
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 24px 60px -16px rgba(20,10,30,.32);
+  }
+  .confirm-modal.is-open{
+    opacity:1;
+    transform:translate(-50%, -50%);
+    pointer-events:auto;
+  }
+
+  .confirm-title{
+    font-family:var(--font-serif);font-weight:400;
+    font-size:19px;color:var(--ink);
+    line-height:1.3;
+    margin-bottom:8px;
+    letter-spacing:-.01em;
+  }
+  .confirm-desc{
+    font-size:13.5px;color:var(--muted);
+    line-height:1.6;
+    margin-bottom:20px;
+  }
+  .confirm-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+  .confirm-btn{
+    padding:12px;
+    border-radius:12px;
+    font-family:var(--font-sans);
+    font-size:13.5px;font-weight:500;
+    letter-spacing:-.005em;
+    border:none;
+    cursor:pointer;
+    transition:background .2s var(--ease-out), color .2s var(--ease-out);
+  }
+  .confirm-btn.cancel{
+    background:var(--bg-soft);
+    color:var(--ink);
+  }
+  .confirm-btn.cancel:hover{background:var(--line-08)}
+  .confirm-btn.proceed{
+    background:var(--danger);
+    color:#fff;
+  }
+  .confirm-btn.proceed:hover{background:#7d3030}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:360px){
+    main{padding:12px 16px 48px}
+    .account-section{padding:18px 18px 20px}
+    .profile-avatar{width:44px;height:44px;font-size:18px}
+    .profile-name{font-size:17px}
+  }
+
+  /* ============ REDUCED MOTION ============ */
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;
+    }
+    .page-header,
+    .account-section{
+      opacity:1 !important;transform:none !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- =================== NAV =================== -->
+<nav id="nav">
+  <div class="row">
+    <a class="logo" href="/" aria-label="deepvibe 홈으로">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 30 18" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="logo-pink" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff6f91" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#ff9fbc" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".7"/>
+            </radialGradient>
+            <radialGradient id="logo-violet" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#b967ff" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#cdb4ff" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#cdb4ff" stop-opacity=".7"/>
+            </radialGradient>
+          </defs>
+          <circle cx="11" cy="9" r="8" fill="url(#logo-pink)" style="mix-blend-mode:multiply"/>
+          <circle cx="19" cy="9" r="8" fill="url(#logo-violet)" style="mix-blend-mode:multiply"/>
+        </svg>
+      </span>
+      <span class="word">deepvibe</span>
+    </a>
+    <!-- Auth UI (login button or user chip) is injected by auth-ui.js -->
+  </div>
+</nav>
+
+<!-- Page back (v124 통일 컴포넌트) -->
+<div class="page-back">
+  <a class="page-back-link" href="javascript:history.back()" aria-label="이전 페이지로">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M9 3 L5 7 L9 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    이전
+  </a>
+</div>
+
+<!-- =================== MAIN =================== -->
+<main>
+
+  <!-- Page header -->
+  <header class="page-header">
+    <div class="page-mark" aria-hidden="true">
+      <svg viewBox="0 0 44 30" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="acc-pink" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ff6f91" stop-opacity=".9"/>
+            <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".7"/>
+          </radialGradient>
+          <radialGradient id="acc-violet" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#b967ff" stop-opacity=".9"/>
+            <stop offset="100%" stop-color="#cdb4ff" stop-opacity=".7"/>
+          </radialGradient>
+        </defs>
+        <circle cx="17" cy="15" r="13" fill="url(#acc-pink)" style="mix-blend-mode:multiply"/>
+        <circle cx="27" cy="15" r="13" fill="url(#acc-violet)" style="mix-blend-mode:multiply"/>
+      </svg>
+    </div>
+    <h1 class="page-title">내 <em>계정</em></h1>
+    <p class="page-sub">알림, 데이터, 계정 정보를 관리해요.</p>
+  </header>
+
+  <!-- Sections -->
+  <div class="account-sections">
+
+    <!-- ====== 1. PROFILE ====== -->
+    <section class="account-section">
+      <div class="section-label">프로필</div>
+      <div class="profile-row">
+        <div class="profile-avatar" id="profileAvatar" aria-hidden="true">민</div>
+        <div class="profile-info">
+          <div class="profile-name" id="profileName">민지</div>
+          <div class="profile-id" id="profileId">dev_1759123456</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== 2. MATCHING ====== -->
+    <section class="account-section">
+      <div class="section-label">매칭</div>
+      <div class="setting-list">
+        <div class="setting-row">
+          <div class="setting-text">
+            <div class="setting-title">매칭 별명</div>
+            <div class="setting-desc">상대에게 보이는 이름이에요. 본명은 표시되지 않아요.</div>
+          </div>
+          <input type="text" class="nick-edit" id="nickEdit" value="달팽이" maxlength="12" placeholder="별명" aria-label="매칭 별명">
+        </div>
+        <div class="setting-row">
+          <div class="setting-text">
+            <div class="setting-title">결 매칭 사용</div>
+            <div class="setting-desc">끄면 추천에서 빠지고, 결 유형도 더 이상 쓰이지 않아요.</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="matchToggle" checked aria-label="결 매칭 사용 토글">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <a href="/matches" class="action-row">
+          <div class="action-text">
+            <div class="action-title">결이 닿은 사람 보기</div>
+            <div class="action-desc">나와 결이 닮은 사람을 확인해요.</div>
+          </div>
+          <svg class="action-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M5 3 L9 7 L5 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- ====== 3. NOTIFICATIONS ====== -->
+    <section class="account-section">
+      <div class="section-label">알림</div>
+      <div class="setting-list">
+        <div class="setting-row">
+          <div class="setting-text">
+            <div class="setting-title">D-Day 알림</div>
+            <div class="setting-desc">50일·100일·200일·1000일에 두 사람의 결을 비교해드려요.</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="notifDday" checked aria-label="D-Day 알림 토글">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="setting-row">
+          <div class="setting-text">
+            <div class="setting-title">재분석 추천</div>
+            <div class="setting-desc">한 달에 한 번, 결의 변화를 다시 살펴볼 시점을 알려드려요.</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="notifReanalysis" checked aria-label="재분석 추천 알림 토글">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== 이용권 ====== -->
+    <section class="account-section">
+      <div class="section-label">이용권</div>
+      <div class="action-list">
+        <a href="/pricing" class="action-row">
+          <div class="action-text">
+            <div class="action-title">이용권 보기</div>
+            <div class="action-desc">남은 분석권을 확인하고, 더 담을 수 있어요.</div>
+          </div>
+          <svg class="action-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M5 3 L9 7 L5 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- ====== 3. DATA ====== -->
+    <section class="account-section">
+      <div class="section-label">데이터</div>
+      <div class="action-list">
+        <a href="/history" class="action-row">
+          <div class="action-text">
+            <div class="action-title">내가 그린 결 보기</div>
+            <div class="action-desc">지금까지의 분석 이력을 모아서 봐요.</div>
+          </div>
+          <svg class="action-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M5 3 L9 7 L5 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <button type="button" class="action-row danger" id="btnDeleteData">
+          <div class="action-text">
+            <div class="action-title">모든 분석 결과 삭제</div>
+            <div class="action-desc">지금까지의 분석 이력을 모두 지워요. 되돌릴 수 없어요.</div>
+          </div>
+          <svg class="action-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M5 3 L9 7 L5 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ====== 4. ACCOUNT ====== -->
+    <section class="account-section">
+      <div class="section-label">계정</div>
+      <div class="action-list">
+        <a href="/terms" class="action-row">
+          <div class="action-text">
+            <div class="action-title">이용약관</div>
+          </div>
+          <svg class="action-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M5 3 L9 7 L5 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="/privacy" class="action-row">
+          <div class="action-text">
+            <div class="action-title">개인정보처리방침</div>
+          </div>
+          <svg class="action-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M5 3 L9 7 L5 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="/refund" class="action-row">
+          <div class="action-text">
+            <div class="action-title">환불 정책</div>
+          </div>
+          <svg class="action-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M5 3 L9 7 L5 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <button type="button" class="action-row" id="btnLogout">
+          <div class="action-text">
+            <div class="action-title">로그아웃</div>
+          </div>
+          <svg class="action-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M5 3 L9 7 L5 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button type="button" class="action-row danger" id="btnDeleteAccount">
+          <div class="action-text">
+            <div class="action-title">회원 탈퇴</div>
+            <div class="action-desc">계정과 모든 데이터를 영구 삭제해요.</div>
+          </div>
+          <svg class="action-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M5 3 L9 7 L5 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </section>
+
+  </div>
+
+</main>
+
+<!-- Confirm Modal -->
+<div class="confirm-overlay" id="confirmOverlay" aria-hidden="true"></div>
+<div class="confirm-modal" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-hidden="true">
+  <h2 class="confirm-title" id="confirmTitle">정말 삭제할까요?</h2>
+  <p class="confirm-desc" id="confirmDesc">이 작업은 되돌릴 수 없어요.</p>
+  <div class="confirm-actions">
+    <button type="button" class="confirm-btn cancel" id="confirmCancel">취소</button>
+    <button type="button" class="confirm-btn proceed" id="confirmProceed">삭제하기</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <span id="toastText">저장됐어요</span>
+</div>
+
+<script src="auth.js" defer></script>
+<script src="auth-ui.js" defer></script>
+<script>
+(() => {
+  // ============ Dynamic user info (placeholder + dvAuth integration) ============
+  const profileName = document.getElementById('profileName');
+  const profileId = document.getElementById('profileId');
+  const profileAvatar = document.getElementById('profileAvatar');
+
+  // dvAuth가 로드될 때까지 짧게 대기 후 사용자 정보 표시
+  const updateProfile = () => {
+    if (!window.dvAuth || !window.dvAuth.isSignedIn()) return false;
+    const user = window.dvAuth.getUser();
+    if (!user) return false;
+
+    if (user.nickname) {
+      profileName.textContent = user.nickname;
+      // 아바타의 첫 글자
+      profileAvatar.textContent = user.nickname.charAt(0);
+    }
+    if (user.kakao_id) {
+      profileId.textContent = user.kakao_id;
+    }
+    if (user.profile_image) {
+      profileAvatar.innerHTML = `<img src="${user.profile_image}" alt="${user.nickname || '프로필'}">`;
+    }
+    return true;
+  };
+
+  // defer로 로드되는 auth.js 대기 (최대 1초)
+  if (!updateProfile()) {
+    let attempts = 0;
+    const interval = setInterval(() => {
+      attempts++;
+      if (updateProfile() || attempts > 20) clearInterval(interval);
+    }, 50);
+  }
+
+  // ============ Toast ============
+  const toast = document.getElementById('toast');
+  const toastText = document.getElementById('toastText');
+  let toastTimer;
+  const showToast = (msg) => {
+    toastText.textContent = msg;
+    toast.classList.add('is-shown');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('is-shown'), 2200);
+  };
+
+  // ============ Toggle handlers ============
+  const notifDday = document.getElementById('notifDday');
+  const notifReanalysis = document.getElementById('notifReanalysis');
+
+  notifDday.addEventListener('change', (e) => {
+    showToast(e.target.checked ? 'D-Day 알림을 켰어요' : 'D-Day 알림을 껐어요');
+    // TODO (백엔드 연동): PATCH /api/user/settings
+  });
+  notifReanalysis.addEventListener('change', (e) => {
+    showToast(e.target.checked ? '재분석 추천을 켰어요' : '재분석 추천을 껐어요');
+    // TODO (백엔드 연동): PATCH /api/user/settings
+  });
+
+  // ============ 매칭 별명 + 사용 토글 ============
+  const nickEdit = document.getElementById('nickEdit');
+  const matchToggle = document.getElementById('matchToggle');
+
+  if (nickEdit) {
+    nickEdit.addEventListener('change', () => {
+      const v = nickEdit.value.trim();
+      if (v.length >= 1) showToast('별명을 바꿨어요');
+      // TODO (백엔드 연동): PATCH /api/match/profile { nickname }
+    });
+  }
+  if (matchToggle) {
+    matchToggle.addEventListener('change', (e) => {
+      showToast(e.target.checked ? '결 매칭을 켰어요' : '결 매칭을 껐어요');
+      // TODO (백엔드 연동): PATCH /api/match/profile { active }
+    });
+  }
+
+  // ============ Confirm Modal ============
+  const confirmOverlay = document.getElementById('confirmOverlay');
+  const confirmModal = document.getElementById('confirmModal');
+  const confirmTitleEl = document.getElementById('confirmTitle');
+  const confirmDescEl = document.getElementById('confirmDesc');
+  const confirmCancel = document.getElementById('confirmCancel');
+  const confirmProceed = document.getElementById('confirmProceed');
+
+  let onProceed = null;
+
+  const openConfirm = (title, desc, proceedLabel, onYes) => {
+    confirmTitleEl.textContent = title;
+    confirmDescEl.textContent = desc;
+    confirmProceed.textContent = proceedLabel;
+    onProceed = onYes;
+    confirmOverlay.classList.add('is-open');
+    confirmModal.classList.add('is-open');
+    confirmOverlay.setAttribute('aria-hidden', 'false');
+    confirmModal.setAttribute('aria-hidden', 'false');
+  };
+
+  const closeConfirm = () => {
+    confirmOverlay.classList.remove('is-open');
+    confirmModal.classList.remove('is-open');
+    confirmOverlay.setAttribute('aria-hidden', 'true');
+    confirmModal.setAttribute('aria-hidden', 'true');
+    onProceed = null;
+  };
+
+  confirmCancel.addEventListener('click', closeConfirm);
+  confirmOverlay.addEventListener('click', closeConfirm);
+  confirmProceed.addEventListener('click', () => {
+    if (onProceed) onProceed();
+    closeConfirm();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && confirmModal.classList.contains('is-open')) closeConfirm();
+  });
+
+  // ============ Delete data ============
+  document.getElementById('btnDeleteData').addEventListener('click', () => {
+    openConfirm(
+      '모든 분석 결과를 지울까요?',
+      '지금까지의 분석 이력이 모두 사라져요. 되돌릴 수 없어요.',
+      '삭제하기',
+      () => {
+        showToast('분석 결과를 모두 지웠어요');
+        // TODO (백엔드 연동): DELETE /api/history
+      }
+    );
+  });
+
+  // ============ Logout ============
+  document.getElementById('btnLogout').addEventListener('click', () => {
+    openConfirm(
+      '로그아웃 할까요?',
+      '다시 로그인하면 분석 결과는 그대로 있어요.',
+      '로그아웃',
+      () => {
+        if (window.dvAuth) window.dvAuth.logout();
+        window.location.href = '/';
+      }
+    );
+  });
+
+  // ============ Delete account ============
+  document.getElementById('btnDeleteAccount').addEventListener('click', () => {
+    openConfirm(
+      '정말 탈퇴할까요?',
+      '계정과 모든 분석 데이터가 영구 삭제돼요. 다시 가입해도 복구할 수 없어요.',
+      '탈퇴하기',
+      () => {
+        showToast('탈퇴 처리 중이에요...');
+        // TODO (백엔드 연동): DELETE /api/account
+        setTimeout(() => {
+          if (window.dvAuth) window.dvAuth.logout();
+          window.location.href = '/';
+        }, 1500);
+      }
+    );
+  });
+})();
+</script>
+</body>
+</html>

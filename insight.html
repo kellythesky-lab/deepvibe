@@ -1,0 +1,820 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#F6F4F1"/>
+<title>나의 연애 결 — deepvibe</title>
+
+<meta name="description" content="여러 대화를 모아, 당신의 연애 결을 그려드려요."/>
+<meta name="robots" content="noindex, nofollow"/>
+
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<link rel="apple-touch-icon" href="favicon.svg"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F4F1;
+    --bg-soft:#EFEBE5;
+    --bg-warm:#F0E9DE;
+    --ink:#15131A;
+    --ink-2:#2a262f;
+    --muted:#7a7680;
+    --muted-2:#a8a4ac;
+    --line-04:rgba(20,10,30,.04);
+    --line-08:rgba(20,10,30,.08);
+    --line-12:rgba(20,10,30,.12);
+    --line-18:rgba(20,10,30,.18);
+    --kakao:#FEE500;
+    --kakao-ink:#3D1E1E;
+    --pink:#ff6f91;
+    --pink-soft:#ffb4c6;
+    --pink-bg:rgba(255,159,188,.22);
+    --violet:#b967ff;
+    --violet-soft:#cdb4ff;
+
+    --font-serif:'Fraunces','Noto Serif KR',serif;
+    --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Pretendard','Noto Sans KR',sans-serif;
+
+    --ease-out:cubic-bezier(.22,1,.36,1);
+    --ease-out-soft:cubic-bezier(.16,1,.3,1);
+    --dur-fast:.18s;
+    --dur-base:.32s;
+
+    --safe-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+  :focus{outline:none}
+  :focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:4px}
+
+  html{scroll-behavior:smooth;overflow-x:hidden;font-size:100%;-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--font-sans);font-size:15px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    word-break:keep-all;line-break:strict;
+    overflow-x:hidden;
+    min-height:100vh;min-height:100dvh;
+    position:relative;
+  }
+
+  /* ============ NAV ============ */
+  nav{
+    position:sticky;top:0;z-index:30;
+    background:rgba(246,244,241,.85);
+    backdrop-filter:blur(14px) saturate(180%);
+    -webkit-backdrop-filter:blur(14px) saturate(180%);
+    border-bottom:.5px solid transparent;
+  }
+  nav .row{
+    max-width:520px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 20px;
+  }
+  nav .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+  nav .logo .mark{display:inline-block;width:22px;height:14px;position:relative}
+  nav .logo .mark svg{width:100%;height:100%;overflow:visible}
+  nav .logo .word{
+    font-family:var(--font-serif);font-weight:400;font-style:italic;
+    font-size:18px;letter-spacing:-.01em;color:var(--ink);
+  }
+
+  /* ============ PAGE BACK ============ */
+  .page-back{
+    max-width:520px;margin:0 auto;padding:16px 20px 0;
+  }
+  .page-back-link{
+    display:inline-flex;align-items:center;gap:4px;
+    padding:6px 10px 6px 8px;
+    background:transparent;border:none;
+    color:var(--muted);
+    font-size:12.5px;font-weight:500;letter-spacing:-.005em;
+    text-decoration:none;border-radius:8px;
+    transition:background .2s var(--ease-out), color .2s var(--ease-out);
+    cursor:pointer;
+  }
+  .page-back-link:hover{background:var(--bg-soft);color:var(--ink)}
+
+  /* ============ MAIN ============ */
+  main{
+    max-width:520px;width:100%;
+    margin:0 auto;
+    padding:16px 20px 60px;
+  }
+
+  /* ============ PAGE HEADER ============ */
+  .page-header{
+    text-align:center;
+    margin-bottom:14px;
+    opacity:0;transform:translateY(8px);
+    animation:fadeUp .7s .1s var(--ease-out-soft) forwards;
+  }
+  @keyframes fadeUp{to{opacity:1;transform:none}}
+
+  .page-mark{display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px}
+  .page-mark svg{width:44px;height:30px;overflow:visible}
+
+  .page-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:clamp(28px, 8vw, 34px);
+    line-height:1.2;letter-spacing:-.02em;
+    color:var(--ink);
+    margin-bottom:10px;
+  }
+  .page-title em{font-style:italic;color:var(--ink)}
+
+  .page-sub{
+    font-size:14.5px;color:var(--muted);
+    line-height:1.7;
+    max-width:340px;margin:0 auto;
+  }
+  .page-sub em{font-style:normal;font-weight:500;color:var(--ink-2)}
+
+  /* sample basis (분석 표본 수) */
+  .basis-chip{
+    display:inline-flex;align-items:center;gap:5px;
+    margin:18px auto 0;
+    padding:6px 13px;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:999px;
+    font-size:11.5px;color:var(--muted);
+    letter-spacing:-.002em;
+    box-shadow:0 1px 2px var(--line-04);
+  }
+  .basis-chip strong{color:var(--ink-2);font-weight:500}
+  .basis-chip svg{color:var(--pink)}
+
+  /* ============ SECTION ============ */
+  .section{
+    margin-top:30px;
+    opacity:0;transform:translateY(12px);
+    animation:fadeUp .7s var(--ease-out-soft) forwards;
+  }
+  .section:nth-of-type(1){animation-delay:.2s}
+  .section:nth-of-type(2){animation-delay:.3s}
+  .section:nth-of-type(3){animation-delay:.4s}
+  .section:nth-of-type(4){animation-delay:.5s}
+
+  .section-head{
+    margin-bottom:16px;
+  }
+  .section-tag{
+    display:inline-block;
+    font-size:11px;font-weight:600;
+    color:var(--muted);
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    margin-bottom:8px;
+  }
+  .section-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:22px;color:var(--ink);
+    line-height:1.3;letter-spacing:-.01em;
+  }
+  .section-title em{font-style:italic}
+  .section-desc{
+    font-size:13px;color:var(--muted);
+    line-height:1.6;
+    margin-top:6px;
+    letter-spacing:-.002em;
+  }
+
+  /* ============ CARD (공통) ============ */
+  .card{
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:18px;
+    padding:22px 22px 18px;
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 8px 22px -14px rgba(20,10,30,.06);
+  }
+
+  /* ============ A. OBSERVED — Axis Slider ============ */
+  .axis{
+    padding:16px 0;
+    border-bottom:.5px solid var(--line-08);
+  }
+  .axis:first-child{padding-top:4px}
+  .axis:last-child{border-bottom:none;padding-bottom:4px}
+
+  .axis-head{
+    display:flex;align-items:baseline;justify-content:space-between;
+    gap:10px;
+    margin-bottom:12px;
+  }
+  .axis-name{
+    font-size:14px;font-weight:500;color:var(--ink);
+    letter-spacing:-.005em;
+  }
+  .axis-verdict{
+    font-family:var(--font-serif);font-weight:400;font-style:italic;
+    font-size:14px;color:var(--ink);
+    padding:2px 9px;
+    background:var(--pink-bg);
+    border-radius:6px;
+    letter-spacing:-.005em;
+    flex-shrink:0;
+  }
+
+  /* track + dot */
+  .axis-track{
+    position:relative;
+    height:6px;
+    background:var(--bg-soft);
+    border-radius:999px;
+    margin:0 6px;
+  }
+  .axis-dot{
+    position:absolute;
+    top:50%;
+    width:16px;height:16px;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--pink), var(--violet));
+    box-shadow:0 2px 6px -1px rgba(255,111,145,.5), 0 0 0 3px #fff;
+    transform:translate(-50%, -50%);
+    /* left은 inline style로 (관찰값) */
+    transition:left 1s var(--ease-out-soft);
+  }
+
+  .axis-poles{
+    display:flex;justify-content:space-between;
+    margin-top:9px;
+    padding:0 2px;
+    font-size:11.5px;color:var(--muted-2);
+    letter-spacing:-.002em;
+  }
+
+  .axis-basis{
+    margin-top:8px;
+    font-size:11.5px;color:var(--muted);
+    letter-spacing:-.002em;
+    line-height:1.5;
+  }
+  .axis-basis em{
+    font-style:normal;
+    color:var(--ink-2);
+    font-weight:500;
+  }
+
+  /* ============ B. PREFERENCE — Chip Choice ============ */
+  .pref-axis{
+    padding:16px 0;
+    border-bottom:.5px solid var(--line-08);
+  }
+  .pref-axis:first-child{padding-top:4px}
+  .pref-axis:last-child{border-bottom:none;padding-bottom:4px}
+
+  .pref-name{
+    font-size:14px;font-weight:500;color:var(--ink);
+    margin-bottom:11px;
+    letter-spacing:-.005em;
+  }
+  .pref-chips{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:7px;
+  }
+  .pref-chip{
+    padding:11px 8px;
+    background:var(--bg-soft);
+    border:.5px solid transparent;
+    border-radius:11px;
+    font-family:var(--font-sans);
+    font-size:12.5px;font-weight:500;
+    color:var(--muted);
+    letter-spacing:-.005em;
+    cursor:pointer;
+    text-align:center;
+    transition:background .2s var(--ease-out), color .2s var(--ease-out), border-color .2s var(--ease-out), transform .12s var(--ease-out);
+  }
+  .pref-chip:hover{color:var(--ink-2)}
+  .pref-chip:active{transform:scale(.97)}
+  .pref-chip.is-selected{
+    background:var(--ink);
+    color:#fff;
+    border-color:var(--ink);
+  }
+
+  /* ============ C. COMPARISON ============ */
+  .compare-card{
+    background:linear-gradient(135deg, rgba(255,159,188,.08), rgba(202,163,255,.06));
+    border:.5px solid var(--line-08);
+    border-radius:18px;
+    padding:22px;
+  }
+  .compare-empty{
+    text-align:center;
+    font-size:13.5px;color:var(--muted);
+    line-height:1.6;
+    padding:8px 0;
+  }
+  .compare-legend{
+    display:flex;gap:16px;
+    margin-bottom:16px;
+    padding-bottom:14px;
+    border-bottom:.5px solid var(--line-08);
+  }
+  .legend-item{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:12px;color:var(--muted);
+    letter-spacing:-.002em;
+  }
+  .legend-item .compare-icon{
+    width:18px;height:18px;font-size:9.5px;
+  }
+  .compare-list{
+    display:flex;flex-direction:column;gap:14px;
+  }
+  .compare-item{
+    display:flex;align-items:flex-start;gap:11px;
+  }
+  .compare-icon{
+    flex-shrink:0;
+    width:24px;height:24px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;
+    margin-top:1px;
+  }
+  .compare-icon.match{
+    background:rgba(74,176,122,.14);
+    color:#2d7a52;
+  }
+  .compare-icon.gap{
+    background:var(--pink-bg);
+    color:#a04060;
+  }
+  .compare-text{
+    flex:1;
+    font-size:13.5px;color:var(--ink-2);
+    line-height:1.6;
+    letter-spacing:-.005em;
+  }
+  .compare-text em{
+    font-style:normal;font-weight:600;color:var(--ink);
+  }
+
+  /* ============ D. MATCHING TEASER ============ */
+  .teaser-card{
+    position:relative;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:18px;
+    padding:24px 22px;
+    overflow:hidden;
+    box-shadow:0 1px 2px var(--line-04);
+  }
+  .teaser-card::before{
+    content:"";
+    position:absolute;
+    width:220px;height:220px;
+    right:-80px;top:-90px;
+    border-radius:50%;
+    background:radial-gradient(circle, var(--pink-bg), transparent 62%);
+    filter:blur(24px);
+    pointer-events:none;
+  }
+  .teaser-title{
+    position:relative;
+    font-family:var(--font-serif);font-weight:300;
+    font-size:20px;color:var(--ink);
+    line-height:1.35;letter-spacing:-.01em;
+    margin-bottom:8px;
+  }
+  .teaser-title em{font-style:italic}
+  .teaser-desc{
+    position:relative;
+    font-size:13px;color:var(--muted);
+    line-height:1.65;
+    margin-bottom:18px;
+    letter-spacing:-.002em;
+  }
+
+  /* matching CTA */
+  .teaser-cta{
+    position:relative;
+    display:flex;align-items:center;justify-content:center;gap:7px;
+    width:100%;
+    margin-bottom:16px;
+    padding:15px;
+    border-radius:12px;
+    background:var(--ink);color:#fff;
+    font-family:var(--font-sans);
+    font-size:14.5px;font-weight:600;letter-spacing:-.005em;
+    text-decoration:none;
+    box-shadow:0 1px 0 rgba(0,0,0,.04), 0 8px 20px -12px rgba(20,10,30,.3);
+    transition:transform .15s var(--ease-out), background .2s var(--ease-out);
+  }
+  .teaser-cta:hover{background:var(--ink-2)}
+  .teaser-cta:active{transform:scale(.98)}
+  .teaser-cta svg{flex-shrink:0}
+
+  /* privacy note */
+  .privacy-note{
+    position:relative;
+    display:flex;align-items:flex-start;gap:8px;
+    margin-top:14px;
+    font-size:11.5px;color:var(--muted);
+    line-height:1.6;
+    letter-spacing:-.002em;
+  }
+  .privacy-note svg{flex-shrink:0;margin-top:2px;color:var(--muted-2)}
+  .privacy-note strong{color:var(--ink-2);font-weight:500}
+
+  /* ============ TOAST ============ */
+  .toast{
+    position:fixed;
+    bottom:calc(24px + var(--safe-bottom));
+    left:50%;transform:translate(-50%, 100%);
+    z-index:60;
+    padding:12px 20px;
+    background:rgba(21,19,26,.94);color:#fff;
+    border-radius:999px;
+    font-size:13.5px;font-weight:500;letter-spacing:-.005em;
+    box-shadow:0 1px 0 rgba(255,255,255,.08) inset, 0 12px 32px -10px rgba(20,10,30,.32);
+    opacity:0;pointer-events:none;
+    transition:opacity .3s var(--ease-out), transform .3s var(--ease-out);
+  }
+  .toast.is-shown{opacity:1;transform:translate(-50%, 0);pointer-events:auto}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:360px){
+    main{padding:12px 16px 48px}
+    .card,.compare-card,.teaser-card{padding:20px 18px}
+    .pref-chip{font-size:12px;padding:10px 6px}
+  }
+
+  /* ============ REDUCED MOTION ============ */
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;
+    }
+    .page-header,.section{opacity:1 !important;transform:none !important}
+    .axis-dot{transition:none !important}
+  }
+</style>
+</head>
+<body>
+
+<!-- =================== NAV =================== -->
+<nav id="nav">
+  <div class="row">
+    <a class="logo" href="/" aria-label="deepvibe 홈으로">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 30 18" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="logo-pink" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff6f91" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#ff9fbc" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".7"/>
+            </radialGradient>
+            <radialGradient id="logo-violet" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#b967ff" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#cdb4ff" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#cdb4ff" stop-opacity=".7"/>
+            </radialGradient>
+          </defs>
+          <circle cx="11" cy="9" r="8" fill="url(#logo-pink)" style="mix-blend-mode:multiply"/>
+          <circle cx="19" cy="9" r="8" fill="url(#logo-violet)" style="mix-blend-mode:multiply"/>
+        </svg>
+      </span>
+      <span class="word">deepvibe</span>
+    </a>
+    <!-- Auth UI injected by auth-ui.js -->
+  </div>
+</nav>
+
+<!-- Page back -->
+<div class="page-back">
+  <a class="page-back-link" href="javascript:history.back()" aria-label="이전 페이지로">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M9 3 L5 7 L9 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    이전
+  </a>
+</div>
+
+<!-- =================== MAIN =================== -->
+<main>
+
+  <!-- Page header -->
+  <header class="page-header">
+    <div class="page-mark" aria-hidden="true">
+      <svg viewBox="0 0 44 30" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="in-pink" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ff6f91" stop-opacity=".9"/>
+            <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".7"/>
+          </radialGradient>
+          <radialGradient id="in-violet" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#b967ff" stop-opacity=".9"/>
+            <stop offset="100%" stop-color="#cdb4ff" stop-opacity=".7"/>
+          </radialGradient>
+        </defs>
+        <circle cx="17" cy="15" r="13" fill="url(#in-pink)" style="mix-blend-mode:multiply"/>
+        <circle cx="27" cy="15" r="13" fill="url(#in-violet)" style="mix-blend-mode:multiply"/>
+      </svg>
+    </div>
+    <h1 class="page-title">나의 연애 <em>결</em></h1>
+    <p class="page-sub">여러 대화를 모아 보니, <em>당신의 결</em>이 보여요.</p>
+    <div class="basis-chip">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+        <path d="M7 1.5 L8.7 5.1 L12.5 5.6 L9.7 8.3 L10.4 12.1 L7 10.3 L3.6 12.1 L4.3 8.3 L1.5 5.6 L5.3 5.1 Z" fill="currentColor"/>
+      </svg>
+      <span><strong>3편</strong>의 분석에서 찾은 결이에요</span>
+    </div>
+  </header>
+
+  <!-- ====== A. OBSERVED ====== -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-tag">관찰된 결</span>
+      <h2 class="section-title">지금까지의 대화 속 <em>당신</em></h2>
+      <p class="section-desc">상대와 나눈 대화에서 자연스럽게 드러난 결이에요. 점수가 아니라, 결의 방향이에요.</p>
+    </div>
+
+    <div class="card">
+      <!-- 축 1: 답장 리듬 -->
+      <div class="axis">
+        <div class="axis-head">
+          <span class="axis-name">답장 리듬</span>
+          <span class="axis-verdict">빠른 편</span>
+        </div>
+        <div class="axis-track">
+          <div class="axis-dot" style="left:22%"></div>
+        </div>
+        <div class="axis-poles"><span>빠름</span><span>느긋</span></div>
+        <div class="axis-basis">평균 답장 <em>4.2분</em> — 거의 실시간으로 주고받았어요.</div>
+      </div>
+
+      <!-- 축 2: 감정 표현 -->
+      <div class="axis">
+        <div class="axis-head">
+          <span class="axis-name">감정 표현</span>
+          <span class="axis-verdict">솔직한 편</span>
+        </div>
+        <div class="axis-track">
+          <div class="axis-dot" style="left:30%"></div>
+        </div>
+        <div class="axis-poles"><span>솔직·직접</span><span>은은·절제</span></div>
+        <div class="axis-basis">설렘과 친근함을 <em>자주 직접</em> 표현했어요.</div>
+      </div>
+
+      <!-- 축 3: 대화 깊이 -->
+      <div class="axis">
+        <div class="axis-head">
+          <span class="axis-name">대화 깊이</span>
+          <span class="axis-verdict">가볍게 자주</span>
+        </div>
+        <div class="axis-track">
+          <div class="axis-dot" style="left:72%"></div>
+        </div>
+        <div class="axis-poles"><span>깊게 파고</span><span>가볍게 자주</span></div>
+        <div class="axis-basis">서로의 <em>하루</em>를 가볍게, 매일 나눴어요.</div>
+      </div>
+
+      <!-- 축 4: 진전 속도 -->
+      <div class="axis">
+        <div class="axis-head">
+          <span class="axis-name">진전 속도</span>
+          <span class="axis-verdict">빠른 편</span>
+        </div>
+        <div class="axis-track">
+          <div class="axis-dot" style="left:28%"></div>
+        </div>
+        <div class="axis-poles"><span>빠르게</span><span>천천히</span></div>
+        <div class="axis-basis">호감이 <em>꾸준히</em> 올라가는 곡선이었어요.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== B. PREFERENCE ====== -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-tag">바라는 결</span>
+      <h2 class="section-title">어떤 결의 사람과 <em>만나고 싶어요?</em></h2>
+      <p class="section-desc">관찰된 모습과 다를 수도 있어요. 지금 끌리는 결을 골라주세요.</p>
+    </div>
+
+    <div class="card">
+      <!-- 선호 축 1 -->
+      <div class="pref-axis">
+        <div class="pref-name">답장 리듬</div>
+        <div class="pref-chips" data-axis="rhythm">
+          <button type="button" class="pref-chip" data-val="fast">빠른 사람</button>
+          <button type="button" class="pref-chip" data-val="any">상관없어요</button>
+          <button type="button" class="pref-chip" data-val="slow">느긋한 사람</button>
+        </div>
+      </div>
+
+      <!-- 선호 축 2 -->
+      <div class="pref-axis">
+        <div class="pref-name">감정 표현</div>
+        <div class="pref-chips" data-axis="emotion">
+          <button type="button" class="pref-chip" data-val="open">솔직한 사람</button>
+          <button type="button" class="pref-chip" data-val="any">상관없어요</button>
+          <button type="button" class="pref-chip" data-val="subtle">은은한 사람</button>
+        </div>
+      </div>
+
+      <!-- 선호 축 3 -->
+      <div class="pref-axis">
+        <div class="pref-name">대화 깊이</div>
+        <div class="pref-chips" data-axis="depth">
+          <button type="button" class="pref-chip" data-val="deep">깊게 나누는</button>
+          <button type="button" class="pref-chip" data-val="any">상관없어요</button>
+          <button type="button" class="pref-chip" data-val="light">가볍게 자주</button>
+        </div>
+      </div>
+
+      <!-- 선호 축 4 -->
+      <div class="pref-axis">
+        <div class="pref-name">진전 속도</div>
+        <div class="pref-chips" data-axis="pace">
+          <button type="button" class="pref-chip" data-val="fast">빠르게</button>
+          <button type="button" class="pref-chip" data-val="any">상관없어요</button>
+          <button type="button" class="pref-chip" data-val="slow">천천히</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== C. COMPARISON ====== -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-tag">관찰 vs 바람</span>
+      <h2 class="section-title">당신과 <em>당신이 바라는 결</em></h2>
+      <p class="section-desc">평소 드러난 결과 바라는 결을 나란히 놓고 봤어요.</p>
+    </div>
+
+    <div class="compare-card">
+      <div class="compare-empty" id="compareEmpty">
+        위에서 바라는 결을 고르면,<br>관찰된 당신과 어떻게 다른지 보여드릴게요.
+      </div>
+      <div class="compare-legend" id="compareLegend" style="display:none">
+        <span class="legend-item"><span class="compare-icon match">♥</span>닮은 결</span>
+        <span class="legend-item"><span class="compare-icon gap">↗</span>다른 결</span>
+      </div>
+      <div class="compare-list" id="compareList" style="display:none"></div>
+    </div>
+  </section>
+
+  <!-- ====== D. MATCHING ====== -->
+  <section class="section">
+    <div class="teaser-card">
+      <h2 class="teaser-title">결이 맞는 사람과<br><em>이어져 볼까요?</em></h2>
+      <p class="teaser-desc">당신이 바라는 결과 닮은 사람을, deepvibe가 조용히 찾아드릴게요.</p>
+
+      <a href="/match-setup" class="teaser-cta">
+        매칭 시작하기
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M5 3 L9 7 L5 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+
+      <div class="privacy-note">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M7 1.5 L11 3 V7 C 11 9.5, 9 11.3, 7 12 C 5 11.3, 3 9.5, 3 7 V3 Z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
+          <path d="M5.2 7 L6.4 8.2 L8.8 5.8" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div>매칭에는 <strong>결의 유형만</strong> 쓰여요. 대화 원본은 어디에도 올라가지 않아요.</div>
+      </div>
+
+      <div class="privacy-note">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <circle cx="7" cy="5.8" r="2.4" stroke="currentColor" stroke-width="1"/>
+          <path d="M7 1.5 C 4 1.5, 2.2 3.8, 2.2 5.8 C 2.2 8.6, 7 12.5, 7 12.5 C 7 12.5, 11.8 8.6, 11.8 5.8 C 11.8 3.8, 10 1.5, 7 1.5 Z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
+        </svg>
+        <div>거리는 매칭을 켤 때 물어봐요. 정확한 위치는 누구에게도 보이지 않아요.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Toast -->
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <span id="toastText"></span>
+</div>
+
+<script src="auth.js" defer></script>
+<script src="auth-ui.js" defer></script>
+<script>
+(() => {
+  // ============ 관찰된 결 (A) — placeholder 데이터 ============
+  // 실제 구현 시: 분석 종합 결과에서 추출
+  const observed = {
+    rhythm:  { side: 'fast',  label: '빠른 편' },     // 답장 빠름
+    emotion: { side: 'open',  label: '솔직한 편' },    // 감정 솔직
+    depth:   { side: 'light', label: '가볍게 자주' },  // 가볍게 자주
+    pace:    { side: 'fast',  label: '빠른 편' },      // 진전 빠름
+  };
+
+  // 각 축의 "관찰된 쪽"과 "선호 선택"을 사람이 읽는 말로
+  const axisLabels = {
+    rhythm:  { name: '답장 리듬', fast: '빠른', slow: '느긋한', open:null, subtle:null, deep:null, light:null },
+    emotion: { name: '감정 표현', open: '솔직한', subtle: '은은한' },
+    depth:   { name: '대화 깊이', deep: '깊게 나누는', light: '가볍게 자주' },
+    pace:    { name: '진전 속도', fast: '빠르게', slow: '천천히' },
+  };
+
+  // 관찰 side → 선호 칩 val 매핑 (같은 방향인지 비교용)
+  const observedToPrefVal = {
+    rhythm:  { fast: 'fast', slow: 'slow' },
+    emotion: { open: 'open', subtle: 'subtle' },
+    depth:   { deep: 'deep', light: 'light' },
+    pace:    { fast: 'fast', slow: 'slow' },
+  };
+
+  // ============ 선호 선택 (B) 상태 ============
+  const prefs = { rhythm:null, emotion:null, depth:null, pace:null };
+
+  const chips = document.querySelectorAll('.pref-chip');
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const group = chip.closest('.pref-chips');
+      const axis = group.dataset.axis;
+      // 같은 그룹 내 선택 해제
+      group.querySelectorAll('.pref-chip').forEach(c => c.classList.remove('is-selected'));
+      chip.classList.add('is-selected');
+      prefs[axis] = chip.dataset.val;
+      renderComparison();
+    });
+  });
+
+  // ============ C. 비교 인사이트 ============
+  const compareEmpty = document.getElementById('compareEmpty');
+  const compareLegend = document.getElementById('compareLegend');
+  const compareList = document.getElementById('compareList');
+
+  const verdictWord = (axis, val) => {
+    const map = axisLabels[axis];
+    return map[val] || '';
+  };
+
+  const renderComparison = () => {
+    // 선택된 축만 (any 제외)
+    const items = [];
+    Object.keys(prefs).forEach(axis => {
+      const pref = prefs[axis];
+      if (!pref || pref === 'any') return;
+
+      const obsSide = observed[axis].side;
+      const obsAsPref = observedToPrefVal[axis][obsSide]; // 관찰을 선호 val로 환산
+      const name = axisLabels[axis].name;
+      const obsWord = observed[axis].label;
+      const prefWord = verdictWord(axis, pref);
+
+      if (obsAsPref === pref) {
+        // 일치
+        items.push({
+          type: 'match',
+          text: `<em>${name}</em> — 평소에도, 바라는 결도 ${prefWord} 쪽이에요.`
+        });
+      } else {
+        // 차이
+        items.push({
+          type: 'gap',
+          text: `<em>${name}</em> — 평소 ${obsWord}인 당신, ${prefWord} 사람에게 끌리네요.`
+        });
+      }
+    });
+
+    if (items.length === 0) {
+      compareEmpty.style.display = 'block';
+      compareLegend.style.display = 'none';
+      compareList.style.display = 'none';
+      return;
+    }
+
+    compareEmpty.style.display = 'none';
+    compareLegend.style.display = 'flex';
+    compareList.style.display = 'flex';
+    compareList.innerHTML = items.map(it => `
+      <div class="compare-item">
+        <span class="compare-icon ${it.type}">${it.type === 'match' ? '♥' : '↗'}</span>
+        <span class="compare-text">${it.text}</span>
+      </div>
+    `).join('');
+  };
+
+  // ============ Toast ============
+  const toast = document.getElementById('toast');
+  const toastText = document.getElementById('toastText');
+  let toastTimer;
+  const showToast = (msg) => {
+    toastText.textContent = msg;
+    toast.classList.add('is-shown');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('is-shown'), 2200);
+  };
+})();
+</script>
+</body>
+</html>

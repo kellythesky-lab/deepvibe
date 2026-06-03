@@ -1,0 +1,2893 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#F6F4F1"/>
+<title>deepvibe — 카톡 대화로 읽는 우리 사이</title>
+
+<!-- ============ SEO Meta ============ -->
+<meta name="description" content="카톡 대화로 두 사람 사이의 결을 분석해요. 친밀도, 대화 속도, 감정 시그널까지 — 한 편의 리포트로 받아보세요. 분석이 끝나면 원본은 바로 지워져요."/>
+<meta name="keywords" content="카톡 분석, 카카오톡 대화 분석, 연애 분석, 썸 분석, 관계 분석, 친밀도 분석, 커플 위젯, D-Day 위젯"/>
+<meta name="author" content="deepvibe"/>
+<meta name="robots" content="index, follow"/>
+
+<!-- ============ Open Graph (카카오톡, 페이스북 공유) ============ -->
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="deepvibe — 카톡 대화로 읽는 우리 사이"/>
+<meta property="og:description" content="두 사람 사이에 흐르는 결을, AI가 카톡 대화로 분석해요. 친밀도부터 감정 시그널까지, 한 편의 리포트로."/>
+<meta property="og:image" content="https://deepvibe-phi.vercel.app/api/og?type=index"/>
+<meta property="og:image:type" content="image/png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:alt" content="deepvibe — 두 사람 사이에 흐르는 결을 그립니다"/>
+<meta property="og:site_name" content="deepvibe"/>
+<meta property="og:locale" content="ko_KR"/>
+
+<!-- ============ Twitter Card ============ -->
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="deepvibe — 카톡 대화로 읽는 우리 사이"/>
+<meta name="twitter:description" content="두 사람 사이에 흐르는 결을, AI가 카톡 대화로 분석해요."/>
+<meta name="twitter:image" content="https://deepvibe-phi.vercel.app/api/og?type=index"/>
+
+<!-- ============ Mobile / Apple ============ -->
+<meta name="apple-mobile-web-app-title" content="deepvibe"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+
+<!-- Inline SVG favicon — no separate file needed -->
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<link rel="apple-touch-icon" href="favicon.svg"/>
+
+<!-- ============ Schema.org Structured Data ============ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "deepvibe",
+  "description": "카톡 대화로 두 사람 사이의 결을 분석하는 AI 관계 분석 서비스",
+  "applicationCategory": "LifestyleApplication",
+  "operatingSystem": "iOS, Android, Web",
+  "inLanguage": "ko-KR",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "KRW",
+    "description": "첫 분석 무료"
+  }
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Light palette */
+    --bg:#F6F4F1;
+    --bg-soft:#EFEBE5;
+    --bg-warm:#F0E9DE;
+    --ink:#15131A;
+    --ink-2:#2a262f;
+    --muted:#7a7680;
+    --muted-2:#a8a4ac;
+    --line:#1c1a21;
+    --line-soft:var(--line-08);
+    --line-soft-2:rgba(20,10,30,.05);
+
+    /* (Dark palette removed — page is now light-mode throughout) */
+
+    /* Brand colors */
+    --kakao:#FEE500;
+    --kakao-ink:#3D1E1E;
+    --pink:#ff6f91;
+    --pink-soft:#ffb4c6;
+    --violet:#b967ff;
+    --warm:#ffb894;
+    --gold:#ffce6a;
+    --sky:#9bbcff;
+    --mint:#92e5bc;
+
+    /* Typography */
+    --font-serif:'Fraunces','Noto Serif KR',serif;
+    --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Pretendard','Noto Sans KR',sans-serif;
+    --font-hand:'Caveat','Kalam',cursive;
+    --font-mono:ui-monospace,'SF Mono',Menlo,monospace;
+
+    /* ─── Type scale — 8 tier ─────────────────── */
+    --t-2xs:10px;     /* micro labels, eyebrows */
+    --t-xs:11px;      /* meta, captions */
+    --t-sm:12.5px;    /* small body, pills */
+    --t-base:14px;    /* body */
+    --t-md:15.5px;    /* card body, prominent body */
+    --t-lg:17px;      /* card title, FAQ */
+    --t-xl:22px;      /* small heading */
+    --t-2xl:28px;     /* section heading */
+    /* Display sizes: use clamp() inline */
+
+    /* ─── Line-height scale — 5 tier ──────────── */
+    --lh-tight:1;      /* big display numbers */
+    --lh-snug:1.2;     /* big headlines */
+    --lh-normal:1.4;   /* small headings, titles */
+    --lh-relaxed:1.55; /* body */
+    --lh-loose:1.7;    /* FAQ answers, long-form */
+
+    /* ─── Letter-spacing scale — 5 tier ───────── */
+    --ls-display:-.035em; /* very large display */
+    --ls-tight:-.02em;    /* headlines */
+    --ls-snug:-.005em;    /* small headings */
+    --ls-normal:0;        /* body */
+    --ls-wide:.14em;      /* uppercase eyebrows, labels */
+
+    --safe-bottom:env(safe-area-inset-bottom,0px);
+
+    /* Motion tokens */
+    --ease-out:cubic-bezier(.22,1,.36,1);
+    --ease-out-soft:cubic-bezier(.16,1,.3,1);
+    --ease-in-out:cubic-bezier(.65,0,.35,1);
+    --dur-fast:.18s;
+    --dur-base:.32s;
+    --dur-slow:.55s;
+
+    /* ─── Radii — 4 tier ──────────────────────── */
+    --r-sm:6px;
+    --r-md:14px;
+    --r-lg:20px;
+    --r-pill:999px;
+
+    /* ─── Section padding — 3 tier ────────────── */
+    --pad-section-lg:72px;
+    --pad-section-md:56px;
+    --pad-section-sm:40px;
+
+    /* ─── Additional line/border opacities (deduped) ── */
+    --line-04:rgba(20,10,30,.04);
+    --line-08:rgba(20,10,30,.08);
+    --line-12:rgba(20,10,30,.12);
+    --line-18:rgba(20,10,30,.18);
+
+    /* Pink alpha tones (deduped) */
+    --pink-08:rgba(255,111,145,.08);
+    --pink-12:rgba(255,111,145,.12);
+    --pink-18:rgba(255,111,145,.18);
+    --pink-42:rgba(255,111,145,.42);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+  /* ============ Accessibility — Keyboard focus ============
+     :focus-visible only applies to keyboard navigation (Tab/Shift+Tab),
+     not mouse clicks. So designs stay clean for pointer users
+     while remaining navigable for keyboard / screen-reader users. */
+  :focus{outline:none}  /* remove default browser ring */
+  :focus-visible{
+    outline:2px solid var(--ink);
+    outline-offset:3px;
+    border-radius:4px;
+    transition:outline-offset .12s var(--ease-out);
+  }
+  /* Buttons / links — slightly thicker offset since they already have padding */
+  button:focus-visible,
+  a:focus-visible{
+    outline-offset:4px;
+  }
+  /* Kakao yellow CTA — ink outline has low contrast on yellow,
+     use a darker ink-2 ring with white halo for visibility */
+  .btn-kakao:focus-visible{
+    outline:2px solid var(--kakao-ink);
+    outline-offset:3px;
+    box-shadow:0 0 0 5px rgba(255,255,255,.6);
+  }
+  /* Hero card / journey card / faq summary — focus inside, never around the card */
+  details > summary:focus-visible{
+    outline:2px solid var(--ink);
+    outline-offset:2px;
+    border-radius:6px;
+  }
+  /* Footer links — tighter offset (compact area) */
+  footer a:focus-visible{
+    outline-offset:2px;
+  }
+
+  html{
+    scroll-behavior:smooth;
+    overflow-x:hidden;
+    font-size:100%;
+    -webkit-text-size-adjust:100%;
+    text-size-adjust:100%;
+  }
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--font-sans);font-size:15.5px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    word-break:keep-all;line-break:strict;
+    overflow-x:hidden;
+    padding-bottom:calc(80px + var(--safe-bottom));
+    position:relative;
+  }
+  /* paper-grain noise overlay — very subtle, adds warmth */
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    pointer-events:none;
+    z-index:1;
+    opacity:.5;
+    mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.08 0 0 0 0 0.07 0 0 0 0 0.1 0 0 0 .045 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+  /* All content above noise */
+  body > *{position:relative;z-index:2}
+  img,svg{display:block;max-width:100%}
+  button{font-family:inherit;border:none;background:none;cursor:pointer;color:inherit}
+  a{color:inherit;text-decoration:none}
+  em{font-style:italic}
+
+  /* ============ REVEAL ============
+     Content-first principle: opacity always 1, motion is transform-only.
+     If JS fails or scrolling never triggers, content is still fully visible. */
+  .reveal{
+    /* no opacity:0, no display:none — content is always visible */
+    transform:translateY(14px);
+    transition:transform .7s var(--ease-out-soft);
+  }
+  .reveal.is-in{transform:none}
+  /* If JS is disabled, no transform at all */
+  .no-js .reveal{transform:none}
+
+  /* ============ NAV ============ */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(246,244,241,.85);
+    backdrop-filter:saturate(180%) blur(14px);
+    -webkit-backdrop-filter:saturate(180%) blur(14px);
+    border-bottom:.5px solid transparent;
+    transition:border-color var(--dur-base) var(--ease-out), background var(--dur-base) var(--ease-out);
+  }
+  nav.is-scrolled{
+    border-bottom-color:var(--line-soft);
+    background:rgba(246,244,241,.92);
+  }
+  nav .row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:14px 18px;max-width:520px;margin:0 auto;
+  }
+  nav .logo{
+    display:flex;align-items:center;gap:9px;
+    font-family:var(--font-serif);font-size:22px;font-weight:400;
+    font-style:italic;
+    letter-spacing:-.015em;
+    color:var(--ink);
+  }
+  /* logo mark: two overlapping circles — "two vibes meeting"
+     blurred SVG edges echo the card shapes' bleed */
+  nav .logo .mark{
+    position:relative;
+    width:30px;height:18px;
+    display:inline-block;
+    flex-shrink:0;
+    animation:logo-breath 4.5s var(--ease-in-out) infinite;
+  }
+  nav .logo .mark svg{
+    width:100%;height:100%;
+    overflow:visible;
+  }
+  nav .logo .mark .c1,
+  nav .logo .mark .c2{
+    mix-blend-mode:multiply;
+  }
+  @keyframes logo-breath{
+    0%,100%{transform:scale(1)}
+    50%{transform:scale(1.05)}
+  }
+  nav .nav-login{
+    position:relative;
+    display:inline-flex;align-items:center;
+    padding:8px 4px;
+    background:transparent;
+    color:var(--ink-2);
+    font-family:var(--font-sans);
+    font-size:11px;font-weight:500;letter-spacing:-.005em;
+    min-height:36px;
+    transition:color var(--dur-base) var(--ease-out);
+  }
+  nav .nav-login:hover{color:var(--ink)}
+  nav .nav-login:active{color:var(--muted)}
+  nav .nav-login::after{
+    content:"";position:absolute;
+    left:4px;right:4px;bottom:6px;
+    height:.5px;
+    background:currentColor;
+    opacity:0;
+    transform:scaleX(0);transform-origin:left;
+    transition:opacity .4s var(--ease-out), transform .4s var(--ease-out);
+  }
+  nav .nav-login:hover::after{opacity:.5;transform:scaleX(1)}
+
+  /* ============ User Chip (signed-in state, dynamic) ============ */
+  nav .user-chip{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:6px 12px 6px 6px;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:999px;
+    font-family:var(--font-sans);
+    font-size:12.5px;font-weight:500;color:var(--ink-2);
+    transition:background .2s var(--ease-out), border-color .2s var(--ease-out);
+    box-shadow:0 1px 2px var(--line-04);
+    cursor:pointer;
+  }
+  nav .user-chip:hover{background:#fff;border-color:var(--line-12)}
+  nav .user-chip .avatar{
+    width:22px;height:22px;border-radius:50%;
+    background:linear-gradient(135deg, var(--pink), var(--violet));
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:10px;font-weight:600;
+    letter-spacing:0;
+    overflow:hidden;
+  }
+  nav .user-chip .avatar img{
+    width:100%;height:100%;object-fit:cover;
+  }
+
+  /* ============ Auth Dropdown (logout menu) ============ */
+  .auth-dropdown{
+    position:absolute;
+    top:calc(100% + 6px);right:20px;
+    min-width:140px;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:12px;
+    box-shadow:0 8px 24px -10px rgba(20,10,30,.18), 0 1px 2px var(--line-04);
+    padding:6px;
+    opacity:0;
+    transform:translateY(-4px);
+    pointer-events:none;
+    transition:opacity .2s var(--ease-out), transform .2s var(--ease-out);
+    z-index:100;
+  }
+  .auth-dropdown.is-open{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+  }
+  .auth-dropdown button,
+  .auth-dropdown a{
+    display:block;width:100%;
+    padding:9px 12px;
+    background:transparent;border:none;
+    text-align:left;
+    font-family:var(--font-sans);
+    font-size:13px;color:var(--ink-2);
+    border-radius:8px;
+    cursor:pointer;
+    transition:background .15s var(--ease-out);
+    text-decoration:none;
+    box-sizing:border-box;
+  }
+  .auth-dropdown button:hover,
+  .auth-dropdown a:hover{background:var(--bg-soft)}
+  /* ============ CONSENT MODAL (first-time user agreement) ============ */
+  .consent-modal-overlay{
+    position:fixed;inset:0;z-index:200;
+    background:rgba(20,10,30,.45);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    opacity:0;
+    transition:opacity .35s var(--ease-out);
+    display:flex;align-items:flex-end;justify-content:center;
+  }
+  .consent-modal-overlay.is-open{opacity:1}
+
+  .consent-modal{
+    width:100%;
+    max-width:520px;
+    background:#fff;
+    border-top-left-radius:24px;
+    border-top-right-radius:24px;
+    padding:14px 24px calc(28px + var(--safe-bottom, 0px));
+    max-height:90vh;
+    overflow-y:auto;
+    transform:translateY(100%);
+    transition:transform .4s var(--ease-out-soft);
+  }
+  .consent-modal-overlay.is-open .consent-modal{transform:translateY(0)}
+
+  .consent-modal-handle{
+    width:36px;height:4px;
+    margin:0 auto 20px;
+    background:var(--muted-2);
+    border-radius:2px;
+    opacity:.5;
+  }
+  .consent-modal-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:22px;color:var(--ink);
+    line-height:1.35;
+    letter-spacing:-.015em;
+    margin-bottom:8px;
+  }
+  .consent-modal-title em{
+    font-style:italic;
+    color:var(--ink);
+  }
+  .consent-modal-desc{
+    font-family:var(--font-sans);
+    font-size:13.5px;color:var(--muted);
+    line-height:1.7;
+    letter-spacing:-.005em;
+    margin-bottom:24px;
+  }
+
+  .consent-list{
+    list-style:none;
+    display:flex;flex-direction:column;
+    gap:0;
+    margin-bottom:14px;
+  }
+  .consent-item{
+    border-bottom:.5px solid var(--line-08);
+  }
+  .consent-item:last-child{border-bottom:none}
+
+  .consent-row{
+    display:flex;align-items:center;gap:12px;
+    padding:14px 4px;
+    cursor:pointer;
+  }
+  .consent-check{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+    width:0;height:0;
+  }
+  .consent-check-box{
+    width:20px;height:20px;
+    flex-shrink:0;
+    border:1.5px solid var(--line-18);
+    border-radius:6px;
+    background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;
+    transition:background .2s var(--ease-out), border-color .2s var(--ease-out);
+  }
+  .consent-check-box svg{
+    width:12px;height:12px;
+    opacity:0;
+    transition:opacity .2s var(--ease-out);
+  }
+  .consent-check:checked + .consent-check-box{
+    background:var(--ink);
+    border-color:var(--ink);
+  }
+  .consent-check:checked + .consent-check-box svg{opacity:1}
+  .consent-check:focus-visible + .consent-check-box{
+    outline:2px solid var(--ink);
+    outline-offset:2px;
+  }
+
+  .consent-text{
+    flex:1;
+    display:flex;align-items:center;gap:8px;
+    flex-wrap:wrap;
+  }
+  .consent-tag{
+    display:inline-block;
+    padding:2px 7px;
+    background:rgba(255,159,188,.22);
+    color:#a04060;
+    border-radius:999px;
+    font-family:var(--font-sans);
+    font-size:10.5px;font-weight:600;
+    letter-spacing:-.002em;
+    flex-shrink:0;
+  }
+  .consent-tag-optional{
+    background:var(--bg-soft);
+    color:var(--muted);
+  }
+  .consent-label{
+    font-family:var(--font-sans);
+    font-size:14px;color:var(--ink-2);
+    letter-spacing:-.005em;
+    line-height:1.4;
+    flex:1;
+    min-width:0;
+  }
+  .consent-link{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:24px;height:24px;
+    color:var(--muted);
+    border-radius:6px;
+    transition:background .15s var(--ease-out), color .15s var(--ease-out);
+    text-decoration:none;
+    flex-shrink:0;
+  }
+  .consent-link:hover{
+    background:var(--bg-soft);
+    color:var(--ink);
+  }
+
+  .consent-all-row{
+    padding:4px 0 16px;
+    margin-bottom:20px;
+    border-bottom:.5px solid var(--line-08);
+  }
+  .consent-row-all{
+    padding:10px 4px;
+  }
+  .consent-label-all{
+    font-weight:500;
+    color:var(--ink);
+  }
+
+  .btn-consent-submit{
+    display:flex;align-items:center;justify-content:center;
+    width:100%;
+    padding:16px;
+    border-radius:14px;
+    background:var(--kakao);color:var(--kakao-ink);
+    font-family:var(--font-sans);
+    font-size:15px;font-weight:600;letter-spacing:-.005em;
+    border:none;
+    box-shadow:0 1px 0 rgba(0,0,0,.05), 0 10px 24px -12px rgba(20,10,30,.22);
+    transition:transform var(--dur-fast) var(--ease-out), opacity var(--dur-base) var(--ease-out), background var(--dur-base) var(--ease-out);
+    cursor:pointer;
+    margin-bottom:8px;
+  }
+  .btn-consent-submit:disabled{
+    background:var(--bg-soft);
+    color:var(--muted-2);
+    box-shadow:none;
+    cursor:not-allowed;
+  }
+  .btn-consent-submit:not(:disabled):active{transform:scale(.985)}
+
+  .btn-consent-cancel{
+    display:flex;align-items:center;justify-content:center;
+    width:100%;
+    padding:12px;
+    background:transparent;
+    color:var(--muted);
+    font-family:var(--font-sans);
+    font-size:13px;font-weight:500;letter-spacing:-.005em;
+    border:none;
+    cursor:pointer;
+    transition:color .2s var(--ease-out);
+  }
+  .btn-consent-cancel:hover{color:var(--ink-2)}
+
+
+
+  /* ============ HERO — analysis-first ============ */
+  .hero{
+    position:relative;
+    padding:36px 20px 80px;     /* wordmark now overlaps card, no extra bottom needed */
+    max-width:520px;margin:0 auto;
+    text-align:center;
+    overflow:hidden;  /* contain split wordmarks within hero bounds */
+  }
+  .hero h1{
+    position:relative;
+    z-index:2;
+    margin-top:0;
+    font-family:var(--font-serif);font-weight:300;
+    font-size:clamp(28px,7vw,44px);
+    line-height:1.15;letter-spacing:-.025em;
+    color:var(--ink);
+    animation:h1-in .9s .12s var(--ease-out-soft) both;
+  }
+  @keyframes h1-in{
+    from{opacity:0;transform:translateY(10px)}
+    to{opacity:1;transform:none}
+  }
+  .hero h1 em{
+    font-style:normal;
+    font-weight:400;
+    color:var(--ink);
+  }
+
+  /* hero wordmark — SPLIT signature: "deep" left, "vibe" right.
+     Sized so both words fit COMPLETELY within viewport (readable in full),
+     while the card overlaps the MIDDLE portion of each word.
+     Pattern: Linear/Vercel/Stripe hero wordmark — brand letterforms behind
+     content, fully readable in periphery, content as foreground spotlight. */
+  .hero-wordmark{
+    position:absolute;
+    font-family:var(--font-serif);font-weight:300;font-style:italic;
+    /* size calibrated so deep+vibe both fit in viewport with breathing room */
+    font-size:clamp(72px,19vw,110px);
+    line-height:.85;letter-spacing:-.04em;
+    color:transparent;
+    -webkit-text-stroke:1.4px var(--ink);
+    user-select:none;
+    pointer-events:none;
+    z-index:0;
+    opacity:.28;
+    width:max-content;
+    animation:wordmark-in 1.4s .5s var(--ease-out-soft) both;
+  }
+  /* "deep" — left side, fully visible within viewport.
+     Vertical position: overlaps card's MIDDLE row so card covers letters' middle band.
+     Card center ≈ y:362 (card top 222 + card height 280/2). Wordmark top at 320 puts
+     letter middle (~y:367) right under the card center. */
+  .hero-wordmark-deep{
+    top:320px;
+    left:-8px;
+  }
+  /* "vibe" — inset from right so trailing 'e' stays fully within viewport */
+  .hero-wordmark-vibe{
+    top:320px;
+    right:24px;
+  }
+  @keyframes wordmark-in{
+    from{opacity:0;transform:translateY(8px)}
+    to{opacity:.28;transform:translateY(0)}
+  }
+
+  .hero .sub{
+    position:relative;
+    z-index:2;
+    margin-top:18px;
+    font-family:var(--font-serif);font-weight:400;
+    font-size:clamp(15.5px,3.8vw,18px);
+    color:var(--ink-2);line-height:1.4;
+    max-width:320px;margin-left:auto;margin-right:auto;
+    letter-spacing:-.005em;
+    animation:sub-in .9s .54s var(--ease-out-soft) both;
+  }
+  .hero .sub em{
+    font-style:normal;
+    font-weight:500;
+    color:var(--ink);
+  }
+  @keyframes sub-in{
+    from{opacity:0;transform:translateY(8px)}
+    to{opacity:1;transform:none}
+  }
+
+  /* ---- HERO CARD STAGE: featured single card sitting over the wordmark.
+     Stage is generously sized so the card with its rotation/shadow fully fits,
+     and the shadow is softened so the card melts into the beige page. */
+  .hero-stage{
+    position:relative;
+    margin:64px auto 0;
+    width:280px;
+    height:328px;            /* enough vertical room for the rotated card + shadow */
+    z-index:2;
+    animation:stage-in .7s .3s var(--ease-out-soft) both;
+  }
+  @keyframes stage-in{
+    from{opacity:0}
+    to{opacity:1}
+  }
+
+  /* Hero → Journey link — soft invitation to keep scrolling */
+  .hero-link{
+    margin:40px auto 0;
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+    opacity:0;
+    transform:translateY(8px);
+    /* appear after the stage settles */
+    animation:hero-link-in .8s 1.8s var(--ease-out-soft) forwards;
+  }
+  @keyframes hero-link-in{
+    to{opacity:1;transform:none}
+  }
+  .hero-link-text{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:14px;color:var(--muted);
+    letter-spacing:-.005em;
+    text-align:center;
+  }
+  .hero-link-text em{
+    font-style:italic;
+    color:var(--ink-2);
+  }
+  .hero-link-arrow{
+    width:14px;height:18px;
+    color:var(--muted-2);
+    opacity:.7;
+    animation:hero-arrow-nudge 2.4s var(--ease-in-out) infinite;
+  }
+  @keyframes hero-arrow-nudge{
+    0%, 100%{transform:translateY(0)}
+    50%{transform:translateY(4px)}
+  }
+  /* featured front card — now a stack of 6 swappable slides */
+  @keyframes front-in{
+    from{opacity:0;transform:translateX(-50%) translateY(12px) rotate(-2deg)}
+    to{opacity:1;transform:translateX(-50%) translateY(0) rotate(-2deg)}
+  }
+  .hero-card{
+    position:absolute;left:50%;top:8px;
+    transform:translateX(-50%) rotate(-2deg);
+    width:218px;aspect-ratio:3/4;
+    background:#fff;border-radius:16px;
+    padding:18px;
+    border:.5px solid var(--line-soft);
+    /* softer, more diffuse shadow — the card "rests on" the page, not floats above it */
+    box-shadow:
+      0 1px 2px rgba(20,10,30,.04),
+      0 10px 24px -14px rgba(20,10,30,.1),
+      0 30px 60px -30px rgba(20,10,30,.16);
+    z-index:2;
+    animation:front-in .8s .8s var(--ease-out-soft) both;
+    cursor:pointer;
+    transition:transform .55s var(--ease-out-soft);
+  }
+  .hero-card.is-shifting{
+    transform:translateX(-50%) rotate(-2deg) translateY(-1px);
+  }
+  /* slides: stack inside the card with 3D-feeling card-flip transitions */
+  .hero-slides{
+    position:relative;width:100%;height:100%;
+    /* tilt perspective gives slides a hint of depth as they enter/leave */
+    perspective:900px;
+    perspective-origin:50% 50%;
+  }
+  .hero-slide{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;
+    opacity:0;
+    /* INCOMING / DEFAULT state: ready behind, slightly smaller, slightly tilted */
+    transform:translateY(14px) scale(.94) rotateZ(2deg);
+    transform-origin:50% 70%;
+    transition:
+      opacity .5s var(--ease-out-soft),
+      transform .65s var(--ease-out-soft);
+    pointer-events:none;
+    will-change:transform,opacity;
+    /* keep slides crisp on transform */
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+  }
+  /* CURRENT slide: at rest, in front */
+  .hero-slide.is-current{
+    opacity:1;
+    transform:translateY(0) scale(1) rotateZ(0deg);
+    pointer-events:auto;
+    z-index:2;
+  }
+  /* OUTGOING slide: lifts up + tilts the other way, fades */
+  .hero-slide.is-leaving{
+    opacity:0;
+    transform:translateY(-24px) scale(1.02) rotateZ(-3deg);
+    pointer-events:none;
+    z-index:1;
+    transition:
+      opacity .55s var(--ease-out-soft),
+      transform .65s var(--ease-out-soft);
+  }
+  /* enter / exit choreography for content blocks within a slide */
+  .hero-slide .a-title,
+  .hero-slide .a-art,
+  .hero-slide .a-quote,
+  .hero-slide .a-stat{
+    opacity:0;transform:translateY(6px);
+    transition:opacity .5s var(--ease-out-soft), transform .5s var(--ease-out-soft);
+  }
+  .hero-slide.is-current .a-title{opacity:1;transform:none;transition-delay:.18s}
+  .hero-slide.is-current .a-art{opacity:1;transform:none;transition-delay:.24s}
+  .hero-slide.is-current .a-quote{opacity:1;transform:none;transition-delay:.3s}
+  .hero-slide.is-current .a-stat{opacity:1;transform:none;transition-delay:.36s}
+
+  .hero-slide .a-title{
+    margin-top:14px;
+    font-family:var(--font-serif);font-weight:400;
+    font-size:17px;color:var(--ink);
+    letter-spacing:-.005em;
+    line-height:1.2;
+  }
+  .hero-slide .a-art{
+    flex:1;margin-top:10px;
+    border-radius:6px;position:relative;
+    -webkit-mask-position:center;mask-position:center;
+    -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  }
+  /* breathing effect — pulse opacity/glow only, never transform.
+     This prevents clipping conflicts with stagger transforms. */
+  .hero-slide.is-current .a-art{
+    animation:art-breathe 8s var(--ease-in-out) infinite;
+  }
+  @keyframes art-breathe{
+    0%,100%{opacity:.92}
+    50%{opacity:1}
+  }
+  .hero-slide .a-quote{
+    margin-top:10px;
+    max-height:none;
+    overflow:visible;
+    font-family:var(--font-serif);font-weight:400;
+    font-size:13.5px;color:var(--muted);
+    line-height:1.7;
+    letter-spacing:-.005em;
+  }
+  .hero-slide .a-quote em{
+    font-style:normal;
+    font-weight:500;
+    color:var(--ink);
+    padding:0 5px;
+    border-radius:4px;
+    transition:background-color .5s var(--ease-out);
+  }
+  /* Base text stays neutral gray across all slides — like a real chat read aloud.
+     Only the em (highlighted signal) picks up the card's signature color background.
+     Mirrors the p-event-text highlight pattern in the analysis preview card. */
+  .hero-slide.s1 .a-quote em{background:rgba(255,159,188,.22)}   /* pink */
+  .hero-slide.s2 .a-quote em{background:rgba(255,184,148,.22)}   /* orange */
+  .hero-slide.s3 .a-quote em{background:rgba(155,188,255,.26)}   /* blue */
+  .hero-slide.s4 .a-quote em{background:rgba(255,206,106,.26)}   /* gold */
+  .hero-slide.s5 .a-quote em{background:rgba(202,163,255,.24)}   /* violet */
+  .hero-slide.s6 .a-quote em{background:rgba(146,229,188,.26)}   /* mint */
+  .hero-slide .a-stat{
+    display:flex;justify-content:space-between;align-items:baseline;
+    max-height:none;
+    overflow:visible;
+    font-family:var(--font-sans);font-size:11px;color:var(--muted);
+    margin-top:18px;
+    position:relative;
+  }
+  .hero-slide .a-stat .big{
+    position:relative;
+    font-family:var(--font-serif);font-weight:400;
+    font-size:30px;color:var(--ink);letter-spacing:-.02em;
+    line-height:1;
+    font-variant-numeric:tabular-nums lining-nums;
+    font-feature-settings:"tnum" 1,"lnum" 1;
+  }
+  /* big-text: 한글 정성 표현용 (s1, s3, s4 평가성 카드)
+     - Fraunces 영문 숫자 30px → 한글 22px로 시각적 균형
+     - 의미 있는 한 줄 카피 (점수 평가 X) */
+  .hero-slide .a-stat .big.big-text{
+    font-size:22px;
+    font-weight:400;
+    letter-spacing:-.005em;
+    font-feature-settings:normal;
+  }
+  /* small soft glow orb behind the number — smaller than the digits,
+     bleeds out gently like ink in paper. Multiply blend so the color
+     soaks into the white card background instead of floating above it. */
+  .hero-slide .a-stat .big::before{
+    content:"";
+    position:absolute;
+    left:50%;top:50%;
+    width:28px;height:28px;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(
+      circle at center,
+      rgba(var(--slide-glow,255,120,160),.55) 0%,
+      rgba(var(--slide-glow,255,120,160),.3) 35%,
+      rgba(var(--slide-glow,255,120,160),0) 75%
+    );
+    filter:blur(12px);
+    mix-blend-mode:multiply;
+    z-index:-1;
+    opacity:0;
+    pointer-events:none;
+    border-radius:50%;
+  }
+  .hero-slide .a-stat .big.is-pulsing::before{
+    animation:stat-glow 2.8s var(--ease-in-out);
+  }
+  @keyframes stat-glow{
+    0%{opacity:0;transform:translate(-50%,-50%) scale(.7)}
+    30%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+    65%{opacity:.9;transform:translate(-50%,-50%) scale(1.08)}
+    100%{opacity:0;transform:translate(-50%,-50%) scale(1.15)}
+  }
+  /* slide-specific gradient art with soft blur halo
+     — uses drop-shadow stacked to make the masked shape feel like
+     a "moment when the heart moves": crisp center, edges softly bleed out. */
+  /* --slide-glow: medium-saturated colors. Visible but not aggressive.
+     Used with radial-gradient halo behind the number, not text-shadow. */
+  .hero-slide.s1{--slide-glow:255,120,160}
+  .hero-slide.s2{--slide-glow:255,150,110}
+  .hero-slide.s3{--slide-glow:110,150,255}
+  .hero-slide.s4{--slide-glow:250,180,80}
+  .hero-slide.s5{--slide-glow:175,120,255}
+  .hero-slide.s6{--slide-glow:90,200,150}
+  .hero-slide.s1 .a-art{
+    background:radial-gradient(circle at 50% 50%,#ff9fbc 0%,#ffc4d6 35%,#ffe3ec 65%,rgba(255,227,236,0) 92%);
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-30 -30 160 160'><filter id='b' x='-50' y='-50' width='200' height='200'><feGaussianBlur stdDeviation='6'/></filter><path d='M50 90 C18 62 4 44 4 26 C4 11 22 3 35 13 C42 18 47 26 50 33 C53 26 58 18 65 13 C78 3 96 11 96 26 C96 44 82 62 50 90 Z' fill='black' filter='url(%23b)'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-30 -30 160 160'><filter id='b' x='-50' y='-50' width='200' height='200'><feGaussianBlur stdDeviation='6'/></filter><path d='M50 90 C18 62 4 44 4 26 C4 11 22 3 35 13 C42 18 47 26 50 33 C53 26 58 18 65 13 C78 3 96 11 96 26 C96 44 82 62 50 90 Z' fill='black' filter='url(%23b)'/></svg>");
+    -webkit-mask-size:62% auto;mask-size:62% auto;
+    filter:
+      blur(2px)
+      drop-shadow(0 0 14px rgba(255,159,188,.45));
+  }
+  .hero-slide.s2 .a-art{
+    background:radial-gradient(circle at 50% 50%,#ffb894 0%,#ffd4b5 35%,#ffe8d6 65%,rgba(255,232,214,0) 92%);
+    -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 14%,transparent 42%);
+    mask-image:radial-gradient(circle at 50% 50%,#000 14%,transparent 42%);
+    -webkit-mask-size:100% 100%;mask-size:100% 100%;
+    filter:
+      blur(2px)
+      drop-shadow(0 0 14px rgba(255,184,148,.45));
+  }
+  .hero-slide.s3 .a-art{
+    background:radial-gradient(circle at 50% 50%,#9bbcff 0%,#c2d6ff 35%,#e0eaff 65%,rgba(224,234,255,0) 92%);
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-30 -30 160 160'><filter id='b' x='-50' y='-50' width='200' height='200'><feGaussianBlur stdDeviation='6'/></filter><path d='M50 8 L92 50 L50 92 L8 50 Z' fill='black' filter='url(%23b)'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-30 -30 160 160'><filter id='b' x='-50' y='-50' width='200' height='200'><feGaussianBlur stdDeviation='6'/></filter><path d='M50 8 L92 50 L50 92 L8 50 Z' fill='black' filter='url(%23b)'/></svg>");
+    -webkit-mask-size:66% auto;mask-size:66% auto;
+    filter:
+      blur(2px)
+      drop-shadow(0 0 14px rgba(155,188,255,.45));
+  }
+  .hero-slide.s4 .a-art{
+    background:radial-gradient(circle at 50% 50%,#ffce6a 0%,#ffe0a1 35%,#ffeecb 65%,rgba(255,238,203,0) 92%);
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-30 -30 160 160'><filter id='b' x='-50' y='-50' width='200' height='200'><feGaussianBlur stdDeviation='6'/></filter><g fill='black' filter='url(%23b)'><circle cx='50' cy='28' r='20'/><circle cx='72' cy='50' r='20'/><circle cx='50' cy='72' r='20'/><circle cx='28' cy='50' r='20'/><rect x='40' y='40' width='20' height='20'/></g></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-30 -30 160 160'><filter id='b' x='-50' y='-50' width='200' height='200'><feGaussianBlur stdDeviation='6'/></filter><g fill='black' filter='url(%23b)'><circle cx='50' cy='28' r='20'/><circle cx='72' cy='50' r='20'/><circle cx='50' cy='72' r='20'/><circle cx='28' cy='50' r='20'/><rect x='40' y='40' width='20' height='20'/></g></svg>");
+    -webkit-mask-size:66% auto;mask-size:66% auto;
+    filter:
+      blur(2px)
+      drop-shadow(0 0 14px rgba(255,206,106,.45));
+  }
+  .hero-slide.s5 .a-art{
+    background:radial-gradient(circle at 50% 50%,#caa3ff 0%,#dec4ff 35%,#ece0ff 65%,rgba(236,224,255,0) 92%);
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-30 -30 160 160'><filter id='b' x='-50' y='-50' width='200' height='200'><feGaussianBlur stdDeviation='6'/></filter><path d='M50 90 C18 62 4 44 4 26 C4 11 22 3 35 13 C42 18 47 26 50 33 C53 26 58 18 65 13 C78 3 96 11 96 26 C96 44 82 62 50 90 Z' fill='black' filter='url(%23b)'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-30 -30 160 160'><filter id='b' x='-50' y='-50' width='200' height='200'><feGaussianBlur stdDeviation='6'/></filter><path d='M50 90 C18 62 4 44 4 26 C4 11 22 3 35 13 C42 18 47 26 50 33 C53 26 58 18 65 13 C78 3 96 11 96 26 C96 44 82 62 50 90 Z' fill='black' filter='url(%23b)'/></svg>");
+    -webkit-mask-size:62% auto;mask-size:62% auto;
+    filter:
+      blur(2px)
+      drop-shadow(0 0 14px rgba(202,163,255,.45));
+  }
+  .hero-slide.s6 .a-art{
+    background:radial-gradient(circle at 50% 50%,#92e5bc 0%,#baeed3 35%,#d8f4e4 65%,rgba(216,244,228,0) 92%);
+    -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 14%,transparent 42%);
+    mask-image:radial-gradient(circle at 50% 50%,#000 14%,transparent 42%);
+    -webkit-mask-size:100% 100%;mask-size:100% 100%;
+    filter:
+      blur(2px)
+      drop-shadow(0 0 14px rgba(146,229,188,.45));
+  }
+
+  /* ============ SECTION COMMONS ============ */
+  section{padding:var(--pad-section-md) 20px;max-width:520px;margin:0 auto}
+  .sec-eyebrow{
+    font-family:var(--font-sans);font-size:10px;font-weight:600;
+    color:var(--muted);letter-spacing:.14em;
+    display:inline-flex;align-items:center;gap:10px;
+    text-transform:uppercase;
+  }
+  .sec-eyebrow::before{
+    content:"";width:0;height:.5px;background:var(--ink-2);
+    transition:width .8s .1s var(--ease-out-soft);
+  }
+  .reveal.is-in .sec-eyebrow::before{width:24px}
+
+  /* sec-input — small label ABOVE the h2 that describes the action/input
+     leading to the section's result. Korean-friendly: no italic (italic Korean
+     glyphs look awkward), no uppercase, with em highlight matching the section. */
+  .sec-input{
+    font-family:var(--font-serif);font-weight:400;
+    font-size:14px;color:var(--muted);
+    letter-spacing:-.005em;
+    margin-bottom:6px;
+  }
+  .sec-input em{
+    font-style:normal;
+    font-weight:500;
+    color:var(--ink);
+    padding:0 5px;
+    border-radius:4px;
+    background:rgba(255,159,188,.22);  /* pink — matches analysis card s1 color world */
+  }
+
+  .sec-h{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:clamp(28px,7.5vw,34px);line-height:1.2;letter-spacing:-.02em;
+    color:var(--ink);margin-top:16px;
+  }
+  /* When sec-input precedes sec-h, tighten the gap (they read as a single phrase) */
+  .sec-input + .sec-h{margin-top:0}
+  .sec-h em{font-style:italic}
+  .sec-sub{
+    margin:14px auto 0;
+    font-size:14px;color:var(--muted);line-height:1.7;
+    max-width:380px;
+  }
+
+  /* ============ ANALYSIS PREVIEW ============
+     3-card "report sample" — Bento grid pattern.
+     Main hero card (full width) + 2 side cards (50/50 row below).
+     Shows what an actual deepvibe report looks like, not abstract features. */
+  .analysis{padding-top:var(--pad-section-md);padding-bottom:var(--pad-section-sm)}
+
+  /* Single hero preview card — no grid needed since sides were removed.
+     The main card alone is the analysis preview, ghost cards below hint at more. */
+  .preview-grid{
+    margin-top:24px;
+  }
+  .p-card{
+    position:relative;
+    background:#fff;
+    border:.5px solid var(--line-soft);
+    border-radius:18px;
+    padding:24px 22px 22px;
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 8px 22px -12px rgba(20,10,30,.08),
+      0 22px 44px -24px rgba(20,10,30,.12);
+    overflow:hidden;
+    opacity:0;
+    transform:translateY(14px);
+    transition:opacity .7s var(--ease-out-soft), transform .55s var(--ease-out-soft);
+  }
+  .reveal.is-in .p-card{opacity:1;transform:none;transition-delay:.05s}
+
+  /* Internal staggered choreography:
+     1. p-tag (instant with card)
+     2. p-title (.2s)
+     3. p-hero-num (.35s - count-up animates the number)
+     4. p-summary (.6s)
+     5. p-chart (.8s - line draws 1.8s)
+     6. p-events (1.1s, 1.3s, 1.5s sequentially) */
+  .p-card .p-title,
+  .p-card .p-summary,
+  .p-card .p-chart,
+  .p-card .p-events li{
+    opacity:0;
+    transform:translateY(8px);
+    transition:opacity .6s var(--ease-out-soft), transform .6s var(--ease-out-soft);
+  }
+  .reveal.is-in .p-card .p-title{opacity:1;transform:none;transition-delay:.1s}
+  .reveal.is-in .p-card .p-summary{opacity:1;transform:none;transition-delay:.25s}
+  .reveal.is-in .p-card .p-chart{opacity:1;transform:none;transition-delay:.45s}
+  .reveal.is-in .p-card .p-events li:nth-child(1){opacity:1;transform:none;transition-delay:.75s}
+  .reveal.is-in .p-card .p-events li:nth-child(2){opacity:1;transform:none;transition-delay:.95s}
+  .reveal.is-in .p-card .p-events li:nth-child(3){opacity:1;transform:none;transition-delay:1.15s}
+
+  /* v124: p-tag removed ("01 · AFFINITY" English label dropped — Korean-first principle). */
+
+  .p-title{
+    margin-top:6px;
+    font-family:var(--font-serif);font-weight:300;font-style:italic;
+    font-size:20px;color:var(--ink);
+    line-height:1.2;letter-spacing:-.01em;
+  }
+  .p-main .p-title{font-size:24px}
+
+  /* v124: p-hero-num removed (score "82.3 /100" replaced by narrative + chart,
+     matching /report's AFFINITY card pattern). */
+
+  .p-summary{
+    margin-top:18px;
+    text-align:center;
+    font-family:var(--font-serif);font-weight:300;font-style:italic;
+    font-size:15px;color:var(--ink);
+    line-height:1.5;
+    letter-spacing:-.005em;
+  }
+  .p-summary em{
+    font-style:normal;font-weight:400;
+    color:var(--ink);
+    background:rgba(255,159,188,.22);
+    padding:0 5px;border-radius:4px;
+  }
+
+  .p-chart{
+    margin-top:24px;
+    padding-top:16px;
+    border-top:.5px solid var(--line-08);
+  }
+  .p-chart-label{
+    text-align:center;
+    font-family:var(--font-sans);font-size:10px;font-weight:500;
+    color:var(--muted-2);
+    letter-spacing:.06em;
+    margin-bottom:10px;
+  }
+  .p-chart-svg{
+    display:block;width:100%;height:auto;
+    aspect-ratio:320/80;
+  }
+  .p-chart-line{
+    stroke-dasharray:600;
+    stroke-dashoffset:600;
+    transition:stroke-dashoffset 1.8s .9s var(--ease-out-soft);
+  }
+  .reveal.is-in .p-chart-line{stroke-dashoffset:0}
+  .p-chart-svg circle{
+    opacity:0;
+    transition:opacity .35s var(--ease-out-soft);
+  }
+  /* Dots appear sequentially as the line is drawn (1.8s line / 5 dots) */
+  .reveal.is-in .p-chart-svg circle:nth-child(3){opacity:1;transition-delay:1.0s}
+  .reveal.is-in .p-chart-svg circle:nth-child(4){opacity:1;transition-delay:1.3s}
+  .reveal.is-in .p-chart-svg circle:nth-child(5){opacity:1;transition-delay:1.6s}
+  .reveal.is-in .p-chart-svg circle:nth-child(6){opacity:1;transition-delay:1.9s}
+  .reveal.is-in .p-chart-svg circle:nth-child(7){opacity:1;transition-delay:2.2s}
+  .p-chart-axis{
+    margin-top:4px;
+    display:flex;justify-content:space-between;
+    font-family:var(--font-sans);font-size:9.5px;
+    color:var(--muted-2);letter-spacing:.02em;
+  }
+
+  .p-events{
+    list-style:none;
+    margin-top:20px;
+    padding-top:16px;
+    border-top:.5px solid var(--line-08);
+    display:flex;flex-direction:column;gap:10px;
+  }
+  .p-events::before{
+    content:"관계가 깊어진 변곡점";
+    display:block;
+    text-align:center;
+    font-family:var(--font-sans);font-size:10px;font-weight:500;
+    color:var(--muted-2);
+    letter-spacing:.06em;
+    margin-bottom:6px;
+  }
+  .p-events li{
+    display:flex;align-items:baseline;gap:14px;
+    font-family:var(--font-sans);font-size:12.5px;
+    color:var(--ink-2);
+    line-height:1.45;
+  }
+  .p-event-date{
+    flex-shrink:0;
+    width:56px;
+    font-family:var(--font-serif);font-style:italic;font-weight:300;
+    font-size:13px;color:var(--pink);
+    font-feature-settings:"tnum" 1;
+    letter-spacing:-.005em;
+  }
+  .p-event-text{color:var(--ink-2)}
+  .p-event-text em{
+    font-style:normal;
+    background:rgba(255,159,188,.16);
+    padding:0 4px;
+    border-radius:3px;
+    color:var(--ink);
+    font-weight:500;
+  }
+
+  /* ===== "더 있음" 암시 — wrapper로 chip을 mask 영향에서 분리 ===== */
+  .preview-more-wrap{
+    position:relative;
+    margin-top:14px;
+  }
+  .preview-more{
+    position:relative;
+    padding-bottom:48px;       /* room for the flat invitation below */
+    /* fade-out gradient — only ghost cards get faded, not the invitation */
+    -webkit-mask-image:linear-gradient(to bottom, #000 0%, #000 40%, transparent 95%);
+    mask-image:linear-gradient(to bottom, #000 0%, #000 40%, transparent 95%);
+  }
+  .preview-more-row{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:10px;
+  }
+  /* ghost cards — blurred, low opacity. Hint at more cards below the fold. */
+  .preview-ghost{
+    background:#fff;
+    border:.5px solid var(--line-soft);
+    border-radius:14px;
+    padding:14px 12px;
+    height:88px;
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 6px 16px -8px rgba(20,10,30,.06);
+    display:flex;flex-direction:column;justify-content:space-between;
+    filter:blur(2.5px);
+    overflow:hidden;
+    opacity:0;
+    transform:translateY(8px);
+    transition:opacity .7s var(--ease-out-soft), transform .55s var(--ease-out-soft);
+  }
+  .reveal.is-in .preview-ghost{
+    opacity:.55;transform:none;
+  }
+  .reveal.is-in .preview-ghost:nth-child(1){transition-delay:.4s}
+  .reveal.is-in .preview-ghost:nth-child(2){transition-delay:.5s}
+  .reveal.is-in .preview-ghost:nth-child(3){transition-delay:.6s}
+  /* fake content shapes inside ghost cards */
+  .preview-ghost .g-line{
+    height:6px;border-radius:3px;
+    background:linear-gradient(to right, var(--line-12), var(--line-08));
+  }
+  .preview-ghost .g-line.short{width:40%}
+  .preview-ghost .g-line.med{width:65%}
+  .preview-ghost .g-line.long{width:85%}
+  .preview-ghost .g-num{
+    height:18px;width:55%;border-radius:3px;
+    background:linear-gradient(to right, var(--line-18), var(--line-12));
+  }
+  .preview-ghost .g-dot{
+    width:14px;height:14px;border-radius:50%;
+    background:linear-gradient(135deg, rgba(255,159,188,.4), rgba(202,163,255,.3));
+  }
+
+  /* "더 깊은 결이 이어져요" — SAME visual language as .hero-link
+     flat invitation: text + arrow, no chip card, no glow, no bounce */
+  .preview-count{
+    position:absolute;
+    left:50%;
+    bottom:8px;
+    transform:translateX(-50%);
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+    z-index:3;
+    opacity:0;
+    transition:opacity .8s 1s var(--ease-out-soft);
+  }
+  .reveal.is-in .preview-count{opacity:1}
+  .preview-count-text{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:14px;color:var(--muted);
+    letter-spacing:-.005em;
+    text-align:center;
+    white-space:nowrap;
+  }
+  .preview-count-text em{
+    font-style:italic;
+    color:var(--ink-2);
+    /* prevent italic Korean glyph from overlapping the next normal char */
+    padding-right:.05em;
+  }
+  .preview-count-arrow{
+    width:14px;height:18px;
+    color:var(--muted-2);
+    opacity:.7;
+    animation:preview-arrow-nudge 2.4s var(--ease-in-out) infinite;
+  }
+  @keyframes preview-arrow-nudge{
+    0%, 100%{transform:translateY(0)}
+    50%{transform:translateY(4px)}
+  }
+
+  /* Shape masks — SVG includes feGaussianBlur so edges fade like ink bleed */
+  .art-heart{
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-30 -30 160 160'><filter id='b' x='-50' y='-50' width='200' height='200'><feGaussianBlur stdDeviation='6'/></filter><path d='M50 90 C18 62 4 44 4 26 C4 11 22 3 35 13 C42 18 47 26 50 33 C53 26 58 18 65 13 C78 3 96 11 96 26 C96 44 82 62 50 90 Z' fill='black' filter='url(%23b)'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-30 -30 160 160'><filter id='b' x='-50' y='-50' width='200' height='200'><feGaussianBlur stdDeviation='6'/></filter><path d='M50 90 C18 62 4 44 4 26 C4 11 22 3 35 13 C42 18 47 26 50 33 C53 26 58 18 65 13 C78 3 96 11 96 26 C96 44 82 62 50 90 Z' fill='black' filter='url(%23b)'/></svg>");
+    -webkit-mask-size:62% auto;mask-size:62% auto;
+  }
+  .art-circle{
+    -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 14%,transparent 42%);
+    mask-image:radial-gradient(circle at 50% 50%,#000 14%,transparent 42%);
+    -webkit-mask-size:100% 100%;mask-size:100% 100%;
+  }
+  .art-diamond{
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-30 -30 160 160'><filter id='b' x='-50' y='-50' width='200' height='200'><feGaussianBlur stdDeviation='6'/></filter><path d='M50 8 L92 50 L50 92 L8 50 Z' fill='black' filter='url(%23b)'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-30 -30 160 160'><filter id='b' x='-50' y='-50' width='200' height='200'><feGaussianBlur stdDeviation='6'/></filter><path d='M50 8 L92 50 L50 92 L8 50 Z' fill='black' filter='url(%23b)'/></svg>");
+    -webkit-mask-size:66% auto;mask-size:66% auto;
+  }
+  .art-clover{
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-30 -30 160 160'><filter id='b' x='-50' y='-50' width='200' height='200'><feGaussianBlur stdDeviation='6'/></filter><g fill='black' filter='url(%23b)'><circle cx='50' cy='28' r='20'/><circle cx='72' cy='50' r='20'/><circle cx='50' cy='72' r='20'/><circle cx='28' cy='50' r='20'/><rect x='40' y='40' width='20' height='20'/></g></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-30 -30 160 160'><filter id='b' x='-50' y='-50' width='200' height='200'><feGaussianBlur stdDeviation='6'/></filter><g fill='black' filter='url(%23b)'><circle cx='50' cy='28' r='20'/><circle cx='72' cy='50' r='20'/><circle cx='50' cy='72' r='20'/><circle cx='28' cy='50' r='20'/><rect x='40' y='40' width='20' height='20'/></g></svg>");
+    -webkit-mask-size:66% auto;mask-size:66% auto;
+  }
+  /* Gradient backgrounds + matching glow halos
+     (each color gets its own blur-bleed: edges softly leak outward) */
+  .g1{
+    background:radial-gradient(circle at 50% 50%,#ff9fbc 0%,#ffc4d6 35%,#ffe3ec 65%,rgba(255,227,236,0) 92%);
+    filter:
+      blur(2px)
+      drop-shadow(0 0 14px rgba(255,159,188,.45));
+  }
+  .g2{
+    background:radial-gradient(circle at 50% 50%,#ffb894 0%,#ffd4b5 35%,#ffe8d6 65%,rgba(255,232,214,0) 92%);
+    filter:
+      blur(2px)
+      drop-shadow(0 0 14px rgba(255,184,148,.45));
+  }
+  .g3{
+    background:radial-gradient(circle at 50% 50%,#9bbcff 0%,#c2d6ff 35%,#e0eaff 65%,rgba(224,234,255,0) 92%);
+    filter:
+      blur(2px)
+      drop-shadow(0 0 14px rgba(155,188,255,.45));
+  }
+  .g4{
+    background:radial-gradient(circle at 50% 50%,#caa3ff 0%,#dec4ff 35%,#ece0ff 65%,rgba(236,224,255,0) 92%);
+    filter:
+      blur(2px)
+      drop-shadow(0 0 14px rgba(202,163,255,.45));
+  }
+  .g5{
+    background:radial-gradient(circle at 50% 50%,#92e5bc 0%,#baeed3 35%,#d8f4e4 65%,rgba(216,244,228,0) 92%);
+    filter:
+      blur(2px)
+      drop-shadow(0 0 14px rgba(146,229,188,.45));
+  }
+
+  /* ============ DDAY SECTION — Light mode, page-consistent background ============
+     No more dark interruption. The widget itself (white card) provides the
+     visual focus, and a subtle warm-beige tint differentiates the section
+     just enough without breaking page flow. */
+  .dday-section{
+    background:var(--bg-warm);            /* same warm beige as Timeline */
+    max-width:none;width:100%;
+    padding:80px 20px 72px;
+    position:relative;overflow:hidden;
+    color:var(--ink);
+  }
+  /* soft pink atmospheric glow behind the widget — brand-toned, more visible */
+  .dday-section .dday-atmos{
+    position:absolute;inset:0;
+    background:
+      radial-gradient(45% 32% at 50% 42%,rgba(255,159,188,.22) 0%,transparent 70%),
+      radial-gradient(35% 28% at 82% 88%,rgba(185,103,255,.09) 0%,transparent 65%),
+      radial-gradient(40% 26% at 18% 88%,rgba(255,206,106,.07) 0%,transparent 65%);
+    pointer-events:none;
+    z-index:0;
+  }
+  /* Stars no longer make sense in a light section — hide them via CSS,
+     keep DOM untouched for backwards compatibility */
+  .dday-section .star{display:none}
+  /* dday-inner: now in light mode, use normal ink/muted colors */
+  .dday-inner{max-width:520px;margin:0 auto;text-align:center;position:relative;z-index:2}
+  .dday-inner .sec-eyebrow{justify-content:center;display:inline-flex}
+
+  /* ============ STANDALONE D-DAY WIDGET ============
+     Real D-Day widget — not a phone mock-up. The widget IS the example.
+     Minimal like actual iOS/KakaoTalk D-Day widgets:
+     names + big day count + next milestone. No brand name in widget itself. */
+
+  .widget-stage{
+    position:relative;
+    margin:48px auto 0;
+    width:clamp(280px, 78vw, 340px);
+  }
+  /* Apple-style lock-screen widget — frosted material, hero number typography,
+     minimal color (only data, not decoration), clear visual hierarchy. */
+  .widget{
+    position:relative;
+    background:rgba(255,255,255,.85);
+    backdrop-filter:blur(40px) saturate(180%);
+    -webkit-backdrop-filter:blur(40px) saturate(180%);
+    border:.5px solid rgba(255,255,255,.9);
+    border-radius:22px;
+    padding:22px 22px 20px;
+    z-index:2;
+    text-align:left;
+    /* Apple widget shadow — soft, single-layer, never glowing */
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.6) inset,
+      0 12px 36px -14px rgba(20,10,30,.16),
+      0 2px 8px -4px rgba(20,10,30,.08);
+    transform:translateY(14px) scale(.96);
+    opacity:0;
+    transition:transform .9s .25s var(--ease-out-soft), opacity .7s .25s var(--ease-out-soft);
+  }
+  .reveal.is-in .widget{transform:none;opacity:1}
+
+  /* Top label — small, all-caps, tracked, muted */
+  .widget .w-label{
+    font-family:var(--font-sans);
+    font-size:11px;font-weight:600;
+    color:var(--ink-2);
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    margin-bottom:8px;
+    display:flex;align-items:center;gap:7px;
+  }
+  /* Small accent dot before the label — subtle brand signal */
+  .widget .w-label::before{
+    content:"";
+    width:6px;height:6px;border-radius:50%;
+    background:linear-gradient(135deg, #ff6f91, #a070ff);
+  }
+
+  /* Hero number — Fraunces still, but heavier weight + tabular */
+  .widget .w-num-wrap{
+    display:flex;align-items:baseline;gap:6px;
+    margin:6px 0 14px;
+  }
+  .widget .w-num{
+    font-family:var(--font-serif);font-weight:500;
+    font-size:64px;line-height:1;letter-spacing:-.045em;
+    color:var(--ink);
+    font-feature-settings:"tnum" 1, "lnum" 1;
+  }
+  .widget .w-num-unit{
+    font-family:var(--font-sans);font-weight:500;
+    font-size:18px;color:var(--muted);
+    letter-spacing:-.02em;
+  }
+
+  /* Names — single line, neutral, slightly stronger */
+  .widget .w-names{
+    font-family:var(--font-sans);font-weight:500;
+    font-size:13px;color:var(--ink);
+    letter-spacing:-.01em;
+    margin-bottom:8px;
+  }
+
+  /* Footer — when it started */
+  .widget .w-since{
+    font-family:var(--font-sans);font-weight:400;
+    font-size:11px;color:var(--muted);
+    letter-spacing:-.005em;
+    font-feature-settings:"tnum" 1;
+    padding-top:10px;
+    border-top:.5px solid rgba(20,10,30,.06);
+  }
+
+  .dday-feature-row{
+    margin-top:44px;display:grid;grid-template-columns:1fr 1fr;gap:12px;
+    text-align:left;
+  }
+  .dday-mini{
+    position:relative;
+    background:#fff;
+    border-radius:18px;
+    padding:22px 18px 20px;
+    border:.5px solid var(--line-soft);
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 8px 22px -14px rgba(20,10,30,.08),
+      0 18px 36px -22px rgba(255,159,188,.18);
+    transition:transform var(--dur-base) var(--ease-out-soft), box-shadow var(--dur-base) var(--ease-out-soft);
+    overflow:hidden;
+  }
+  /* subtle pink corner glow — like a stamp/seal on each card */
+  .dday-mini::before{
+    content:"";position:absolute;
+    width:90px;height:90px;
+    right:-20px;top:-20px;
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(255,159,188,.18) 0%,rgba(255,159,188,0) 70%);
+    pointer-events:none;
+  }
+  .dday-mini:active{
+    transform:scale(.985);
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 4px 12px -10px rgba(20,10,30,.1);
+  }
+  .dday-mini > *{position:relative;z-index:1}
+  .dday-mini .top-label{
+    font-family:var(--font-sans);font-size:10px;font-weight:600;
+    color:var(--muted-2);letter-spacing:.16em;text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .dday-mini .head{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:16px;color:var(--ink);
+    line-height:1.35;letter-spacing:-.005em;
+  }
+  .dday-mini .head em{
+    font-style:italic;
+    color:var(--ink);
+  }
+  .dday-mini .lbl{
+    margin-top:12px;font-size:11.5px;color:var(--muted);line-height:1.6;
+    letter-spacing:-.005em;
+  }
+
+  /* ============ TIMELINE ============ */
+  .timeline-section{
+    max-width:none;width:100%;
+    padding:64px 0 60px;
+    background:var(--bg-warm);
+    position:relative;overflow:hidden;
+  }
+  /* subtle radial accent — soft pink, matching brand palette */
+  .timeline-section::before{
+    content:"";position:absolute;
+    width:400px;height:400px;
+    right:-150px;top:50%;transform:translateY(-50%);
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(255,180,200,.18) 0%,rgba(255,180,200,0) 60%);
+    pointer-events:none;
+    filter:blur(40px);
+  }
+  .timeline-inner{max-width:520px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
+  .timeline{
+    position:relative;margin-top:32px;
+  }
+  .tl-item{
+    position:relative;
+    padding:18px 0;
+    border-top:.5px solid var(--line-soft);
+    transform:translateX(-8px);
+    transition:transform .7s var(--ease-out-soft);
+  }
+  .tl-item:first-child{
+    border-top:none;
+    padding-top:0;
+  }
+  .reveal.is-in .tl-item{transform:none}
+  .reveal.is-in .tl-item:nth-child(1){transition-delay:.25s}
+  .reveal.is-in .tl-item:nth-child(2){transition-delay:.4s}
+  .reveal.is-in .tl-item:nth-child(3){transition-delay:.55s}
+  .reveal.is-in .tl-item:nth-child(4){transition-delay:.7s}
+  .reveal.is-in .tl-item:nth-child(5){transition-delay:.85s}
+  /* fail-safe for tl-items */
+  @media not (prefers-reduced-motion:reduce){
+    .tl-item{
+      animation:tl-item-show 0s 1.8s forwards;
+    }
+  }
+  @keyframes tl-item-show{
+    to{transform:none}
+  }
+  .tl-day{
+    display:inline-flex;align-items:baseline;
+    gap:2px;
+    flex-shrink:0;
+    min-width:74px;
+    line-height:1;
+    margin-top:2px;
+  }
+  .tl-day .num{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:26px;line-height:1;
+    color:var(--muted);
+    letter-spacing:-.02em;
+    font-feature-settings:"tnum" 1;
+  }
+  .tl-day .unit{
+    font-family:var(--font-sans);font-weight:500;
+    font-size:11px;color:var(--muted-2);
+    letter-spacing:-.005em;
+  }
+  /* milestones get darker numbers — visual weight without dots */
+  .tl-item.milestone .tl-day .num{color:var(--ink)}
+  .tl-item.milestone .tl-day .unit{color:var(--muted)}
+  .tl-row{
+    display:flex;align-items:flex-start;gap:14px;
+  }
+  .tl-body{
+    flex:1;
+    min-width:0;
+  }
+  /* Unified type system: Sans body, no italic, consistent sizes */
+  .tl-body .tl-title{
+    font-family:var(--font-sans);font-weight:500;
+    font-size:15px;line-height:1.4;color:var(--ink);
+    letter-spacing:-.01em;
+  }
+  /* em now uses weight only, no italic — readability over flourish */
+  .tl-body .tl-title em{
+    font-style:normal;
+    color:var(--ink);
+    font-weight:600;
+  }
+  .tl-body .tl-example{
+    margin-top:4px;
+    font-family:var(--font-sans);font-weight:400;
+    font-size:12px;color:var(--muted);
+    line-height:1.5;letter-spacing:-.005em;
+  }
+  .tl-pill{
+    flex-shrink:0;
+    margin-top:5px;
+    display:inline-block;
+    padding:3px 9px;border-radius:999px;
+    background:transparent;
+    border:.5px solid var(--line-18);
+    font-family:var(--font-sans);font-size:10.5px;font-weight:500;
+    color:var(--muted);letter-spacing:-.002em;
+    white-space:nowrap;
+  }
+  /* paid: subtle dark text on light bg + tiny dot indicator */
+  .tl-pill.paid{
+    background:rgba(20,10,30,.05);
+    border-color:var(--line-12);
+    color:var(--ink-2);
+    padding-left:14px;
+    position:relative;
+  }
+  .tl-pill.paid::before{
+    content:"";
+    position:absolute;left:7px;top:50%;
+    transform:translateY(-50%);
+    width:3px;height:3px;border-radius:50%;
+    background:var(--ink);
+  }
+
+  /* ============ JOURNEY (Before · Some · After) — Bento Grid ============ */
+  .journey{padding-top:var(--pad-section-lg);padding-bottom:var(--pad-section-md)}
+
+  .journey-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:18px;
+    margin-top:32px;
+  }
+  .journey-card{
+    position:relative;
+    background:#fff;border-radius:20px;
+    border:.5px solid var(--line-soft);
+    padding:24px 22px 26px;
+    box-shadow:
+      0 1px 2px rgba(20,10,30,.03),
+      0 14px 36px -22px var(--line-12);
+    overflow:hidden;
+    /* Stagger entrance: each card slides up + fades in slightly delayed */
+    opacity:0;
+    transform:translateY(20px);
+    transition:
+      opacity .7s var(--ease-out-soft),
+      transform .8s var(--ease-out-soft),
+      box-shadow var(--dur-base) var(--ease-out-soft);
+  }
+  .reveal.is-in .journey-card{
+    opacity:1;
+    transform:none;
+  }
+  .reveal.is-in .journey-card:nth-of-type(1){transition-delay:.15s}
+  .reveal.is-in .journey-card:nth-of-type(2){transition-delay:.32s}
+  .reveal.is-in .journey-card:nth-of-type(3){transition-delay:.49s}
+  .journey-card:active{
+    transform:scale(.992);
+    box-shadow:0 1px 2px var(--line-04),0 8px 20px -14px rgba(20,10,30,.16);
+  }
+  /* Card 2 (SOME) — the hero of the journey, same neutral background
+     as the other cards but with stronger pink halo for emphasis. */
+  .journey-card.some{
+    background:#fff;
+    border-color:var(--pink-12);
+    padding:28px 22px 30px;
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 18px 40px -20px var(--pink-18),
+      0 24px 50px -24px var(--line-18);
+  }
+  /* gradient halo per stage */
+  .journey-card::before{
+    content:"";position:absolute;
+    width:220px;height:220px;
+    right:-80px;top:-80px;
+    border-radius:50%;
+    pointer-events:none;
+    filter:blur(20px);
+    transition:transform 1.4s var(--ease-out-soft);
+    transform:translate(0,0);
+  }
+  .journey-card.before::before{
+    background:radial-gradient(circle,rgba(255,206,106,.55) 0%,rgba(255,224,161,0) 60%);
+    opacity:.85;
+  }
+  .journey-card.some::before{
+    background:radial-gradient(circle,var(--pink-42) 0%,rgba(255,159,188,0) 65%);
+    opacity:.9;
+    width:300px;height:300px;
+    right:-110px;top:-110px;
+  }
+  .journey-card.after::before{
+    background:radial-gradient(circle,rgba(155,188,255,.55) 0%,rgba(194,214,255,0) 60%);
+    opacity:.8;
+  }
+  .reveal.is-in .journey-card::before{transform:translate(-10%,8%)}
+
+  .journey-card > *{position:relative;z-index:1}
+
+  .journey-head{
+    display:flex;align-items:center;gap:10px;
+    margin-bottom:16px;
+    /* leave room for the icon on the right */
+    padding-right:50px;
+  }
+
+  .journey-stage{
+    font-family:var(--font-sans);
+    font-size:11px;font-weight:600;
+    color:var(--ink);
+    display:inline-flex;align-items:center;gap:0;
+  }
+  .journey-card.some .journey-stage{color:var(--ink)}
+
+  /* TARGET label — Korean, the primary signal ("내 단계가 여기야?") */
+  .journey-stage .target{
+    font-family:var(--font-sans);
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink);
+    letter-spacing:-.01em;
+    display:inline-flex;align-items:center;
+    padding:4px 10px;
+    border-radius:999px;
+    background:rgba(20,10,30,.04);
+    border:.5px solid var(--line-08);
+  }
+  /* Each stage card uses its background-halo color for the target chip —
+     gold (singles · warm beginning), pink (some · the spark), blue (lovers · depth) */
+  .journey-card.before .journey-stage .target{
+    color:#a87010;
+    background:rgba(255,206,106,.14);
+    border-color:rgba(168,112,16,.22);
+  }
+  .journey-card.some .journey-stage .target{
+    color:#a04060;
+    background:rgba(255,159,188,.1);
+    border-color:rgba(255,159,188,.25);
+  }
+  .journey-card.after .journey-stage .target{
+    color:#2850a8;
+    background:rgba(155,188,255,.14);
+    border-color:rgba(60,100,200,.22);
+  }
+
+  .journey-stage .dot{
+    display:inline-block;margin:0 8px;
+    color:var(--muted-2);font-weight:300;
+    font-size:11px;
+  }
+  .journey-card.some .journey-stage .dot{color:var(--muted-2)}
+
+  /* ROLE label — service description, secondary */
+  .journey-stage .role{
+    color:var(--muted);
+    font-weight:500;
+    font-size:11px;
+    letter-spacing:.04em;
+  }
+  .journey-card.some .journey-stage .role{color:var(--muted)}
+
+  .journey-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:22px;line-height:1.3;letter-spacing:-.005em;
+    color:var(--ink);
+  }
+  .journey-card.some .journey-title{
+    font-size:24px;line-height:1.3;
+    color:var(--ink);
+  }
+  .journey-title em{
+    font-style:normal;
+    font-weight:400;
+    color:var(--ink);
+  }
+  /* SOME card em keeps the same dark ink color as other cards — pink halo is the differentiator */
+  .journey-card.some .journey-title em{color:var(--ink);font-weight:400}
+
+  .journey-body{
+    margin-top:14px;
+    font-family:var(--font-sans);font-size:14px;line-height:1.7;
+    color:var(--muted);
+  }
+  .journey-card.some .journey-body{color:var(--muted)}
+
+  .journey-body em{
+    font-family:var(--font-sans);
+    font-style:normal;font-weight:500;
+    color:var(--ink-2);
+  }
+  .journey-card.some .journey-body em{color:var(--ink-2)}
+
+  /* ============ INVITE ============ */
+  .invite{
+    display:block;
+    background:linear-gradient(160deg,#fff 0%,#fff 65%,rgba(255,243,235,.6) 100%);
+    border-radius:16px;
+    border:.5px solid var(--line-soft);
+    padding:22px 22px 24px;margin-top:0;
+    text-align:center;
+    position:relative;overflow:hidden;
+    box-shadow:
+      0 1px 2px rgba(20,10,30,.03),
+      0 14px 28px -20px rgba(20,10,30,.12);
+    color:inherit;
+    text-decoration:none;
+    transition:transform .25s var(--ease-out), box-shadow .25s var(--ease-out);
+    -webkit-tap-highlight-color:transparent;
+    cursor:pointer;
+  }
+  .invite:hover{
+    transform:translateY(-2px);
+    box-shadow:
+      0 1px 2px rgba(20,10,30,.03),
+      0 20px 36px -18px rgba(20,10,30,.18);
+  }
+  .invite:active{transform:translateY(0)}
+  .invite::before{
+    content:"";position:absolute;inset:-30%;
+    background:
+      radial-gradient(circle at 25% 15%,rgba(255,159,188,.18),transparent 45%),
+      radial-gradient(circle at 80% 85%,rgba(202,163,255,.14),transparent 45%);
+    z-index:0;
+    animation:invite-drift 16s var(--ease-in-out) infinite;
+  }
+  @keyframes invite-drift{
+    0%,100%{transform:translate(0,0) rotate(0deg)}
+    50%{transform:translate(4%,-3%) rotate(2deg)}
+  }
+  .invite > *{position:relative;z-index:1}
+  .invite-icon{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:32px;height:32px;
+    border-radius:50%;
+    background:rgba(255,159,188,.1);
+    color:#a04060;
+    margin-bottom:10px;
+  }
+  .invite-icon svg{width:14px;height:14px}
+  .invite h3{
+    font-family:var(--font-sans);font-weight:500;font-size:16px;
+    line-height:1.45;color:var(--ink);letter-spacing:-.01em;
+  }
+  .invite h3 em{
+    font-style:normal;
+    color:#a04060;
+    font-weight:600;
+  }
+  .invite p{
+    margin-top:8px;font-size:12px;color:var(--muted);line-height:1.55;
+    max-width:280px;margin-left:auto;margin-right:auto;
+    letter-spacing:-.002em;
+  }
+  .invite-cta{
+    display:inline-flex;align-items:center;gap:4px;
+    margin-top:14px;
+    font-family:var(--font-sans);
+    font-size:13px;font-weight:500;
+    color:var(--ink);
+    letter-spacing:-.005em;
+  }
+  .invite-cta svg{
+    transition:transform .2s var(--ease-out);
+  }
+  .invite:hover .invite-cta svg{
+    transform:translateX(3px);
+  }
+
+  /* ============ FAQ ============ */
+  .faq{margin-top:var(--pad-section-md);padding-top:var(--pad-section-sm);padding-bottom:var(--pad-section-sm)}
+  .faq details{
+    border-bottom:.5px solid var(--line-soft);
+    padding:18px 0;
+    transition:background var(--dur-base) var(--ease-out);
+  }
+  .faq details:first-of-type{border-top:.5px solid var(--line-soft)}
+  .faq details[open]{
+    padding-bottom:20px;
+  }
+  .faq summary{
+    list-style:none;cursor:pointer;
+    display:flex;justify-content:space-between;align-items:center;gap:14px;
+    font-family:var(--font-serif);font-weight:300;font-size:17px;
+    color:var(--ink);letter-spacing:-.005em;line-height:1.4;
+    transition:color var(--dur-fast) var(--ease-out);
+  }
+  .faq summary:active{color:var(--ink-2)}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{
+    content:"";
+    width:22px;height:22px;border-radius:50%;
+    background:var(--bg-soft);
+    background-image:
+      linear-gradient(var(--ink),var(--ink)),
+      linear-gradient(var(--ink),var(--ink));
+    background-size:9px 1px, 1px 9px;
+    background-position:center, center;
+    background-repeat:no-repeat;
+    transition:transform var(--dur-base) var(--ease-out-soft), background-color var(--dur-base) var(--ease-out);
+    flex-shrink:0;
+  }
+  .faq details[open] summary::after{
+    transform:rotate(45deg);
+    background-color:var(--ink);
+    background-image:
+      linear-gradient(#fff,#fff),
+      linear-gradient(#fff,#fff);
+  }
+  .faq details p{
+    margin-top:12px;font-size:14px;color:var(--muted);line-height:1.7;
+    animation:faq-open .35s var(--ease-out-soft);
+    padding-right:36px;
+  }
+  @keyframes faq-open{
+    from{opacity:0;transform:translateY(-4px)}
+    to{opacity:1;transform:none}
+  }
+
+  /* ============ FOOTER ============ */
+  footer{
+    margin-top:var(--pad-section-md);
+    padding:var(--pad-section-md) 20px var(--pad-section-sm);
+    text-align:center;
+    font-size:11px;color:var(--muted-2);
+    font-family:var(--font-sans);letter-spacing:.02em;line-height:1.7;
+    position:relative;
+    max-width:520px;margin-left:auto;margin-right:auto;
+  }
+  /* fine top hairline */
+  footer::before{
+    content:"";
+    position:absolute;
+    top:0;left:50%;transform:translateX(-50%);
+    width:36px;height:.5px;
+    background:linear-gradient(to right,transparent,var(--muted-2),transparent);
+    opacity:.6;
+  }
+  footer .f-tag{
+    color:var(--muted);font-size:14px;letter-spacing:-.005em;
+    margin-bottom:36px;
+    font-family:var(--font-serif);font-weight:400;
+    line-height:1.55;
+  }
+  footer .f-logo{
+    font-family:var(--font-serif);font-style:italic;font-weight:300;
+    font-size:50px;letter-spacing:-.035em;line-height:1;
+    color:transparent;-webkit-text-stroke:.7px var(--muted-2);
+    margin-bottom:24px;
+    user-select:none;
+    opacity:.9;
+  }
+  footer .f-links{
+    display:flex;align-items:center;justify-content:center;
+    flex-wrap:wrap;gap:0;
+    margin-bottom:14px;
+  }
+  footer .f-links a{
+    color:var(--muted-2);font-size:11px;letter-spacing:-.002em;
+    padding:4px 10px;
+    transition:color var(--dur-base) var(--ease-out);
+  }
+  footer .f-links a:active{color:var(--ink)}
+  footer .f-links .f-strong{color:var(--ink-2);font-weight:500}
+  footer .f-sep{
+    display:inline-block;
+    width:2px;height:2px;border-radius:50%;
+    background:var(--muted-2);
+    opacity:.4;
+  }
+  footer .f-links-legal{
+    margin-bottom:28px;
+    padding-bottom:24px;
+    border-bottom:.5px solid var(--line-soft);
+  }
+  footer .f-company{
+    margin-bottom:24px;
+    text-align:left;
+    max-width:280px;
+    margin-left:auto;margin-right:auto;
+  }
+  footer .f-company-row{
+    display:flex;align-items:baseline;gap:10px;
+    font-size:10.5px;color:var(--muted-2);
+    line-height:1.7;
+  }
+  footer .f-company-row .f-key{
+    flex-shrink:0;
+    min-width:88px;
+    color:var(--muted-2);
+    font-weight:500;
+    letter-spacing:0;
+  }
+  footer .f-company-row .f-val{
+    color:var(--muted);
+    letter-spacing:-.002em;
+    flex:1;
+  }
+  footer .f-company-row .f-val a{
+    color:var(--muted);
+    text-decoration:underline;
+    text-decoration-color:var(--line-12);
+    text-underline-offset:2px;
+  }
+  footer .f-copyright{
+    font-size:10px;color:var(--muted-2);
+    letter-spacing:.04em;
+    opacity:.55;
+  }
+
+  /* ============ STICKY CTA ============
+     Initially completely removed from layout (display:none) so iOS Safari
+     cannot detect the yellow CTA color in the bottom fold. JS toggles
+     `is-mounted` first (sets display), then `is-shown` triggers the slide-in. */
+  .sticky-cta{
+    display:none;
+    position:fixed;bottom:0;left:0;right:0;z-index:40;
+    padding:14px 16px calc(12px + var(--safe-bottom));
+    background:linear-gradient(
+      to bottom,
+      rgba(246,244,241,0) 0%,
+      rgba(246,244,241,.7) 45%,
+      rgba(246,244,241,.96) 100%
+    );
+    transform:translateY(110%);
+    opacity:0;
+    transition:
+      transform .7s var(--ease-out-soft),
+      opacity .55s var(--ease-out-soft);
+    pointer-events:none;
+    will-change:transform,opacity;
+  }
+  .sticky-cta.is-mounted{
+    display:block;
+  }
+  .sticky-cta.is-shown{
+    transform:translateY(0);
+    opacity:1;
+    pointer-events:auto;
+  }
+  .sticky-cta .inner{
+    max-width:520px;margin:0 auto;
+  }
+  .btn-kakao{
+    position:relative;
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;
+    padding:14px;border-radius:14px;
+    background:var(--kakao);color:var(--kakao-ink);
+    font-size:14px;font-weight:600;letter-spacing:-.005em;
+    /* Neutral ink shadow only — no yellow glow that would tint the gradient fade below */
+    box-shadow:
+      0 1px 0 rgba(0,0,0,.05),
+      0 10px 24px -12px rgba(20,10,30,.22);
+    overflow:hidden;
+    transition:transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+  }
+  .btn-kakao:active{transform:scale(.985);box-shadow:0 1px 0 rgba(0,0,0,.05),0 4px 12px -8px rgba(254,229,0,.6)}
+  .btn-kakao svg{width:16px;height:16px;transition:transform var(--dur-base) var(--ease-out-soft)}
+  .btn-kakao:active svg{transform:translateX(2px)}
+
+  /* ============ RESPONSIVE EDGE ============ */
+
+  /* Small phones (iPhone SE 1st gen, etc.) */
+  @media (max-width:360px){
+    .hero h1{font-size:28px}
+    .hero-wordmark{font-size:80px}
+    /* card bottom ≈ h1(50) + sub(48) + stage margin(54) + stage height(302) = ~454px,
+       card center ≈ ~340. Wordmark top at ~298 puts letters' middle band under card. */
+    .hero-wordmark-deep{top:298px;left:-6px}
+    .hero-wordmark-vibe{top:298px;right:18px}
+    .hero-stage{width:260px;height:302px;margin-top:54px}
+    .hero-card{width:200px;top:6px}
+    section{padding-left:18px;padding-right:18px}
+    .journey-card{padding:20px 18px 22px}
+    .journey-title{font-size:22px}
+    .invite{padding:20px 18px 22px}
+    .dday-section{padding-left:18px;padding-right:18px}
+  }
+
+  /* Foldables (folded) and ultra narrow */
+  @media (max-width:320px){
+    .hero h1{font-size:24px}
+    .hero-wordmark{font-size:66px}
+    .hero-wordmark-deep{top:272px;left:-4px}
+    .hero-wordmark-vibe{top:272px;right:14px}
+    .hero-stage{width:240px;height:278px;margin-top:48px}
+    .hero-card{width:184px;top:6px}
+    /* widget: slightly smaller */
+    .widget{padding:18px 18px 16px}
+    .widget .w-num{font-size:54px}
+    .widget .w-num-unit{font-size:16px}
+    .widget .w-names{font-size:12px}
+    .widget .w-since{font-size:10px;padding-top:8px}
+    /* nav: tighter */
+    nav .logo .word{display:none}
+    section{padding-left:16px;padding-right:16px}
+    .journey-title{font-size:17px;line-height:1.3}
+    .journey-card{padding:18px 16px 20px}
+    .journey-head{gap:8px}
+    .journey-stage{font-size:10px}
+    .journey-stage .target{font-size:12px;padding:3px 9px}
+    .tl-pill{font-size:10px;padding:3px 8px}
+    .tl-pill.paid{padding-left:13px}
+    .tl-body{font-size:15.5px}
+  }
+
+  /* Landscape phones — let content breathe */
+  @media (orientation:landscape) and (max-height:500px){
+    section{padding-top:var(--pad-section-sm);padding-bottom:var(--pad-section-sm)}
+    .hero{padding-top:20px;padding-bottom:32px}
+    .hero-stage{margin-top:8px}
+  }
+
+  /* Larger phones / small tablets - more comfortable container */
+  @media (min-width:540px){
+    body{background:var(--bg)}
+    section{padding-left:32px;padding-right:32px}
+  }
+
+  /* Bigger tablets — keep mobile-first feel but slightly broader */
+  @media (min-width:768px){
+    .hero{padding-top:36px}
+  }
+
+  /* High-DPI fine-tuning — sharper borders */
+  @media (-webkit-min-device-pixel-ratio:2),(min-resolution:192dpi){
+    .p-card,.journey-card,.invite{
+      box-shadow:
+        0 .5px 1px var(--line-04),
+        0 14px 36px -22px var(--line-12);
+    }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;
+    }
+    .reveal{opacity:1;transform:none}
+    .sticky-cta{transition:none}
+    /* preview cards: skip the staggered entry reveal */
+    .reveal.is-in .p-card{transition-delay:0s !important}
+    /* skip all internal staggers — show everything instantly */
+    .journey-card,
+    .p-card .p-title,
+    .p-card .p-summary,
+    .p-card .p-chart,
+    .p-card .p-events li{
+      opacity:1 !important;
+      transform:none !important;
+      transition-delay:0s !important;
+    }
+    .p-chart-line{stroke-dashoffset:0 !important}
+    .p-chart-svg circle{opacity:1 !important}
+  }
+</style>
+<noscript>
+  <style>
+    .reveal{transform:none !important}
+  </style>
+</noscript>
+
+<!-- ============ Auth Module (Phase 1: placeholder Kakao key) ============ -->
+<script src="auth.js" defer></script>
+<script src="auth-ui.js" defer></script>
+</head>
+<body>
+
+<!-- =================== NAV =================== -->
+<nav id="nav">
+  <div class="row">
+    <div class="logo">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 30 18" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="logo-blur" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation=".55"/>
+            </filter>
+            <radialGradient id="logo-pink" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff6f91" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#ff9fbc" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".7"/>
+            </radialGradient>
+            <radialGradient id="logo-violet" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#b967ff" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#caa3ff" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#dec4ff" stop-opacity=".7"/>
+            </radialGradient>
+          </defs>
+          <g filter="url(#logo-blur)">
+            <circle class="c1" cx="11" cy="9" r="7.5" fill="url(#logo-pink)"/>
+            <circle class="c2" cx="19" cy="9" r="7.5" fill="url(#logo-violet)"/>
+          </g>
+        </svg>
+      </span>
+      <span class="word">deepvibe</span>
+    </div>
+    <!-- Auth UI (login button or user chip) is injected by auth-ui.js -->
+  </div>
+</nav>
+
+<!-- v124: <main> 시멘틱 추가 (다른 페이지와 통일) -->
+<main>
+
+<!-- =================== HERO — ANALYSIS-FIRST =================== -->
+<header class="hero">
+  <div class="hero-wordmark hero-wordmark-deep" aria-hidden="true"><em>deep</em></div>
+  <div class="hero-wordmark hero-wordmark-vibe" aria-hidden="true"><em>vibe</em></div>
+
+  <h1>
+    그 사람 마음,<br>
+    <em>어디쯤</em> 와 있을까?
+  </h1>
+
+  <p class="sub">
+    카톡이 이미, <em>답을 알고 있어요.</em>
+  </p>
+
+  <div class="hero-stage" aria-hidden="true">
+    <!-- featured front card with 6 auto-rotating slides -->
+    <div class="hero-card" id="heroCard">
+      <div class="hero-slides" id="heroSlides">
+
+        <div class="hero-slide s1 is-current">
+          <div class="a-title">답장이 빨라진 주</div>
+          <div class="a-art"></div>
+          <div class="a-quote">"자고 있었어? ㅋㅋ<br><em>깨운 건 아니지</em>"</div>
+          <div class="a-stat">
+            <span>지금 결</span>
+            <span class="big big-text">친구 ↔ 연인</span>
+          </div>
+        </div>
+
+        <div class="hero-slide s2" data-stat="4.2" data-stat-fmt="decimal-min">
+          <div class="a-title">주말의 답장 속도</div>
+          <div class="a-art"></div>
+          <div class="a-quote">"지금 카페인데<br>뭐해? <em>같이 올래?</em>"</div>
+          <div class="a-stat">
+            <span>응답 속도</span>
+            <span class="big" data-target="4.2">0<span style="font-size:10px;color:var(--muted);font-style:normal;margin-left:2px">분</span></span>
+          </div>
+        </div>
+
+        <div class="hero-slide s3">
+          <div class="a-title">웃음 이모티콘의 결</div>
+          <div class="a-art"></div>
+          <div class="a-quote">"오늘 진짜<br><em>보고 싶다</em> 🥺"</div>
+          <div class="a-stat">
+            <span>감정 결</span>
+            <span class="big big-text">웃음 흐르는</span>
+          </div>
+        </div>
+
+        <div class="hero-slide s4">
+          <div class="a-title">닮아가는 말투</div>
+          <div class="a-art"></div>
+          <div class="a-quote">"그치 그치,<br><em>나도 그 생각 했어</em>"</div>
+          <div class="a-stat">
+            <span>말투 결</span>
+            <span class="big big-text">닮아가는</span>
+          </div>
+        </div>
+
+        <div class="hero-slide s5" data-stat="3" data-stat-fmt="count">
+          <div class="a-title">대화가 길어지는 주제</div>
+          <div class="a-art"></div>
+          <div class="a-quote">"<em>밤새 얘기해도</em><br>모자랄 듯 ㅋㅋ"</div>
+          <div class="a-stat">
+            <span>주요 주제</span>
+            <span class="big" data-target="3">0<span style="font-size:10px;color:var(--muted);font-style:normal;margin-left:2px">개</span></span>
+          </div>
+        </div>
+
+        <div class="hero-slide s6" data-stat="11" data-stat-fmt="count">
+          <div class="a-title">마음이 움직인 순간</div>
+          <div class="a-art"></div>
+          <div class="a-quote">"나 진짜<br><em>좋아하는 거 같아</em>..."</div>
+          <div class="a-stat">
+            <span>시그니처 모먼트</span>
+            <span class="big" data-target="11">0<span style="font-size:10px;color:var(--muted);font-style:normal;margin-left:2px">번</span></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero → Journey transition: small invitation to keep scrolling -->
+  <div class="hero-link" aria-hidden="true">
+    <div class="hero-link-text">이런 결, <em>더 보고 싶다면</em></div>
+    <svg class="hero-link-arrow" viewBox="0 0 14 18" fill="none" aria-hidden="true">
+      <path d="M7 2 V15" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+      <path d="M2.5 11 L7 15 L11.5 11" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+</header>
+
+<!-- =================== JOURNEY — BEFORE · SOME · AFTER =================== -->
+<section class="journey reveal">
+
+  <h2 class="sec-h">
+    deepvibe는,<br>
+    연애의 <em>모든 순간</em>에 있어요.
+  </h2>
+
+  <div class="journey-grid">
+
+    <article class="journey-card before">
+      <div class="journey-head">        <div class="journey-stage"><span class="target">싱글</span></div>
+      </div>
+      <h3 class="journey-title">
+        나랑 딱 맞는 사람을,<br>
+        AI가 <em>먼저</em> 찾아드려요.
+      </h3>
+      <p class="journey-body">
+        조건이 아니라 <em>결</em>을 봅니다. 보이지 않는 부분이 닮은 사람을 그려드려요.
+      </p>
+    </article>
+
+    <article class="journey-card some">
+      <div class="journey-head">        <div class="journey-stage"><span class="target">썸</span></div>
+      </div>
+      <h3 class="journey-title">
+        헷갈리는 시그널,<br>
+        <em>명쾌한 답</em>으로.
+      </h3>
+      <p class="journey-body">
+        카톡 대화의 패턴으로 상대의 호감도를 읽고, <em>다음 한마디</em>까지 함께 그려요.
+      </p>
+    </article>
+
+    <article class="journey-card after">
+      <div class="journey-head">        <div class="journey-stage"><span class="target">연인</span></div>
+      </div>
+      <h3 class="journey-title">
+        오래 가는 사이를 위한,<br>
+        <em>관계 리포트</em>.
+      </h3>
+      <p class="journey-body">
+        익숙함에 묻혔던 신호를 짚고, 더 건강한 <em>다음 한 달</em>을 제안해요.
+      </p>
+    </article>
+
+  </div>
+
+</section>
+
+<!-- =================== ANALYSIS — single hero preview + ghosts =================== -->
+<section class="analysis reveal">
+
+  <p class="sec-input">
+    <em>카톡 대화</em>를 올리면,
+  </p>
+  <h2 class="sec-h">
+    이런 리포트가,<br>
+    <em>도착해요</em>.
+  </h2>
+
+  <div class="preview-grid">
+
+    <!-- HERO PREVIEW CARD: Affinity / 호감도 - the sole analysis preview -->
+    <article class="p-card" aria-labelledby="p-main-title">
+      <h3 class="p-title" id="p-main-title">상대의 호감도</h3>
+
+      <p class="p-summary">
+        두 사람은 지금,<br>
+        <em>친구에서 연인으로 향하는 길</em> 위에 있어요.
+      </p>
+
+      <!-- mini line chart of affinity over time -->
+      <div class="p-chart">
+        <div class="p-chart-label">호감도 변화 · 94일</div>
+        <svg class="p-chart-svg" viewBox="0 0 320 80" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="p-chart-fill" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stop-color="#ff6f91" stop-opacity=".18"/>
+              <stop offset="100%" stop-color="#ff6f91" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <!-- area fill -->
+          <path d="M 4 64 C 40 60, 70 56, 100 50 C 130 46, 160 42, 190 38 C 220 34, 250 30, 280 26 L 316 22 L 316 78 L 4 78 Z"
+                fill="url(#p-chart-fill)"/>
+          <!-- line -->
+          <path class="p-chart-line"
+                d="M 4 64 C 40 60, 70 56, 100 50 C 130 46, 160 42, 190 38 C 220 34, 250 30, 280 26 L 316 22"
+                fill="none" stroke="#ff6f91" stroke-width="1.4" stroke-linecap="round"/>
+          <!-- 5 milestone dots -->
+          <circle cx="4" cy="64" r="2.5" fill="#fff" stroke="#ff6f91" stroke-width="1.2"/>
+          <circle cx="80" cy="54" r="2.5" fill="#fff" stroke="#ff6f91" stroke-width="1.2"/>
+          <circle cx="160" cy="42" r="2.5" fill="#fff" stroke="#ff6f91" stroke-width="1.2"/>
+          <circle cx="240" cy="30" r="2.5" fill="#fff" stroke="#ff6f91" stroke-width="1.2"/>
+          <circle cx="316" cy="22" r="3.5" fill="#ff6f91"/>
+        </svg>
+        <div class="p-chart-axis">
+          <span>8월 12일 · 첫 대화</span>
+          <span>오늘</span>
+        </div>
+      </div>
+
+      <!-- 3 inflection points -->
+      <ul class="p-events">
+        <li><span class="p-event-date">9월 21일</span><span class="p-event-text">먼저 "<em>잘자</em>" 라고 인사를 시작한 날</span></li>
+        <li><span class="p-event-date">10월 14일</span><span class="p-event-text">답장이 <em>5분 → 1분</em>으로 빨라진 주</span></li>
+        <li><span class="p-event-date">11월 3일</span><span class="p-event-text">처음으로 <em>약한 모습</em>을 보여준 밤</span></li>
+      </ul>
+    </article>
+
+  </div>
+
+  <!-- "더 있음" 암시 — 블러 ghost는 fade out, chip은 별도 (mask 영향 X) -->
+  <div class="preview-more-wrap">
+    <div class="preview-more" aria-hidden="true">
+      <div class="preview-more-row">
+        <div class="preview-ghost">
+          <div class="g-line short"></div>
+          <div class="g-num"></div>
+          <div class="g-line med"></div>
+        </div>
+        <div class="preview-ghost">
+          <div class="g-line short"></div>
+          <div class="g-dot"></div>
+          <div class="g-line long"></div>
+        </div>
+        <div class="preview-ghost">
+          <div class="g-line short"></div>
+          <div class="g-num"></div>
+          <div class="g-line med"></div>
+        </div>
+      </div>
+    </div>
+    <div class="preview-count" aria-hidden="true">
+      <div class="preview-count-text"><em>더 깊은 결이</em>, 이어져요</div>
+      <svg class="preview-count-arrow" viewBox="0 0 14 18" fill="none" aria-hidden="true">
+        <path d="M7 2 V15" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+        <path d="M2.5 11 L7 15 L11.5 11" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- =================== D-DAY SECTION (was hero) =================== -->
+<section class="dday-section reveal">
+  <div class="dday-atmos" aria-hidden="true"></div>
+  <div class="dday-inner">
+
+    <h2 class="sec-h">
+      매일 켜는 화면 위에,<br>
+      <em>두 사람의 D-Day.</em>
+    </h2>
+    <p class="sec-sub">
+      처음 만난 날부터 천 일까지 —<br>
+      잠금화면이 두 사람을 기억해요.
+    </p>
+
+    <div class="widget-stage">
+      <div class="widget">
+        <!-- Top label — small, all caps, muted (Apple widget pattern) -->
+        <div class="w-label">D-DAY</div>
+
+        <!-- Hero number — bold, tabular, dominant -->
+        <div class="w-num-wrap">
+          <span class="w-num" id="widgetNum" data-target="127">0</span>
+          <span class="w-num-unit">일</span>
+        </div>
+
+        <!-- Names — single line, unified tone -->
+        <div class="w-names">민지 &amp; 지훈</div>
+
+        <!-- Footer meta — when it started -->
+        <div class="w-since">2024.12.27 부터</div>
+      </div>
+    </div>
+
+    <div class="dday-feature-row">
+      <div class="dday-mini">
+        <div class="top-label">기념일</div>
+        <div class="head"><em>"50일,</em><br>우리는 어떻게 변했을까?"</div>
+        <div class="lbl">중요한 날마다 두 사람의 결을 다시 분석해드려요.</div>
+      </div>
+      <div class="dday-mini">
+        <div class="top-label">매일</div>
+        <div class="head">화면을 켜면,<br><em>함께한 날들</em></div>
+        <div class="lbl">앱을 열지 않아도 D-Day가 흐르고 있어요.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== TIMELINE =================== -->
+<section class="timeline-section reveal">
+  <div class="timeline-inner">
+
+    <h2 class="sec-h">
+      <em>천 일이 넘어도,</em><br>
+      곁에서 함께.
+    </h2>
+    <p class="sec-sub">
+      그때그때 다시 분석하면서,<br>
+      두 사람의 결을 맞춰가요.
+    </p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-row">
+          <div class="tl-day"><span class="num">0</span><span class="unit">일</span></div>
+          <div class="tl-body">
+            <div class="tl-title"><em>첫 대화</em>로 시작해요</div>
+            <div class="tl-example">호감도, 답장 패턴, 자주 쓰는 말</div>
+          </div>
+          <span class="tl-pill">시작</span>
+        </div>
+      </div>
+
+      <div class="tl-item milestone">
+        <div class="tl-row">
+          <div class="tl-day"><span class="num">50</span><span class="unit">일</span></div>
+          <div class="tl-body">
+            <div class="tl-title"><em>처음과 지금</em>을 나란히</div>
+            <div class="tl-example">답장 속도와 말투의 변화</div>
+          </div>
+          <span class="tl-pill paid">비교</span>
+        </div>
+      </div>
+
+      <div class="tl-item milestone">
+        <div class="tl-row">
+          <div class="tl-day"><span class="num">100</span><span class="unit">일</span></div>
+          <div class="tl-body">
+            <div class="tl-title"><em>달라진 결</em>을 살펴</div>
+            <div class="tl-example">새 감정과 자리잡은 주제</div>
+          </div>
+          <span class="tl-pill paid">점검</span>
+        </div>
+      </div>
+
+      <div class="tl-item milestone">
+        <div class="tl-row">
+          <div class="tl-day"><span class="num">200</span><span class="unit">일</span></div>
+          <div class="tl-body">
+            <div class="tl-title"><em>결을 다시</em> 맞춰</div>
+            <div class="tl-example">변화의 신호와 다음 한 달</div>
+          </div>
+          <span class="tl-pill paid">재정비</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-row">
+          <div class="tl-day"><span class="num">1,000</span><span class="unit">일</span></div>
+          <div class="tl-body">
+            <div class="tl-title"><em>천 일의 흐름</em>을 되짚어요</div>
+            <div class="tl-example">전체 여정의 시그니처 순간들</div>
+          </div>
+          <span class="tl-pill paid">회고</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== INVITE =================== -->
+<section class="features reveal" style="padding-top:var(--pad-section-sm);padding-bottom:var(--pad-section-sm)">
+  <a class="invite" href="/invite">
+    <div class="invite-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M12 4 L12 20 M4 12 L20 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h3>친구를 초대하면<br>분석권 <em>한 장</em>이 더 와요.</h3>
+    <p>친구도 첫 분석을 받고, 나에게는 다음 재분석권 한 장.</p>
+    <div class="invite-cta">
+      초대 링크 보기
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M3 6 H9 M6.5 3.5 L9 6 L6.5 8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </a>
+</section>
+
+<!-- =================== FAQ =================== -->
+<section class="faq reveal">
+
+  <h2 class="sec-h" style="margin-bottom:18px">알아두면 <em>안심되는 것들</em></h2>
+
+  <details>
+    <summary>제 카톡 대화는 안전한가요?</summary>
+    <p>업로드한 카톡 원본은 분석이 끝나면 바로 지워지고, 어디에도 보관되지 않아요. 분석 결과 요약과 D-Day 정보만 내 계정에 묶여 있어요.</p>
+  </details>
+  <details>
+    <summary>분석은 얼마나 정확한가요?</summary>
+    <p>한국어 대화 분석 AI를 사용해요. 대화 톤·답장 패턴·이모티콘 사용 등 여러 신호를 종합해 호감도를 그려요. 다만 사람의 마음을 100% 알 수는 없어요 — 결정에 참고하는 자료로 활용해 주세요.</p>
+  </details>
+  <details>
+    <summary>첫 분석이 무료라면, 그 다음은요?</summary>
+    <p>처음 한 번은 자유롭게 받아보시고, 50·100·200·1000일 같은 기념일에 다시 분석하고 싶을 때 결제하면 돼요. 친구를 초대할 때마다 무료권이 생겨요.</p>
+  </details>
+  <details>
+    <summary>결제 후 환불은 가능한가요?</summary>
+    <p>분석 리포트 생성 전이라면 7일 내 전액 환불해드려요. 리포트가 이미 생성된 후에는 부분 환불이 적용돼요. 자세한 내용은 환불 정책 페이지에서 확인할 수 있어요.</p>
+  </details>
+  <details>
+    <summary>D-Day 위젯은 어떻게 깔아요?</summary>
+    <p>가입 후 위젯 추가 가이드를 보내드려요. iOS는 잠금화면 위젯(iOS 16 이상), Android는 홈 위젯과 단축어 월페이퍼 두 가지 방식 모두 지원할 예정이에요.</p>
+  </details>
+  <details>
+    <summary>친구가 초대를 안 받으면 어떻게 되나요?</summary>
+    <p>친구가 가입을 완료한 시점에 무료권이 발급돼요. 받지 않으면 초대 횟수는 차감되지 않으니 부담 없이 보내보세요. 초대 링크는 7일 후 만료돼요.</p>
+  </details>
+  <details>
+    <summary>새로운 사람을 만나도 쓸 수 있나요?</summary>
+    <p>네. 한 계정에서 여러 관계를 따로 추적할 수 있어요. 지난 관계는 회고로 정리하고, 새 관계는 새로운 D-Day로 시작하면 돼요.</p>
+  </details>
+  <details>
+    <summary>분석 결과를 상대에게 공유해도 되나요?</summary>
+    <p>리포트는 본인용 자료예요. 그대로 보여주기보다는, 인사이트를 참고해서 더 좋은 대화를 만들어가는 용도로 권해드려요. 두 사람의 신뢰가 가장 중요해요.</p>
+  </details>
+</section>
+
+</main>
+<!-- v124: </main> end -->
+
+<!-- =================== FOOTER =================== -->
+<footer>
+  <div class="f-tag">두 사람 사이에 흐르는 결을 그립니다.</div>
+  <div class="f-logo"><em>deepvibe</em></div>
+
+  <nav class="f-links" aria-label="footer-links">
+    <a href="#">분석 원리</a>
+    <span class="f-sep"></span>
+    <a href="#">서비스 소개</a>
+    <span class="f-sep"></span>
+    <a href="#">고객센터</a>
+  </nav>
+
+  <nav class="f-links f-links-legal" aria-label="legal">
+    <a href="#">이용약관</a>
+    <span class="f-sep"></span>
+    <a href="#" class="f-strong">개인정보처리방침</a>
+    <span class="f-sep"></span>
+    <a href="#">환불 정책</a>
+  </nav>
+
+  <div class="f-company">
+    <div class="f-company-row"><span class="f-key">상호</span><span class="f-val">deepvibe (딥바이브)</span></div>
+    <div class="f-company-row"><span class="f-key">대표</span><span class="f-val">홍길동</span></div>
+    <div class="f-company-row"><span class="f-key">사업자등록번호</span><span class="f-val">000-00-00000</span></div>
+    <div class="f-company-row"><span class="f-key">이메일</span><span class="f-val"><a href="mailto:hello@deepvibe.kr">hello@deepvibe.kr</a></span></div>
+  </div>
+
+  <div class="f-copyright">© 2025 deepvibe · All rights reserved</div>
+</footer>
+
+<!-- =================== STICKY CTA =================== -->
+<div class="sticky-cta" id="stickyCta">
+  <div class="inner">
+    <button class="btn-kakao" id="stickyKakao" aria-label="카카오로 무료 시작하기">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 2.8 1.9 5.3 4.7 6.7l-1 3.7c-.1.4.3.7.7.5l4.4-2.9c.4 0 .8.1 1.2.1 5.5 0 10-3.6 10-8.1S17.5 3 12 3z"/></svg>
+      카카오로 무료 시작하기
+    </button>
+  </div>
+</div>
+
+<script>
+(() => {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Reveal on scroll — with fail-safe so content always shows */
+  const revealEls = document.querySelectorAll('.reveal');
+
+  // FAIL-SAFE 1: any reveal section already in or above viewport at load → show immediately
+  const showIfAboveOrInView = (el) => {
+    const r = el.getBoundingClientRect();
+    if (r.top < window.innerHeight) el.classList.add('is-in');
+  };
+  revealEls.forEach(showIfAboveOrInView);
+
+  // OBSERVER: trigger when even a small slice enters
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px 0px 0px' });
+    revealEls.forEach(el => {
+      if (!el.classList.contains('is-in')) io.observe(el);
+    });
+  } else {
+    revealEls.forEach(el => el.classList.add('is-in'));
+  }
+
+  // FAIL-SAFE 2: hard timeout — if anything missed the observer, show it anyway
+  setTimeout(() => {
+    revealEls.forEach(el => el.classList.add('is-in'));
+  }, 1500);
+
+  /* Sticky CTA — display:none until user scrolls past the fold,
+     then mounts (display:block) and animates in. This prevents iOS Safari
+     from sampling the yellow color into its bottom toolbar before the
+     user has scrolled into the content. */
+  const sticky = document.getElementById('stickyCta');
+  const nav = document.getElementById('nav');
+  const SHOW_AFTER_Y = 520;        // appear well past the fold
+  const HIDE_BEFORE_Y = 200;       // unmount again only if scrolled back near top
+  let stickyMounted = false;
+
+  const updateSticky = () => {
+    const y = window.scrollY;
+    if (y > SHOW_AFTER_Y) {
+      // Mount first (so display:block), then on next frame add is-shown to trigger transition
+      if (!stickyMounted) {
+        sticky.classList.add('is-mounted');
+        stickyMounted = true;
+        // Wait one frame so the browser registers the display change before transitioning
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => sticky.classList.add('is-shown'));
+        });
+      } else {
+        sticky.classList.add('is-shown');
+      }
+    } else if (y < HIDE_BEFORE_Y && stickyMounted) {
+      sticky.classList.remove('is-shown');
+      // Unmount after the slide-out transition completes
+      setTimeout(() => {
+        // Only unmount if still hidden (user hasn't scrolled back down meanwhile)
+        if (!sticky.classList.contains('is-shown')) {
+          sticky.classList.remove('is-mounted');
+          stickyMounted = false;
+        }
+      }, 700);
+    }
+    // Between 200 and 520: keep current state (hysteresis — prevents flicker)
+
+    // nav scrolled state
+    if (y > 8) nav.classList.add('is-scrolled');
+    else nav.classList.remove('is-scrolled');
+  };
+
+  window.addEventListener('scroll', updateSticky, { passive: true });
+  // initial check (no auto-show on landing — Sticky stays display:none until scroll)
+  updateSticky();
+
+  /* ============ HERO CARD AUTO-ROTATE ============ */
+  const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+
+  const heroCard = document.getElementById('heroCard');
+  const heroSlides = heroCard ? heroCard.querySelectorAll('.hero-slide') : [];
+
+  const SLIDE_INTERVAL = 3200; // ms per slide
+  const COUNT_DUR = 900;       // stat count-up duration
+
+  const formatStat = (v, fmt) => {
+    if (fmt === 'decimal') return v.toFixed(1);
+    if (fmt === 'decimal-min') return v.toFixed(1);
+    return Math.round(v).toString();
+  };
+
+  // count up the stat number on the *currently visible* slide
+  const animateStatOnSlide = (slideEl) => {
+    const statEl = slideEl.querySelector('.a-stat .big');
+    if (!statEl) return;
+    // big-text: 정성 표현 카드 (s1, s3, s4) — count-up 스킵
+    if (statEl.classList.contains('big-text')) return;
+    const target = parseFloat(statEl.dataset.target);
+    const fmt = slideEl.dataset.statFmt || 'decimal';
+    // text node is first child; preserve any trailing unit <span>
+    const textNode = statEl.firstChild;
+    if (reduce) {
+      textNode.nodeValue = formatStat(target, fmt);
+      return;
+    }
+    const start = performance.now();
+    const tick = (now) => {
+      const p = Math.min(1, (now - start) / COUNT_DUR);
+      const v = easeOut(p) * target;
+      textNode.nodeValue = formatStat(v, fmt);
+      if (p < 1) requestAnimationFrame(tick);
+      else {
+        statEl.classList.add('is-pulsing');
+        setTimeout(() => statEl.classList.remove('is-pulsing'), 2800);
+      }
+    };
+    requestAnimationFrame(tick);
+  };
+
+  let currentIdx = 0;
+  let rotateTimer = null;
+  let isPaused = false;
+  let isInView = true;
+  let userPauseTimer = null;
+
+  const goToSlide = (idx) => {
+    if (idx === currentIdx || !heroSlides.length) return;
+    const prevIdx = currentIdx;
+    currentIdx = (idx + heroSlides.length) % heroSlides.length;
+
+    // brief lift on the card container to feel like a card being placed
+    heroCard.classList.add('is-shifting');
+    setTimeout(() => heroCard.classList.remove('is-shifting'), 350);
+
+    // OUTGOING: previous slide gets 'is-leaving' for its exit animation
+    const leavingSlide = heroSlides[prevIdx];
+    leavingSlide.classList.remove('is-current');
+    leavingSlide.classList.add('is-leaving');
+
+    // INCOMING: new slide becomes current (its CSS slides it into place)
+    heroSlides[currentIdx].classList.add('is-current');
+
+    // Clean up the leaving class once the transition completes
+    setTimeout(() => {
+      leavingSlide.classList.remove('is-leaving');
+    }, 700);
+
+    // count up the new stat after the slide content has faded in
+    setTimeout(() => animateStatOnSlide(heroSlides[currentIdx]), 480);
+  };
+
+  const startRotate = () => {
+    if (rotateTimer || reduce) return;
+    rotateTimer = setInterval(() => {
+      if (isPaused || !isInView) return;
+      goToSlide(currentIdx + 1);
+    }, SLIDE_INTERVAL);
+  };
+
+  const stopRotate = () => {
+    if (rotateTimer) { clearInterval(rotateTimer); rotateTimer = null; }
+  };
+
+  // initial: count up first slide's stat after entrance
+  if (heroSlides.length) {
+    setTimeout(() => animateStatOnSlide(heroSlides[0]), reduce ? 0 : 1200);
+    // start auto rotate after the first card has been shown ~3.2s
+    setTimeout(startRotate, reduce ? 999999 : 2400);
+  }
+
+  // pause on user tap (3s) — give the user breathing room to read
+  if (heroCard) {
+    heroCard.addEventListener('pointerdown', () => {
+      isPaused = true;
+      clearTimeout(userPauseTimer);
+      userPauseTimer = setTimeout(() => {
+        isPaused = false;
+      }, 3000);
+    });
+  }
+
+  // pause when out of viewport (battery / cpu)
+  const stage = document.querySelector('.hero-stage');
+  if (stage && 'IntersectionObserver' in window) {
+    const stageIO = new IntersectionObserver((entries) => {
+      entries.forEach(e => { isInView = e.isIntersecting; });
+    }, { threshold: 0.1 });
+    stageIO.observe(stage);
+  }
+
+  // pause when tab is hidden
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) isInView = false;
+    else {
+      const r = stage?.getBoundingClientRect();
+      isInView = !!(r && r.bottom > 0 && r.top < window.innerHeight);
+    }
+  });
+
+  /* Widget D-Day count-up: starts only when D-Day section reveals */
+  const widgetNum = document.getElementById('widgetNum');
+  if (widgetNum) {
+    const widgetTarget = parseInt(widgetNum.dataset.target, 10);
+    const ddaySection = document.querySelector('.dday-section');
+    let widgetStarted = false;
+    const widgetCount = () => {
+      if (widgetStarted) return;
+      widgetStarted = true;
+      if (reduce) {
+        widgetNum.firstChild.nodeValue = widgetTarget;
+        return;
+      }
+      const dur = 1400;
+      const start = performance.now();
+      const tick = (now) => {
+        const p = Math.min(1, (now - start) / dur);
+        const v = Math.round(easeOut(p) * widgetTarget);
+        widgetNum.firstChild.nodeValue = v;
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+    if ('IntersectionObserver' in window && ddaySection) {
+      const wo = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            setTimeout(widgetCount, 600);
+            wo.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      wo.observe(ddaySection);
+    } else {
+      widgetCount();
+    }
+  }
+
+  /* v124: Analysis preview hero number (82.3) removed for brand consistency.
+     /report AFFINITY card uses narrative + chart (no score), /index preview now matches. */
+
+  /* Tap ripple on kakao buttons */
+  const tapTargets = document.querySelectorAll('.btn-kakao');
+  tapTargets.forEach(btn => {
+    btn.addEventListener('pointerdown', (e) => {
+      const r = btn.getBoundingClientRect();
+      btn.style.setProperty('--rx', ((e.clientX - r.left) / r.width * 100) + '%');
+      btn.style.setProperty('--ry', ((e.clientY - r.top) / r.height * 100) + '%');
+      btn.classList.remove('is-tapped');
+      void btn.offsetWidth;
+      btn.classList.add('is-tapped');
+    });
+  });
+
+  /* Kakao buttons → kicked off by auth-ui.js in capture phase:
+     - signed in: jumps straight to /upload
+     - signed out: triggers Kakao OAuth flow (mock in placeholder mode) */
+
+  /* Light haptic */
+  if ('vibrate' in navigator) {
+    document.querySelectorAll('.btn-kakao').forEach(b => {
+      b.addEventListener('pointerdown', () => navigator.vibrate?.(8));
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

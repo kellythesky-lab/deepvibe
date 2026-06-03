@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#F6F4F1"/>
+<title>이용권 — deepvibe</title>
+
+<meta name="description" content="첫 한 편은 무료로. 필요한 만큼 한 편씩 그려드려요."/>
+<meta name="robots" content="noindex, nofollow"/>
+
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<link rel="apple-touch-icon" href="favicon.svg"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F4F1;
+    --bg-soft:#EFEBE5;
+    --bg-warm:#F0E9DE;
+    --ink:#15131A;
+    --ink-2:#2a262f;
+    --muted:#7a7680;
+    --muted-2:#a8a4ac;
+    --line-04:rgba(20,10,30,.04);
+    --line-08:rgba(20,10,30,.08);
+    --line-12:rgba(20,10,30,.12);
+    --line-18:rgba(20,10,30,.18);
+    --kakao:#FEE500;
+    --kakao-ink:#3D1E1E;
+    --pink:#ff6f91;
+    --pink-soft:#ffb4c6;
+    --pink-bg:rgba(255,159,188,.22);
+    --violet:#b967ff;
+
+    --font-serif:'Fraunces','Noto Serif KR',serif;
+    --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Pretendard','Noto Sans KR',sans-serif;
+
+    --ease-out:cubic-bezier(.22,1,.36,1);
+    --ease-out-soft:cubic-bezier(.16,1,.3,1);
+    --dur-fast:.18s;
+    --dur-base:.32s;
+
+    --safe-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+  :focus{outline:none}
+  :focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:4px}
+
+  html{scroll-behavior:smooth;overflow-x:hidden;font-size:100%;-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--font-sans);font-size:15px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    word-break:keep-all;line-break:strict;
+    overflow-x:hidden;
+    min-height:100vh;min-height:100dvh;
+    position:relative;
+  }
+
+  /* ============ NAV ============ */
+  nav{
+    position:sticky;top:0;z-index:30;
+    background:rgba(246,244,241,.85);
+    backdrop-filter:blur(14px) saturate(180%);
+    -webkit-backdrop-filter:blur(14px) saturate(180%);
+    border-bottom:.5px solid transparent;
+  }
+  nav .row{
+    max-width:520px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 20px;
+  }
+  nav .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+  nav .logo .mark{display:inline-block;width:22px;height:14px;position:relative}
+  nav .logo .mark svg{width:100%;height:100%;overflow:visible}
+  nav .logo .word{
+    font-family:var(--font-serif);font-weight:400;font-style:italic;
+    font-size:18px;letter-spacing:-.01em;color:var(--ink);
+  }
+
+  /* ============ PAGE BACK ============ */
+  .page-back{
+    max-width:520px;margin:0 auto;padding:16px 20px 0;
+    position:relative;z-index:1;
+  }
+  .page-back-link{
+    display:inline-flex;align-items:center;gap:4px;
+    padding:6px 10px 6px 8px;
+    background:transparent;border:none;
+    color:var(--muted);
+    font-size:12.5px;font-weight:500;letter-spacing:-.005em;
+    text-decoration:none;border-radius:8px;
+    transition:background .2s var(--ease-out), color .2s var(--ease-out);
+    cursor:pointer;
+  }
+  .page-back-link:hover{background:var(--bg-soft);color:var(--ink)}
+
+  /* ============ MAIN ============ */
+  main{
+    position:relative;z-index:1;
+    max-width:520px;width:100%;
+    margin:0 auto;
+    padding:16px 20px 60px;
+  }
+
+  /* ============ PAGE HEADER ============ */
+  .page-header{
+    text-align:center;
+    margin-bottom:32px;
+    opacity:0;transform:translateY(8px);
+    animation:fadeUp .7s .1s var(--ease-out-soft) forwards;
+  }
+  @keyframes fadeUp{to{opacity:1;transform:none}}
+
+  .page-mark{display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px}
+  .page-mark svg{width:44px;height:30px;overflow:visible}
+
+  .page-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:clamp(28px, 8vw, 34px);
+    line-height:1.2;letter-spacing:-.02em;
+    color:var(--ink);
+    margin-bottom:10px;
+  }
+  .page-title em{font-style:italic;color:var(--ink)}
+
+  .page-sub{
+    font-size:14.5px;color:var(--muted);
+    line-height:1.7;
+    max-width:340px;margin:0 auto;
+  }
+  .page-sub em{
+    font-style:normal;font-weight:500;color:var(--ink-2);
+  }
+
+  /* ============ PLAN CARDS ============ */
+  .plans{
+    display:flex;flex-direction:column;gap:14px;
+    margin-bottom:28px;
+  }
+
+  .plan-card{
+    position:relative;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:18px;
+    padding:22px 22px;
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 8px 22px -14px rgba(20,10,30,.06);
+    transition:border-color .25s var(--ease-out), box-shadow .25s var(--ease-out), transform .25s var(--ease-out);
+    opacity:0;transform:translateY(12px);
+    animation:fadeUp .7s var(--ease-out-soft) forwards;
+  }
+  .plan-card:nth-child(1){animation-delay:.2s}
+  .plan-card:nth-child(2){animation-delay:.3s}
+  .plan-card:nth-child(3){animation-delay:.4s}
+
+  /* 인기 플랜 강조 */
+  .plan-card.featured{
+    border-color:var(--pink-soft);
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 14px 30px -14px rgba(255,111,145,.18),
+      0 0 0 1px var(--pink-soft);
+  }
+  .plan-card.featured::before{
+    content:"";
+    position:absolute;
+    width:200px;height:200px;
+    right:-70px;top:-70px;
+    border-radius:50%;
+    background:radial-gradient(circle, var(--pink-bg), transparent 62%);
+    filter:blur(22px);
+    pointer-events:none;
+  }
+
+  .plan-badge{
+    display:inline-flex;align-items:center;
+    position:relative;
+    z-index:1;
+    margin-bottom:14px;
+    padding:5px 12px;
+    background:var(--ink);
+    color:#fff;
+    border-radius:999px;
+    font-family:var(--font-sans);
+    font-size:11px;font-weight:600;
+    letter-spacing:.01em;
+  }
+
+  .plan-head{
+    display:flex;align-items:baseline;justify-content:space-between;
+    gap:12px;
+    position:relative;
+    margin-bottom:6px;
+  }
+  .plan-name{
+    font-family:var(--font-serif);font-weight:400;
+    font-size:20px;color:var(--ink);
+    letter-spacing:-.01em;
+  }
+  .plan-name em{font-style:italic}
+  .plan-count{
+    font-family:var(--font-sans);
+    font-size:12.5px;font-weight:500;
+    color:var(--muted);
+    letter-spacing:-.005em;
+    flex-shrink:0;
+  }
+
+  .plan-price-row{
+    display:flex;align-items:baseline;gap:8px;
+    position:relative;
+    margin-bottom:4px;
+  }
+  .plan-price{
+    font-family:var(--font-serif);font-weight:400;
+    font-size:32px;color:var(--ink);
+    line-height:1;letter-spacing:-.02em;
+    font-feature-settings:"tnum" 1, "lnum" 1;
+  }
+  .plan-price .won{
+    font-size:20px;
+    font-weight:400;
+  }
+  .plan-per{
+    font-size:12.5px;color:var(--muted);
+    letter-spacing:-.005em;
+  }
+
+  .plan-desc{
+    position:relative;
+    font-size:13px;color:var(--muted);
+    line-height:1.6;
+    margin-top:10px;
+    padding-top:14px;
+    border-top:.5px solid var(--line-08);
+    letter-spacing:-.002em;
+  }
+  .plan-desc em{
+    font-style:normal;font-weight:500;color:var(--ink-2);
+  }
+
+  .plan-cta{
+    display:flex;align-items:center;justify-content:center;gap:7px;
+    width:100%;
+    margin-top:16px;
+    padding:15px;
+    border-radius:12px;
+    font-family:var(--font-sans);
+    font-size:14px;font-weight:500;
+    letter-spacing:-.005em;
+    border:none;cursor:pointer;
+    transition:transform .15s var(--ease-out), background .2s var(--ease-out), color .2s var(--ease-out), border-color .2s var(--ease-out);
+  }
+  .plan-cta.primary{
+    background:var(--ink);color:#fff;
+    box-shadow:0 1px 0 rgba(0,0,0,.04), 0 8px 20px -12px rgba(20,10,30,.3);
+  }
+  .plan-cta.primary:hover{background:var(--ink-2)}
+  .plan-cta.primary:active{transform:scale(.98)}
+  .plan-cta.outline{
+    background:transparent;color:var(--ink);
+    border:.5px solid var(--line-18);
+  }
+  .plan-cta.outline:hover{background:var(--bg-soft);border-color:var(--line-18)}
+  .plan-cta.outline:active{transform:scale(.98)}
+
+  /* ============ FREE FIRST NOTE ============ */
+  .free-note{
+    display:flex;align-items:center;gap:10px;
+    padding:16px 18px;
+    background:linear-gradient(135deg, rgba(255,159,188,.1), rgba(202,163,255,.08));
+    border:.5px solid var(--line-08);
+    border-radius:14px;
+    margin-bottom:28px;
+    opacity:0;transform:translateY(10px);
+    animation:fadeUp .7s .15s var(--ease-out-soft) forwards;
+  }
+  .free-note-icon{
+    flex-shrink:0;
+    width:36px;height:36px;
+    border-radius:10px;
+    background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 1px 2px var(--line-04);
+  }
+  .free-note-icon svg{width:18px;height:18px}
+  .free-note-text{flex:1;min-width:0}
+  .free-note-title{
+    font-size:13.5px;font-weight:500;color:var(--ink);
+    line-height:1.4;letter-spacing:-.005em;
+  }
+  .free-note-desc{
+    font-size:12px;color:var(--muted);
+    margin-top:2px;line-height:1.5;letter-spacing:-.002em;
+  }
+
+  /* ============ INVITE BONUS LINK ============ */
+  .bonus-card{
+    display:flex;align-items:center;gap:12px;
+    padding:16px 18px;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:14px;
+    text-decoration:none;
+    margin-bottom:24px;
+    box-shadow:0 1px 2px var(--line-04);
+    transition:border-color .2s var(--ease-out), transform .2s var(--ease-out);
+    opacity:0;transform:translateY(10px);
+    animation:fadeUp .7s .25s var(--ease-out-soft) forwards;
+  }
+  .bonus-card:hover{border-color:var(--line-12);transform:translateY(-1px)}
+  .bonus-card-icon{
+    flex-shrink:0;
+    width:38px;height:38px;
+    border-radius:10px;
+    background:linear-gradient(135deg, var(--pink-bg), rgba(202,163,255,.18));
+    display:flex;align-items:center;justify-content:center;
+    color:var(--ink-2);
+  }
+  .bonus-card-text{flex:1;min-width:0}
+  .bonus-card-title{
+    font-size:13.5px;font-weight:500;color:var(--ink);
+    line-height:1.4;letter-spacing:-.005em;
+  }
+  .bonus-card-desc{
+    font-size:12px;color:var(--muted);
+    margin-top:2px;line-height:1.5;letter-spacing:-.002em;
+  }
+  .bonus-card-arrow{color:var(--muted-2);flex-shrink:0;transition:transform .2s var(--ease-out)}
+  .bonus-card:hover .bonus-card-arrow{transform:translateX(2px)}
+
+  /* ============ FINE PRINT ============ */
+  .fine-print{
+    text-align:center;
+    opacity:0;
+    animation:fadeUp .7s .35s var(--ease-out-soft) forwards;
+  }
+  .fine-print p{
+    font-size:11.5px;color:var(--muted-2);
+    line-height:1.7;
+    margin-bottom:10px;
+  }
+  .fine-print a{
+    color:var(--muted);
+    text-decoration:underline;
+    text-decoration-thickness:.5px;
+    text-underline-offset:2px;
+    transition:color .2s var(--ease-out);
+  }
+  .fine-print a:hover{color:var(--ink)}
+
+  /* ============ TOAST ============ */
+  .toast{
+    position:fixed;
+    bottom:calc(24px + var(--safe-bottom));
+    left:50%;transform:translate(-50%, 100%);
+    z-index:60;
+    padding:12px 20px;
+    background:rgba(21,19,26,.94);color:#fff;
+    border-radius:999px;
+    font-size:13.5px;font-weight:500;letter-spacing:-.005em;
+    box-shadow:0 1px 0 rgba(255,255,255,.08) inset, 0 12px 32px -10px rgba(20,10,30,.32);
+    opacity:0;pointer-events:none;
+    transition:opacity .3s var(--ease-out), transform .3s var(--ease-out);
+  }
+  .toast.is-shown{opacity:1;transform:translate(-50%, 0);pointer-events:auto}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:360px){
+    main{padding:12px 16px 48px}
+    .plan-card{padding:20px 18px}
+    .plan-price{font-size:28px}
+  }
+
+  /* ============ REDUCED MOTION ============ */
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;
+    }
+    .page-header,.plan-card,.free-note,.bonus-card,.fine-print{
+      opacity:1 !important;transform:none !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- =================== NAV =================== -->
+<nav id="nav">
+  <div class="row">
+    <a class="logo" href="/" aria-label="deepvibe 홈으로">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 30 18" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="logo-pink" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff6f91" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#ff9fbc" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".7"/>
+            </radialGradient>
+            <radialGradient id="logo-violet" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#b967ff" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#cdb4ff" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#cdb4ff" stop-opacity=".7"/>
+            </radialGradient>
+          </defs>
+          <circle cx="11" cy="9" r="8" fill="url(#logo-pink)" style="mix-blend-mode:multiply"/>
+          <circle cx="19" cy="9" r="8" fill="url(#logo-violet)" style="mix-blend-mode:multiply"/>
+        </svg>
+      </span>
+      <span class="word">deepvibe</span>
+    </a>
+    <!-- Auth UI (login button or user chip) is injected by auth-ui.js -->
+  </div>
+</nav>
+
+<!-- Page back -->
+<div class="page-back">
+  <a class="page-back-link" href="javascript:history.back()" aria-label="이전 페이지로">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M9 3 L5 7 L9 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    이전
+  </a>
+</div>
+
+<!-- =================== MAIN =================== -->
+<main>
+
+  <!-- Page header -->
+  <header class="page-header">
+    <div class="page-mark" aria-hidden="true">
+      <svg viewBox="0 0 44 30" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="pr-pink" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ff6f91" stop-opacity=".9"/>
+            <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".7"/>
+          </radialGradient>
+          <radialGradient id="pr-violet" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#b967ff" stop-opacity=".9"/>
+            <stop offset="100%" stop-color="#cdb4ff" stop-opacity=".7"/>
+          </radialGradient>
+        </defs>
+        <circle cx="17" cy="15" r="13" fill="url(#pr-pink)" style="mix-blend-mode:multiply"/>
+        <circle cx="27" cy="15" r="13" fill="url(#pr-violet)" style="mix-blend-mode:multiply"/>
+      </svg>
+    </div>
+    <h1 class="page-title">필요한 만큼, <em>한 편씩</em></h1>
+    <p class="page-sub">첫 한 편은 <em>무료</em>로 그려드려요.<br>그 다음부터, 필요할 때 한 편씩.</p>
+  </header>
+
+  <!-- 첫 편 무료 안내 -->
+  <div class="free-note">
+    <div class="free-note-icon" aria-hidden="true">
+      <svg viewBox="0 0 18 18" fill="none">
+        <path d="M9 2 L11 6.5 L16 7 L12.5 10.5 L13.5 15.5 L9 13 L4.5 15.5 L5.5 10.5 L2 7 L7 6.5 Z"
+              fill="url(#pr-pink)" stroke="none"/>
+      </svg>
+    </div>
+    <div class="free-note-text">
+      <div class="free-note-title">처음 만나는 결, 무료예요</div>
+      <div class="free-note-desc">가입하면 첫 분석 한 편을 선물로 드려요.</div>
+    </div>
+  </div>
+
+  <!-- Plan cards -->
+  <div class="plans">
+
+    <!-- 한 편 -->
+    <article class="plan-card">
+      <div class="plan-head">
+        <div class="plan-name">한 편</div>
+        <div class="plan-count">리포트 1편</div>
+      </div>
+      <div class="plan-price-row">
+        <span class="plan-price"><span class="won">₩</span>2,900</span>
+      </div>
+      <div class="plan-per">한 번, 깊이 들여다볼 때</div>
+      <p class="plan-desc">한 사람과의 대화를 <em>한 편</em>의 리포트로 그려드려요.</p>
+      <button type="button" class="plan-cta outline" data-plan="single">구매하기</button>
+    </article>
+
+    <!-- 세 편 (featured) -->
+    <article class="plan-card featured">
+      <span class="plan-badge">가장 많이 선택해요</span>
+      <div class="plan-head">
+        <div class="plan-name"><em>세 편</em></div>
+        <div class="plan-count">리포트 3편</div>
+      </div>
+      <div class="plan-price-row">
+        <span class="plan-price"><span class="won">₩</span>6,900</span>
+        <span class="plan-per">편당 2,300원</span>
+      </div>
+      <div class="plan-per">여러 사람, 또는 시간을 두고</div>
+      <p class="plan-desc">세 편을 미리 담아두고, <em>필요할 때마다</em> 한 편씩 꺼내 써요.</p>
+      <button type="button" class="plan-cta primary" data-plan="triple">구매하기</button>
+    </article>
+
+    <!-- 다섯 편 -->
+    <article class="plan-card">
+      <div class="plan-head">
+        <div class="plan-name">다섯 편</div>
+        <div class="plan-count">리포트 5편</div>
+      </div>
+      <div class="plan-price-row">
+        <span class="plan-price"><span class="won">₩</span>9,900</span>
+        <span class="plan-per">편당 1,980원</span>
+      </div>
+      <div class="plan-per">가장 깊이, 가장 자주</div>
+      <p class="plan-desc">D-Day 재분석까지, <em>오래 함께</em> 그려나갈 때 좋아요.</p>
+      <button type="button" class="plan-cta outline" data-plan="penta">구매하기</button>
+    </article>
+
+  </div>
+
+  <!-- 친구 초대 보너스 -->
+  <a href="/invite" class="bonus-card">
+    <div class="bonus-card-icon" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M10 4 V16 M4 10 H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="bonus-card-text">
+      <div class="bonus-card-title">친구를 초대하면, 분석권 한 장이 더 와요.</div>
+      <div class="bonus-card-desc">친구도 첫 분석을 받고, 나에게는 재분석권 한 장.</div>
+    </div>
+    <svg class="bonus-card-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M5 3 L9 7 L5 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+
+  <!-- Fine print -->
+  <div class="fine-print">
+    <p>이용권은 구매일로부터 1년간 유효해요.<br>분석을 시작하기 전이라면 언제든 환불할 수 있어요.</p>
+    <p>
+      <a href="/refund">환불 정책</a>
+      &nbsp;·&nbsp;
+      <a href="/terms">이용약관</a>
+    </p>
+  </div>
+
+</main>
+
+<!-- Toast -->
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <span id="toastText">준비 중이에요</span>
+</div>
+
+<script src="auth.js" defer></script>
+<script src="auth-ui.js" defer></script>
+<script>
+(() => {
+  // ============ Toast ============
+  const toast = document.getElementById('toast');
+  const toastText = document.getElementById('toastText');
+  let toastTimer;
+  const showToast = (msg) => {
+    toastText.textContent = msg;
+    toast.classList.add('is-shown');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('is-shown'), 2200);
+  };
+
+  // ============ Plan CTA (placeholder) ============
+  // 실제 구현 시: 카카오페이/토스 결제 연동 → POST /api/purchase
+  document.querySelectorAll('.plan-cta').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const plan = btn.dataset.plan;
+      showToast('결제 기능은 준비 중이에요');
+      // TODO (백엔드 연동):
+      //   const res = await fetch('/api/purchase', {
+      //     method: 'POST',
+      //     headers: { 'Authorization': `Bearer ${jwt}` },
+      //     body: JSON.stringify({ plan }),
+      //   });
+      //   → 결제 PG사 리다이렉트 또는 위젯 호출
+    });
+  });
+})();
+</script>
+</body>
+</html>

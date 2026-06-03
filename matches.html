@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#F6F4F1"/>
+<title>결이 닿은 사람 — deepvibe</title>
+
+<meta name="description" content="결이 닮은 사람을, 조용히 찾아드려요."/>
+<meta name="robots" content="noindex, nofollow"/>
+
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<link rel="apple-touch-icon" href="favicon.svg"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F4F1;
+    --bg-soft:#EFEBE5;
+    --bg-warm:#F0E9DE;
+    --ink:#15131A;
+    --ink-2:#2a262f;
+    --muted:#7a7680;
+    --muted-2:#a8a4ac;
+    --line-04:rgba(20,10,30,.04);
+    --line-08:rgba(20,10,30,.08);
+    --line-12:rgba(20,10,30,.12);
+    --line-18:rgba(20,10,30,.18);
+    --kakao:#FEE500;
+    --kakao-ink:#3D1E1E;
+    --pink:#ff6f91;
+    --pink-soft:#ffb4c6;
+    --pink-bg:rgba(255,159,188,.22);
+    --violet:#b967ff;
+    --violet-soft:#cdb4ff;
+    --success:#2d7a52;
+    --success-bg:rgba(74,176,122,.12);
+
+    --font-serif:'Fraunces','Noto Serif KR',serif;
+    --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Pretendard','Noto Sans KR',sans-serif;
+
+    --ease-out:cubic-bezier(.22,1,.36,1);
+    --ease-out-soft:cubic-bezier(.16,1,.3,1);
+    --dur-fast:.18s;
+    --dur-base:.32s;
+
+    --safe-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+  :focus{outline:none}
+  :focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:4px}
+
+  html{scroll-behavior:smooth;overflow-x:hidden;font-size:100%;-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--font-sans);font-size:15px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    word-break:keep-all;line-break:strict;
+    overflow-x:hidden;
+    min-height:100vh;min-height:100dvh;
+    position:relative;
+  }
+
+  /* ============ NAV ============ */
+  nav{
+    position:sticky;top:0;z-index:30;
+    background:rgba(246,244,241,.85);
+    backdrop-filter:blur(14px) saturate(180%);
+    -webkit-backdrop-filter:blur(14px) saturate(180%);
+    border-bottom:.5px solid transparent;
+  }
+  nav .row{
+    max-width:520px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 20px;
+  }
+  nav .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+  nav .logo .mark{display:inline-block;width:22px;height:14px;position:relative}
+  nav .logo .mark svg{width:100%;height:100%;overflow:visible}
+  nav .logo .word{
+    font-family:var(--font-serif);font-weight:400;font-style:italic;
+    font-size:18px;letter-spacing:-.01em;color:var(--ink);
+  }
+
+  /* ============ PAGE BACK ============ */
+  .page-back{
+    max-width:520px;margin:0 auto;padding:16px 20px 0;
+  }
+  .page-back-link{
+    display:inline-flex;align-items:center;gap:4px;
+    padding:6px 10px 6px 8px;
+    background:transparent;border:none;
+    color:var(--muted);
+    font-size:12.5px;font-weight:500;letter-spacing:-.005em;
+    text-decoration:none;border-radius:8px;
+    transition:background .2s var(--ease-out), color .2s var(--ease-out);
+    cursor:pointer;
+  }
+  .page-back-link:hover{background:var(--bg-soft);color:var(--ink)}
+
+  /* ============ MAIN ============ */
+  main{
+    max-width:520px;width:100%;
+    margin:0 auto;
+    padding:16px 20px 60px;
+  }
+
+  /* ============ PAGE HEADER ============ */
+  .page-header{
+    text-align:center;
+    margin-bottom:14px;
+    opacity:0;transform:translateY(8px);
+    animation:fadeUp .7s .1s var(--ease-out-soft) forwards;
+  }
+  @keyframes fadeUp{to{opacity:1;transform:none}}
+
+  .page-mark{display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px}
+  .page-mark svg{width:44px;height:30px;overflow:visible}
+
+  .page-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:clamp(28px, 8vw, 34px);
+    line-height:1.2;letter-spacing:-.02em;
+    color:var(--ink);
+    margin-bottom:10px;
+  }
+  .page-title em{font-style:italic;color:var(--ink)}
+
+  .page-sub{
+    font-size:14.5px;color:var(--muted);
+    line-height:1.7;
+    max-width:340px;margin:0 auto;
+  }
+  .page-sub em{font-style:normal;font-weight:500;color:var(--ink-2)}
+
+  .basis-chip{
+    display:inline-flex;align-items:center;gap:5px;
+    margin:18px auto 0;
+    padding:6px 13px;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:999px;
+    font-size:11.5px;color:var(--muted);
+    letter-spacing:-.002em;
+    box-shadow:0 1px 2px var(--line-04);
+  }
+  .basis-chip strong{color:var(--ink-2);font-weight:500}
+  .basis-chip svg{color:var(--pink)}
+
+  /* ============ MATCH LIST ============ */
+  .match-list{
+    display:flex;flex-direction:column;gap:16px;
+    margin-top:28px;
+  }
+
+  .match-card{
+    position:relative;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:18px;
+    padding:20px 20px 18px;
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 8px 22px -14px rgba(20,10,30,.06);
+    opacity:0;transform:translateY(12px);
+    animation:fadeUp .7s var(--ease-out-soft) forwards;
+    overflow:hidden;
+  }
+  .match-card:nth-child(1){animation-delay:.2s}
+  .match-card:nth-child(2){animation-delay:.32s}
+  .match-card:nth-child(3){animation-delay:.44s}
+
+  /* 상호 관심 카드 강조 */
+  .match-card.mutual{
+    border-color:var(--pink-soft);
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 14px 30px -14px rgba(255,111,145,.18),
+      0 0 0 1px var(--pink-soft);
+  }
+  .match-card.mutual::before{
+    content:"";
+    position:absolute;
+    width:200px;height:200px;
+    right:-80px;top:-80px;
+    border-radius:50%;
+    background:radial-gradient(circle, var(--pink-bg), transparent 62%);
+    filter:blur(22px);
+    pointer-events:none;
+  }
+
+  /* ===== Match head (avatar + meta) ===== */
+  .match-head{
+    position:relative;
+    display:flex;align-items:center;gap:13px;
+    margin-bottom:16px;
+  }
+
+  /* 익명 아바타 (블러 그라데이션) */
+  .match-avatar{
+    position:relative;
+    flex-shrink:0;
+    width:52px;height:52px;
+    border-radius:50%;
+    overflow:hidden;
+  }
+  /* 익명 아바타 (그라데이션 원형 + vesica) */
+  .match-avatar.anon{
+    background:linear-gradient(135deg, var(--pink-soft), var(--violet-soft));
+    display:flex;align-items:center;justify-content:center;
+  }
+  .match-avatar.anon .vesica{
+    width:26px;height:17px;
+    opacity:.6;
+  }
+  .match-avatar.anon .vesica svg{width:100%;height:100%;overflow:visible}
+
+  /* 공개 아바타 (이니셜) */
+  .match-avatar.revealed{
+    background:linear-gradient(135deg, var(--pink), var(--violet));
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;
+    font-family:var(--font-serif);font-weight:400;
+    font-size:21px;
+  }
+
+  .match-meta{flex:1;min-width:0}
+  .match-status{
+    display:inline-flex;align-items:center;gap:5px;
+    font-size:12px;font-weight:500;
+    margin-bottom:4px;
+    letter-spacing:-.002em;
+  }
+  .match-status.matched{color:var(--pink)}
+  .match-status.pending{color:var(--muted)}
+  .match-status.mutual{color:var(--success)}
+  .match-status .dot{
+    width:5px;height:5px;border-radius:50%;
+    background:currentColor;
+  }
+  .match-name{
+    font-family:var(--font-serif);font-weight:400;
+    font-size:17px;color:var(--ink);
+    line-height:1.3;letter-spacing:-.005em;
+  }
+  .match-name.anon{
+    color:var(--ink-2);
+    font-style:italic;
+  }
+
+  /* ===== 결 일치 축 ===== */
+  .match-axes{
+    display:flex;flex-direction:column;gap:9px;
+    padding:14px 0 0;
+    border-top:.5px solid var(--line-08);
+  }
+  .match-axis{
+    display:flex;align-items:center;gap:10px;
+  }
+  .match-axis-icon{
+    flex-shrink:0;
+    width:20px;height:20px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:10.5px;
+  }
+  .match-axis-icon.match{background:var(--success-bg);color:var(--success)}
+  .match-axis-icon.gap{background:var(--pink-bg);color:#a04060}
+  .match-axis-name{
+    font-size:13px;color:var(--muted);
+    width:64px;flex-shrink:0;
+    letter-spacing:-.005em;
+  }
+  .match-axis-verdict{
+    font-size:13px;color:var(--ink-2);
+    font-weight:500;
+    letter-spacing:-.005em;
+  }
+
+  /* ===== CTA ===== */
+  .match-cta{
+    display:flex;align-items:center;justify-content:center;gap:7px;
+    width:100%;
+    margin-top:16px;
+    padding:13px;
+    border-radius:12px;
+    font-family:var(--font-sans);
+    font-size:14px;font-weight:500;
+    letter-spacing:-.005em;
+    border:none;cursor:pointer;
+    transition:transform .15s var(--ease-out), background .2s var(--ease-out), color .2s var(--ease-out), border-color .2s var(--ease-out), opacity .2s var(--ease-out);
+  }
+  .match-cta.interest{
+    background:var(--ink);color:#fff;
+    box-shadow:0 1px 0 rgba(0,0,0,.04), 0 8px 20px -12px rgba(20,10,30,.3);
+  }
+  .match-cta.interest:hover{background:var(--ink-2)}
+  .match-cta.interest:active{transform:scale(.98)}
+  .match-cta.interest svg{flex-shrink:0}
+  /* 관심 보낸 후 (대기) */
+  .match-cta.waiting{
+    background:var(--bg-soft);color:var(--muted);
+    cursor:default;
+  }
+  .match-cta.waiting:active{transform:none}
+  /* 상호 관심 → 대화 */
+  .match-cta.talk{
+    background:var(--kakao);color:var(--kakao-ink);
+    box-shadow:0 1px 0 rgba(0,0,0,.05), 0 8px 20px -12px rgba(20,10,30,.22);
+  }
+  .match-cta.talk:hover{filter:brightness(.98)}
+  .match-cta.talk:active{transform:scale(.98)}
+
+  /* ============ PRIVACY NOTE ============ */
+  .privacy-strip{
+    display:flex;align-items:flex-start;gap:9px;
+    margin-top:24px;
+    padding:16px 18px;
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:14px;
+    box-shadow:0 1px 2px var(--line-04);
+    opacity:0;
+    animation:fadeUp .7s .5s var(--ease-out-soft) forwards;
+  }
+  .privacy-strip svg{flex-shrink:0;margin-top:1px;color:var(--muted-2)}
+  .privacy-strip-text{
+    font-size:12px;color:var(--muted);
+    line-height:1.6;letter-spacing:-.002em;
+  }
+  .privacy-strip-text strong{color:var(--ink-2);font-weight:500}
+
+  /* ============ EMPTY STATE ============ */
+  .empty-state{
+    text-align:center;
+    padding:48px 20px;
+    opacity:0;
+    animation:fadeUp .7s .2s var(--ease-out-soft) forwards;
+  }
+  .empty-mark{
+    display:inline-flex;
+    margin-bottom:20px;
+    opacity:.5;
+  }
+  .empty-mark svg{width:54px;height:35px;overflow:visible}
+  .empty-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:21px;color:var(--ink);
+    line-height:1.3;margin-bottom:10px;
+    letter-spacing:-.01em;
+  }
+  .empty-desc{
+    font-size:13.5px;color:var(--muted);
+    line-height:1.7;
+    max-width:300px;margin:0 auto;
+  }
+
+  /* ============ TOAST ============ */
+  .toast{
+    position:fixed;
+    bottom:calc(24px + var(--safe-bottom));
+    left:50%;transform:translate(-50%, 100%);
+    z-index:60;
+    padding:12px 20px;
+    background:rgba(21,19,26,.94);color:#fff;
+    border-radius:999px;
+    font-size:13.5px;font-weight:500;letter-spacing:-.005em;
+    box-shadow:0 1px 0 rgba(255,255,255,.08) inset, 0 12px 32px -10px rgba(20,10,30,.32);
+    opacity:0;pointer-events:none;
+    transition:opacity .3s var(--ease-out), transform .3s var(--ease-out);
+  }
+  .toast.is-shown{opacity:1;transform:translate(-50%, 0);pointer-events:auto}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:360px){
+    main{padding:12px 16px 48px}
+    .match-card{padding:18px 16px 16px}
+    .match-axis-name{width:58px;font-size:12.5px}
+  }
+
+  /* ============ REDUCED MOTION ============ */
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;
+    }
+    .page-header,.match-card,.privacy-strip,.empty-state{
+      opacity:1 !important;transform:none !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- =================== NAV =================== -->
+<nav id="nav">
+  <div class="row">
+    <a class="logo" href="/" aria-label="deepvibe 홈으로">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 30 18" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="logo-pink" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff6f91" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#ff9fbc" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".7"/>
+            </radialGradient>
+            <radialGradient id="logo-violet" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#b967ff" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#cdb4ff" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#cdb4ff" stop-opacity=".7"/>
+            </radialGradient>
+          </defs>
+          <circle cx="11" cy="9" r="8" fill="url(#logo-pink)" style="mix-blend-mode:multiply"/>
+          <circle cx="19" cy="9" r="8" fill="url(#logo-violet)" style="mix-blend-mode:multiply"/>
+        </svg>
+      </span>
+      <span class="word">deepvibe</span>
+    </a>
+    <!-- Auth UI injected by auth-ui.js -->
+  </div>
+</nav>
+
+<!-- Page back -->
+<div class="page-back">
+  <a class="page-back-link" href="javascript:history.back()" aria-label="이전 페이지로">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M9 3 L5 7 L9 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    이전
+  </a>
+</div>
+
+<!-- =================== MAIN =================== -->
+<main>
+
+  <!-- Page header -->
+  <header class="page-header">
+    <div class="page-mark" aria-hidden="true">
+      <svg viewBox="0 0 44 30" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="mt-pink" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ff6f91" stop-opacity=".9"/>
+            <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".7"/>
+          </radialGradient>
+          <radialGradient id="mt-violet" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#b967ff" stop-opacity=".9"/>
+            <stop offset="100%" stop-color="#cdb4ff" stop-opacity=".7"/>
+          </radialGradient>
+        </defs>
+        <circle cx="17" cy="15" r="13" fill="url(#mt-pink)" style="mix-blend-mode:multiply"/>
+        <circle cx="27" cy="15" r="13" fill="url(#mt-violet)" style="mix-blend-mode:multiply"/>
+      </svg>
+    </div>
+    <h1 class="page-title">결이 <em>닿은</em> 사람</h1>
+    <p class="page-sub">이번 주, 당신과 <em>결이 닮은</em> 사람이에요.</p>
+    <div class="basis-chip">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+        <path d="M7 1.5 L8.7 5.1 L12.5 5.6 L9.7 8.3 L10.4 12.1 L7 10.3 L3.6 12.1 L4.3 8.3 L1.5 5.6 L5.3 5.1 Z" fill="currentColor"/>
+      </svg>
+      <span>천천히, <strong>한 주에 몇 명만</strong> 소개해요</span>
+    </div>
+  </header>
+
+  <!-- Match list (3가지 상태 시연) -->
+  <div class="match-list" id="matchList">
+
+    <!-- ===== 상태 3: 상호 관심 (공개 시작) ===== -->
+    <article class="match-card mutual">
+      <div class="match-head">
+        <div class="match-avatar revealed" aria-hidden="true">달</div>
+        <div class="match-meta">
+          <div class="match-status mutual"><span class="dot"></span>서로 관심이 닿았어요</div>
+          <div class="match-name">달팽이 · 가까운 거리</div>
+        </div>
+      </div>
+      <div class="match-axes">
+        <div class="match-axis">
+          <span class="match-axis-icon match">♥</span>
+          <span class="match-axis-name">답장 리듬</span>
+          <span class="match-axis-verdict">둘 다 빠른 편</span>
+        </div>
+        <div class="match-axis">
+          <span class="match-axis-icon match">♥</span>
+          <span class="match-axis-name">감정 표현</span>
+          <span class="match-axis-verdict">둘 다 솔직한 편</span>
+        </div>
+        <div class="match-axis">
+          <span class="match-axis-icon match">♥</span>
+          <span class="match-axis-name">진전 속도</span>
+          <span class="match-axis-verdict">둘 다 천천히</span>
+        </div>
+      </div>
+      <button type="button" class="match-cta talk" data-action="talk">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+          <path d="M3 4 H13 V11 H7 L4 13.5 V11 H3 Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+        </svg>
+        대화 시작하기
+      </button>
+    </article>
+
+    <!-- ===== 상태 2: 관심 보냄 (대기) ===== -->
+    <article class="match-card">
+      <div class="match-head">
+        <div class="match-avatar anon" aria-hidden="true">
+          <span class="vesica">
+            <svg viewBox="0 0 26 17" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="10" cy="8.5" r="7.5" fill="#fff" opacity=".7"/>
+              <circle cx="16" cy="8.5" r="7.5" fill="#fff" opacity=".7"/>
+            </svg>
+          </span>
+        </div>
+        <div class="match-meta">
+          <div class="match-status pending"><span class="dot"></span>관심을 전했어요</div>
+          <div class="match-name anon">아직 모르는 사람</div>
+        </div>
+      </div>
+      <div class="match-axes">
+        <div class="match-axis">
+          <span class="match-axis-icon match">♥</span>
+          <span class="match-axis-name">답장 리듬</span>
+          <span class="match-axis-verdict">둘 다 빠른 편</span>
+        </div>
+        <div class="match-axis">
+          <span class="match-axis-icon match">♥</span>
+          <span class="match-axis-name">대화 깊이</span>
+          <span class="match-axis-verdict">둘 다 깊게 나누는</span>
+        </div>
+        <div class="match-axis">
+          <span class="match-axis-icon gap">↗</span>
+          <span class="match-axis-name">감정 표현</span>
+          <span class="match-axis-verdict">조금 다른 결</span>
+        </div>
+      </div>
+      <button type="button" class="match-cta waiting" disabled>
+        상대의 마음을 기다리는 중
+      </button>
+    </article>
+
+    <!-- ===== 상태 1: 새 매칭 (익명, 관심 전) ===== -->
+    <article class="match-card">
+      <div class="match-head">
+        <div class="match-avatar anon" aria-hidden="true">
+          <span class="vesica">
+            <svg viewBox="0 0 26 17" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="10" cy="8.5" r="7.5" fill="#fff" opacity=".7"/>
+              <circle cx="16" cy="8.5" r="7.5" fill="#fff" opacity=".7"/>
+            </svg>
+          </span>
+        </div>
+        <div class="match-meta">
+          <div class="match-status matched"><span class="dot"></span>결이 닮았어요</div>
+          <div class="match-name anon">아직 모르는 사람</div>
+        </div>
+      </div>
+      <div class="match-axes">
+        <div class="match-axis">
+          <span class="match-axis-icon match">♥</span>
+          <span class="match-axis-name">답장 리듬</span>
+          <span class="match-axis-verdict">둘 다 빠른 편</span>
+        </div>
+        <div class="match-axis">
+          <span class="match-axis-icon match">♥</span>
+          <span class="match-axis-name">감정 표현</span>
+          <span class="match-axis-verdict">둘 다 솔직한 편</span>
+        </div>
+        <div class="match-axis">
+          <span class="match-axis-icon match">♥</span>
+          <span class="match-axis-name">대화 깊이</span>
+          <span class="match-axis-verdict">둘 다 가볍게 자주</span>
+        </div>
+      </div>
+      <button type="button" class="match-cta interest" data-action="interest">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+          <path d="M8 13.5 C 8 13.5, 2 9.5, 2 5.5 C 2 3.5, 3.5 2.5, 5 2.5 C 6.3 2.5, 7.5 3.5, 8 4.5 C 8.5 3.5, 9.7 2.5, 11 2.5 C 12.5 2.5, 14 3.5, 14 5.5 C 14 9.5, 8 13.5, 8 13.5 Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+        </svg>
+        관심 있어요
+      </button>
+    </article>
+
+  </div>
+
+  <!-- Privacy note -->
+  <div class="privacy-strip">
+    <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+      <path d="M8 1.5 L12.5 3.3 V7.5 C 12.5 10.5, 10.3 12.7, 8 13.5 C 5.7 12.7, 3.5 10.5, 3.5 7.5 V3.3 Z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
+      <path d="M5.8 8 L7.2 9.4 L10 6.4" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="privacy-strip-text">
+      사진과 이름은 <strong>서로 관심이 닿으면</strong> 보여요. 그 전까지는 결의 일치만 보이고, 대화 원본은 누구에게도 공유되지 않아요.
+    </div>
+  </div>
+
+</main>
+
+<!-- Toast -->
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <span id="toastText"></span>
+</div>
+
+<script src="auth.js" defer></script>
+<script src="auth-ui.js" defer></script>
+<script>
+(() => {
+  // ============ Toast ============
+  const toast = document.getElementById('toast');
+  const toastText = document.getElementById('toastText');
+  let toastTimer;
+  const showToast = (msg) => {
+    toastText.textContent = msg;
+    toast.classList.add('is-shown');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('is-shown'), 2400);
+  };
+
+  // ============ CTA 액션 ============
+  document.getElementById('matchList').addEventListener('click', (e) => {
+    const btn = e.target.closest('.match-cta');
+    if (!btn) return;
+    const action = btn.dataset.action;
+
+    if (action === 'interest') {
+      // 관심 보내기 → 대기 상태로 전환
+      // TODO (백엔드): POST /api/match/interest { match_id }
+      btn.classList.remove('interest');
+      btn.classList.add('waiting');
+      btn.disabled = true;
+      btn.innerHTML = '상대의 마음을 기다리는 중';
+      // 상태 라벨도 변경
+      const card = btn.closest('.match-card');
+      const status = card.querySelector('.match-status');
+      status.className = 'match-status pending';
+      status.innerHTML = '<span class="dot"></span>관심을 전했어요';
+      showToast('관심을 전했어요. 상대도 관심을 보이면 알려드릴게요');
+    }
+
+    if (action === 'talk') {
+      // 대화 시작 (placeholder — 대화 장소 미정)
+      // TODO: 대화 채널 결정 후 연동
+      showToast('대화 기능은 준비 중이에요');
+    }
+  });
+})();
+</script>
+</body>
+</html>

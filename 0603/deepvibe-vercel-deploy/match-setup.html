@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#F6F4F1"/>
+<title>매칭 준비 — deepvibe</title>
+
+<meta name="description" content="결이 맞는 사람과 만나기 전에, 몇 가지만 정해요."/>
+<meta name="robots" content="noindex, nofollow"/>
+
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<link rel="apple-touch-icon" href="favicon.svg"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F4F1;
+    --bg-soft:#EFEBE5;
+    --bg-warm:#F0E9DE;
+    --ink:#15131A;
+    --ink-2:#2a262f;
+    --muted:#7a7680;
+    --muted-2:#a8a4ac;
+    --line-04:rgba(20,10,30,.04);
+    --line-08:rgba(20,10,30,.08);
+    --line-12:rgba(20,10,30,.12);
+    --line-18:rgba(20,10,30,.18);
+    --kakao:#FEE500;
+    --kakao-ink:#3D1E1E;
+    --pink:#ff6f91;
+    --pink-soft:#ffb4c6;
+    --pink-bg:rgba(255,159,188,.22);
+    --violet:#b967ff;
+    --violet-soft:#cdb4ff;
+    --success:#2d7a52;
+    --success-bg:rgba(74,176,122,.12);
+
+    --font-serif:'Fraunces','Noto Serif KR',serif;
+    --font-sans:'Inter',-apple-system,BlinkMacSystemFont,'Pretendard','Noto Sans KR',sans-serif;
+
+    --ease-out:cubic-bezier(.22,1,.36,1);
+    --ease-out-soft:cubic-bezier(.16,1,.3,1);
+    --dur-fast:.18s;
+    --dur-base:.32s;
+
+    --safe-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+  :focus{outline:none}
+  :focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:4px}
+
+  html{scroll-behavior:smooth;overflow-x:hidden;font-size:100%;-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--font-sans);font-size:15px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    word-break:keep-all;line-break:strict;
+    overflow-x:hidden;
+    min-height:100vh;min-height:100dvh;
+    position:relative;
+  }
+
+  /* ============ NAV ============ */
+  nav{
+    position:sticky;top:0;z-index:30;
+    background:rgba(246,244,241,.85);
+    backdrop-filter:blur(14px) saturate(180%);
+    -webkit-backdrop-filter:blur(14px) saturate(180%);
+    border-bottom:.5px solid transparent;
+  }
+  nav .row{
+    max-width:520px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 20px;
+  }
+  nav .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+  nav .logo .mark{display:inline-block;width:22px;height:14px;position:relative}
+  nav .logo .mark svg{width:100%;height:100%;overflow:visible}
+  nav .logo .word{
+    font-family:var(--font-serif);font-weight:400;font-style:italic;
+    font-size:18px;letter-spacing:-.01em;color:var(--ink);
+  }
+
+  /* ============ PAGE BACK ============ */
+  .page-back{
+    max-width:520px;margin:0 auto;padding:16px 20px 0;
+  }
+  .page-back-link{
+    display:inline-flex;align-items:center;gap:4px;
+    padding:6px 10px 6px 8px;
+    background:transparent;border:none;
+    color:var(--muted);
+    font-size:12.5px;font-weight:500;letter-spacing:-.005em;
+    text-decoration:none;border-radius:8px;
+    transition:background .2s var(--ease-out), color .2s var(--ease-out);
+    cursor:pointer;
+  }
+  .page-back-link:hover{background:var(--bg-soft);color:var(--ink)}
+
+  /* ============ MAIN ============ */
+  main{
+    max-width:520px;width:100%;
+    margin:0 auto;
+    padding:16px 20px calc(40px + var(--safe-bottom));
+  }
+
+  /* ============ PAGE HEADER ============ */
+  .page-header{
+    text-align:center;
+    margin-bottom:30px;
+    opacity:0;transform:translateY(8px);
+    animation:fadeUp .7s .1s var(--ease-out-soft) forwards;
+  }
+  @keyframes fadeUp{to{opacity:1;transform:none}}
+
+  .page-mark{display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px}
+  .page-mark svg{width:44px;height:30px;overflow:visible}
+
+  .page-title{
+    font-family:var(--font-serif);font-weight:300;
+    font-size:clamp(26px, 7.5vw, 32px);
+    line-height:1.25;letter-spacing:-.02em;
+    color:var(--ink);
+    margin-bottom:10px;
+  }
+  .page-title em{font-style:italic;color:var(--ink)}
+
+  .page-sub{
+    font-size:14px;color:var(--muted);
+    line-height:1.7;
+    max-width:330px;margin:0 auto;
+  }
+
+  /* ============ SETUP SECTIONS ============ */
+  .setup-sections{
+    display:flex;flex-direction:column;gap:18px;
+  }
+  .setup-card{
+    background:#fff;
+    border:.5px solid var(--line-08);
+    border-radius:18px;
+    padding:22px;
+    box-shadow:
+      0 1px 2px var(--line-04),
+      0 8px 22px -14px rgba(20,10,30,.06);
+    opacity:0;transform:translateY(12px);
+    animation:fadeUp .7s var(--ease-out-soft) forwards;
+  }
+  .setup-card:nth-of-type(1){animation-delay:.2s}
+  .setup-card:nth-of-type(2){animation-delay:.32s}
+  .setup-card:nth-of-type(3){animation-delay:.44s}
+
+  .setup-step{
+    display:flex;align-items:center;gap:9px;
+    margin-bottom:6px;
+  }
+  .setup-step-num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:22px;height:22px;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--pink-bg), rgba(202,163,255,.22));
+    font-family:var(--font-serif);font-weight:500;font-size:12px;
+    color:var(--ink-2);
+    flex-shrink:0;
+  }
+  .setup-step-label{
+    font-size:14.5px;font-weight:500;color:var(--ink);
+    letter-spacing:-.005em;
+  }
+  .setup-hint{
+    font-size:12.5px;color:var(--muted);
+    line-height:1.6;
+    margin-bottom:16px;
+    letter-spacing:-.002em;
+  }
+  .setup-hint em{font-style:normal;color:var(--ink-2);font-weight:500}
+
+  /* ===== 별명 입력 ===== */
+  .nick-wrap{position:relative}
+  .nick-input{
+    width:100%;
+    padding:14px 16px;
+    background:#fff;
+    border:.5px solid rgba(255,159,188,.32);
+    border-radius:12px;
+    font-family:var(--font-sans);font-size:15.5px;
+    color:var(--ink);
+    letter-spacing:-.005em;
+    box-shadow:inset 0 1px 2px rgba(20,10,30,.03);
+    transition:border-color .2s var(--ease-out), box-shadow .2s var(--ease-out);
+  }
+  .nick-input::placeholder{color:var(--muted);font-weight:400}
+  .nick-input:hover{border-color:var(--pink-soft)}
+  .nick-input:focus-visible{
+    outline:none;border-color:var(--pink-soft);
+    box-shadow:0 0 0 4px var(--pink-bg);
+  }
+  .nick-count{
+    position:absolute;
+    right:14px;top:50%;transform:translateY(-50%);
+    font-size:11.5px;color:var(--muted-2);
+    letter-spacing:0;
+    pointer-events:none;
+  }
+
+  /* ===== 거리 슬라이더 ===== */
+  .dist-verdict{
+    text-align:center;
+    margin-bottom:18px;
+  }
+  .dist-verdict-label{
+    font-family:var(--font-serif);font-weight:400;font-style:italic;
+    font-size:22px;color:var(--ink);
+    letter-spacing:-.01em;
+  }
+  .dist-verdict-km{
+    display:block;
+    font-family:var(--font-sans);
+    font-size:11.5px;color:var(--muted);
+    margin-top:4px;
+    letter-spacing:-.002em;
+  }
+
+  .dist-slider-wrap{padding:0 4px}
+  .dist-slider{
+    -webkit-appearance:none;appearance:none;
+    width:100%;height:6px;
+    background:var(--bg-soft);
+    border-radius:999px;
+    outline:none;
+    cursor:pointer;
+  }
+  .dist-slider::-webkit-slider-thumb{
+    -webkit-appearance:none;appearance:none;
+    width:22px;height:22px;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--pink), var(--violet));
+    box-shadow:0 2px 8px -1px rgba(255,111,145,.5), 0 0 0 3px #fff;
+    cursor:pointer;
+    transition:transform .12s var(--ease-out);
+  }
+  .dist-slider::-webkit-slider-thumb:active{transform:scale(1.12)}
+  .dist-slider::-moz-range-thumb{
+    width:22px;height:22px;
+    border:none;border-radius:50%;
+    background:linear-gradient(135deg, var(--pink), var(--violet));
+    box-shadow:0 2px 8px -1px rgba(255,111,145,.5), 0 0 0 3px #fff;
+    cursor:pointer;
+  }
+  .dist-poles{
+    display:flex;justify-content:space-between;
+    margin-top:11px;padding:0 2px;
+    font-size:11.5px;color:var(--muted-2);
+    letter-spacing:-.002em;
+  }
+
+  /* ===== 동의 ===== */
+  .consent-row{
+    display:flex;align-items:flex-start;gap:12px;
+    cursor:pointer;
+  }
+  .consent-check{
+    flex-shrink:0;
+    width:24px;height:24px;
+    margin-top:1px;
+    border-radius:7px;
+    border:1.5px solid var(--line-18);
+    background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .2s var(--ease-out), border-color .2s var(--ease-out);
+    position:relative;
+  }
+  .consent-check svg{
+    opacity:0;
+    transition:opacity .2s var(--ease-out);
+    color:#fff;
+  }
+  .consent-row.is-checked .consent-check{
+    background:var(--ink);
+    border-color:var(--ink);
+  }
+  .consent-row.is-checked .consent-check svg{opacity:1}
+  .consent-text{flex:1;min-width:0}
+  .consent-title{
+    font-size:13.5px;font-weight:500;color:var(--ink);
+    line-height:1.5;letter-spacing:-.005em;
+  }
+  .consent-desc{
+    font-size:12px;color:var(--muted);
+    margin-top:4px;line-height:1.6;letter-spacing:-.002em;
+  }
+  .consent-input{position:absolute;opacity:0;width:0;height:0}
+
+  /* privacy mini note */
+  .privacy-mini{
+    display:flex;align-items:flex-start;gap:8px;
+    margin-top:16px;padding-top:16px;
+    border-top:.5px solid var(--line-08);
+    font-size:11.5px;color:var(--muted);
+    line-height:1.6;letter-spacing:-.002em;
+  }
+  .privacy-mini svg{flex-shrink:0;margin-top:2px;color:var(--muted-2)}
+  .privacy-mini strong{color:var(--ink-2);font-weight:500}
+
+  /* ============ SUBMIT ============ */
+  .setup-submit{
+    margin-top:28px;
+    opacity:0;
+    animation:fadeUp .7s .56s var(--ease-out-soft) forwards;
+  }
+  .btn-start{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;
+    padding:17px;
+    border-radius:14px;
+    background:var(--ink);color:#fff;
+    font-family:var(--font-sans);
+    font-size:15.5px;font-weight:600;letter-spacing:-.005em;
+    border:none;cursor:pointer;
+    box-shadow:0 1px 0 rgba(0,0,0,.05), 0 10px 24px -12px rgba(20,10,30,.32);
+    transition:transform var(--dur-fast) var(--ease-out), background .2s var(--ease-out), opacity .2s var(--ease-out);
+  }
+  .btn-start:disabled{
+    background:var(--bg-soft);
+    color:var(--muted-2);
+    box-shadow:none;
+    cursor:not-allowed;
+  }
+  .btn-start:not(:disabled):active{transform:scale(.985)}
+  .setup-foot{
+    margin-top:14px;
+    text-align:center;
+    font-size:11.5px;color:var(--muted);
+    line-height:1.6;letter-spacing:-.002em;
+  }
+
+  /* ============ TOAST ============ */
+  .toast{
+    position:fixed;
+    bottom:calc(24px + var(--safe-bottom));
+    left:50%;transform:translate(-50%, 100%);
+    z-index:60;
+    padding:12px 20px;
+    background:rgba(21,19,26,.94);color:#fff;
+    border-radius:999px;
+    font-size:13.5px;font-weight:500;letter-spacing:-.005em;
+    box-shadow:0 1px 0 rgba(255,255,255,.08) inset, 0 12px 32px -10px rgba(20,10,30,.32);
+    opacity:0;pointer-events:none;
+    transition:opacity .3s var(--ease-out), transform .3s var(--ease-out);
+  }
+  .toast.is-shown{opacity:1;transform:translate(-50%, 0);pointer-events:auto}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:360px){
+    main{padding:12px 16px calc(32px + var(--safe-bottom))}
+    .setup-card{padding:20px 18px}
+  }
+
+  /* ============ REDUCED MOTION ============ */
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;
+    }
+    .page-header,.setup-card,.setup-submit{opacity:1 !important;transform:none !important}
+  }
+</style>
+</head>
+<body>
+
+<!-- =================== NAV =================== -->
+<nav id="nav">
+  <div class="row">
+    <a class="logo" href="/" aria-label="deepvibe 홈으로">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 30 18" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="logo-pink" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff6f91" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#ff9fbc" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".7"/>
+            </radialGradient>
+            <radialGradient id="logo-violet" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#b967ff" stop-opacity=".95"/>
+              <stop offset="70%" stop-color="#cdb4ff" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#cdb4ff" stop-opacity=".7"/>
+            </radialGradient>
+          </defs>
+          <circle cx="11" cy="9" r="8" fill="url(#logo-pink)" style="mix-blend-mode:multiply"/>
+          <circle cx="19" cy="9" r="8" fill="url(#logo-violet)" style="mix-blend-mode:multiply"/>
+        </svg>
+      </span>
+      <span class="word">deepvibe</span>
+    </a>
+    <!-- Auth UI injected by auth-ui.js -->
+  </div>
+</nav>
+
+<!-- Page back -->
+<div class="page-back">
+  <a class="page-back-link" href="javascript:history.back()" aria-label="이전 페이지로">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M9 3 L5 7 L9 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    이전
+  </a>
+</div>
+
+<!-- =================== MAIN =================== -->
+<main>
+
+  <!-- Page header -->
+  <header class="page-header">
+    <div class="page-mark" aria-hidden="true">
+      <svg viewBox="0 0 44 30" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="ms-pink" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ff6f91" stop-opacity=".9"/>
+            <stop offset="100%" stop-color="#ffb4c6" stop-opacity=".7"/>
+          </radialGradient>
+          <radialGradient id="ms-violet" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#b967ff" stop-opacity=".9"/>
+            <stop offset="100%" stop-color="#cdb4ff" stop-opacity=".7"/>
+          </radialGradient>
+        </defs>
+        <circle cx="17" cy="15" r="13" fill="url(#ms-pink)" style="mix-blend-mode:multiply"/>
+        <circle cx="27" cy="15" r="13" fill="url(#ms-violet)" style="mix-blend-mode:multiply"/>
+      </svg>
+    </div>
+    <h1 class="page-title">결이 맞는 사람과<br><em>만나기 전에</em></h1>
+    <p class="page-sub">몇 가지만 정하면, 결이 닮은 사람을 찾아드릴게요.</p>
+  </header>
+
+  <div class="setup-sections">
+
+    <!-- ===== 1. 별명 ===== -->
+    <section class="setup-card">
+      <div class="setup-step">
+        <span class="setup-step-num">1</span>
+        <span class="setup-step-label">매칭에서 쓸 별명</span>
+      </div>
+      <p class="setup-hint">상대에게는 <em>이 별명만</em> 보여요. 본명은 어디에도 표시되지 않아요.</p>
+      <div class="nick-wrap">
+        <input type="text" id="nickInput" class="nick-input" placeholder="예: 달팽이, 민트초코" maxlength="12" autocomplete="off">
+        <span class="nick-count" id="nickCount">0/12</span>
+      </div>
+    </section>
+
+    <!-- ===== 2. 선호 거리 ===== -->
+    <section class="setup-card">
+      <div class="setup-step">
+        <span class="setup-step-num">2</span>
+        <span class="setup-step-label">얼마나 가까운 사람과?</span>
+      </div>
+      <p class="setup-hint">멀어도 괜찮은 정도를 골라주세요. 상대에게는 <em>대략의 거리감</em>만 보여요.</p>
+
+      <div class="dist-verdict">
+        <span class="dist-verdict-label" id="distLabel">같은 동네 정도</span>
+      </div>
+      <div class="dist-slider-wrap">
+        <input type="range" id="distSlider" class="dist-slider" min="0" max="3" step="1" value="1">
+        <div class="dist-poles">
+          <span>가까이</span>
+          <span>어디든</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 3. 동의 ===== -->
+    <section class="setup-card">
+      <div class="setup-step">
+        <span class="setup-step-num">3</span>
+        <span class="setup-step-label">매칭에 내 결 사용하기</span>
+      </div>
+      <p class="setup-hint">동의하면, 결이 닮은 사람을 서로에게 조용히 추천해요.</p>
+
+      <label class="consent-row" id="consentRow">
+        <input type="checkbox" id="consentInput" class="consent-input">
+        <span class="consent-check">
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+            <path d="M3 7.2 L6 10 L11 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="consent-text">
+          <span class="consent-title">내 결 유형을 매칭에 사용하는 데 동의해요.</span>
+          <span class="consent-desc">언제든 매칭을 끄면, 추천에서 빠지고 결 유형도 더 이상 쓰이지 않아요.</span>
+        </span>
+      </label>
+
+      <div class="privacy-mini">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M7 1.5 L11 3 V7 C 11 9.5, 9 11.3, 7 12 C 5 11.3, 3 9.5, 3 7 V3 Z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
+          <path d="M5.2 7 L6.4 8.2 L8.8 5.8" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div>매칭에는 <strong>결의 유형과 별명</strong>만 쓰여요. 대화 원본과 정확한 위치는 누구에게도 공유되지 않아요.</div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Submit -->
+  <div class="setup-submit">
+    <button type="button" class="btn-start" id="btnStart" disabled>
+      결이 맞는 사람 만나보기
+    </button>
+    <div class="setup-foot">별명과 동의는 <strong>내 계정</strong>에서 언제든 바꿀 수 있어요.</div>
+  </div>
+
+</main>
+
+<!-- Toast -->
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <span id="toastText"></span>
+</div>
+
+<script src="auth.js" defer></script>
+<script src="auth-ui.js" defer></script>
+<script>
+(() => {
+  // ============ 별명 ============
+  const nickInput = document.getElementById('nickInput');
+  const nickCount = document.getElementById('nickCount');
+
+  // ============ 거리 (정성 표현만, 숫자 없음) ============
+  // 정확한 km 노출은 역산 위험 → 단계별 정성 라벨만
+  const distSlider = document.getElementById('distSlider');
+  const distLabel = document.getElementById('distLabel');
+
+  const distSteps = [
+    '바로 근처면 좋아요',
+    '같은 동네 정도',
+    '같은 도시 안쪽',
+    '거리는 상관없어요',
+  ];
+
+  const renderDist = () => {
+    const i = parseInt(distSlider.value, 10);
+    distLabel.textContent = distSteps[i];
+  };
+  distSlider.addEventListener('input', renderDist);
+  renderDist();
+
+  // ============ 동의 ============
+  const consentRow = document.getElementById('consentRow');
+  const consentInput = document.getElementById('consentInput');
+
+  // ============ 시작 버튼 활성화 ============
+  const btnStart = document.getElementById('btnStart');
+  const updateState = () => {
+    const hasNick = nickInput.value.trim().length >= 1;
+    const hasConsent = consentInput.checked;
+    btnStart.disabled = !(hasNick && hasConsent);
+  };
+
+  nickInput.addEventListener('input', () => {
+    nickCount.textContent = `${nickInput.value.length}/12`;
+    updateState();
+  });
+  consentInput.addEventListener('change', () => {
+    consentRow.classList.toggle('is-checked', consentInput.checked);
+    updateState();
+  });
+
+  // ============ 시작 ============
+  const toast = document.getElementById('toast');
+  const toastText = document.getElementById('toastText');
+  let toastTimer;
+  const showToast = (msg) => {
+    toastText.textContent = msg;
+    toast.classList.add('is-shown');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('is-shown'), 2400);
+  };
+
+  btnStart.addEventListener('click', () => {
+    if (btnStart.disabled) return;
+    // TODO (백엔드): POST /api/match/setup
+    //   { nickname, distance_tier: distSlider.value, consent: true }
+    window.location.href = '/matches';
+  });
+
+  updateState();
+})();
+</script>
+</body>
+</html>

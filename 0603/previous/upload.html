@@ -100,6 +100,32 @@
     position:relative;
   }
 
+  /* ============ AMBIENT BG GLOW (brand signature) ============ */
+  .ambient-bg{
+    position:fixed;inset:0;z-index:0;
+    pointer-events:none;
+    overflow:hidden;
+  }
+  .ambient-bg::before,
+  .ambient-bg::after{
+    content:"";
+    position:absolute;
+    width:60vw;height:60vw;
+    max-width:480px;max-height:480px;
+    border-radius:50%;
+    filter:blur(80px);
+    opacity:.5;
+  }
+  .ambient-bg::before{
+    top:-15%;left:-20%;
+    background:radial-gradient(circle, var(--pink-soft), transparent 70%);
+  }
+  .ambient-bg::after{
+    bottom:-10%;right:-25%;
+    background:radial-gradient(circle, #cdb4ff, transparent 70%);
+    opacity:.4;
+  }
+
   /* ============ NAV ============ */
   nav{
     position:sticky;top:0;z-index:30;
@@ -1427,6 +1453,9 @@
 <script src="auth-ui.js" defer></script>
 </head>
 <body>
+
+<!-- =================== AMBIENT BACKGROUND =================== -->
+<div class="ambient-bg" aria-hidden="true"></div>
 
 <!-- =================== NAV =================== -->
 <nav id="nav">

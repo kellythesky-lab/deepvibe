@@ -480,34 +480,6 @@
   }
 
   /* ============ NEW ANALYSIS CTA (bottom of list) ============ */
-  /* insight 진입 (결 유형 보기) */
-  .insight-entry{
-    display:flex;align-items:center;gap:12px;
-    margin-top:24px;
-    padding:18px;
-    border-radius:14px;
-    background:linear-gradient(135deg, rgba(255,159,188,.1), rgba(202,163,255,.08));
-    border:.5px solid var(--line-08);
-    text-decoration:none;
-    box-shadow:0 1px 2px var(--line-04);
-    transition:border-color .2s var(--ease-out), transform .2s var(--ease-out);
-    opacity:0;transform:translateY(8px);
-    animation:fadeUp .7s .72s var(--ease-out-soft) forwards;
-  }
-  .insight-entry:hover{border-color:var(--line-12);transform:translateY(-1px)}
-  .insight-entry-icon{
-    flex-shrink:0;width:38px;height:38px;border-radius:10px;
-    background:#fff;display:flex;align-items:center;justify-content:center;
-    box-shadow:0 1px 2px var(--line-04);
-  }
-  .insight-entry-icon svg{width:18px;height:18px}
-  .insight-entry-text{flex:1;min-width:0}
-  .insight-entry-title{font-size:14px;font-weight:500;color:var(--ink);line-height:1.4;letter-spacing:-.005em}
-  .insight-entry-desc{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.5;letter-spacing:-.002em}
-  .insight-entry-arrow{color:var(--muted-2);flex-shrink:0;transition:transform .2s var(--ease-out)}
-  .insight-entry:hover .insight-entry-arrow{transform:translateX(2px)}
-  body.is-empty .insight-entry{display:none}
-
   .new-analysis-cta{
     display:flex;align-items:center;justify-content:center;gap:8px;
     margin-top:24px;
@@ -844,28 +816,6 @@
     </a>
 
   </div>
-
-  <!-- 결 유형 보기 (insight 진입) -->
-  <a href="/insight" class="insight-entry">
-    <div class="insight-entry-icon" aria-hidden="true">
-      <svg viewBox="0 0 18 18" fill="none">
-        <path d="M9 1.5 L10.7 5.1 L14.5 5.6 L11.7 8.3 L12.4 12.1 L9 10.3 L5.6 12.1 L6.3 8.3 L3.5 5.6 L7.3 5.1 Z" fill="url(#hist-star)"/>
-        <defs>
-          <linearGradient id="hist-star" x1="0" y1="0" x2="18" y2="18">
-            <stop offset="0%" stop-color="#ff6f91"/>
-            <stop offset="100%" stop-color="#b967ff"/>
-          </linearGradient>
-        </defs>
-      </svg>
-    </div>
-    <div class="insight-entry-text">
-      <div class="insight-entry-title">내 연애 결 보기</div>
-      <div class="insight-entry-desc">여러 분석을 모아, 나와 맞는 결을 그려봐요.</div>
-    </div>
-    <svg class="insight-entry-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none">
-      <path d="M5 3 L9 7 L5 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </a>
 
   <!-- New analysis CTA (shown after list) -->
   <a href="/upload" class="new-analysis-cta">
